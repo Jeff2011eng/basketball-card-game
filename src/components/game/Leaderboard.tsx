@@ -1,29 +1,30 @@
 'use client';
 
-import React from 'react';
-import { Lineup } from '@/lib/types';
-import { Trophy, Medal, Crown } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { LeaderboardEntry } from '@/lib/types';
+import { getPlayerId } from '@/lib/player-identity';
+import { Trophy, Medal, Crown, History, RotateCcw } from 'lucide-react';
 
 interface Props {
-  userLineup: Lineup;
-  userTotalOvr: number;
   onRestart: () => void;
+  onHistory: () => void;
 }
 
-export default function Leaderboard({ userLineup, userTotalOvr, onRestart }: Props) {
-  const mockBoard = [
-    { name: 'HoopsKing99', ovr: 98 },
-    { name: 'BallIsLife', ovr: 96 },
-    { name: 'DraftMaster', ovr: 95 },
-    { name: 'StephBetter', ovr: 93 },
-    { name: 'LeBronFan23', ovr: 91 },
-    { name: 'JRS_User', ovr: 89 },
-    { name: 'Your Lineup', ovr: userTotalOvr, isUser: true },
-    { name: 'RookieCard', ovr: 85 },
-  ].sort((a, b) => b.ovr - a.ovr);
+export default function Leaderboard({ onRestart, onHistory }: Props) {
+  const [board, setBoard] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const playerId = getPlayerId();
 
-  let currentRank = 0;
-  const rankedBoard = mockBoard.map(item => ({ ...item, rank: ++currentRank }));
+  useEffect(() => {
+    fetch('/api/leaderboard')
+      .then(res => res.json())
+      .then(data => {
+        setBoard(data.leaderboard || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const getRankIcon = (rank: number) => {
     if (rank === 1) return <Crown className="text-yellow-400 w-6 h-6" />;
@@ -40,44 +41,100 @@ export default function Leaderboard({ userLineup, userTotalOvr, onRestart }: Pro
           Global Leaderboard
         </h1>
         <p className="text-gray-400 font-bold mt-2 uppercase tracking-widest text-sm">
-          JRS Power Rankings
+          Battle Power Rankings
         </p>
       </div>
 
-      <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
-        <div className="grid grid-cols-12 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
-          <div className="col-span-2 text-center">Rank</div>
-          <div className="col-span-8">Manager</div>
-          <div className="col-span-2 text-right pr-4">Team OVR</div>
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+            className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+          />
         </div>
+      ) : board.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-gray-500 font-bold text-lg">No battles yet</p>
+          <p className="text-gray-600 text-sm mt-2">Be the first to battle!</p>
+        </div>
+      ) : (
+        <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl mb-8">
+          <div className="grid grid-cols-12 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
+            <div className="col-span-1 text-center">#</div>
+            <div className="col-span-3">Manager</div>
+            <div className="col-span-2 text-center">W / L</div>
+            <div className="col-span-2 text-center">Win Rate</div>
+            <div className="col-span-2 text-center">Best Score</div>
+            <div className="col-span-2 text-center">Battles</div>
+          </div>
 
-        <div className="flex flex-col">
-          {rankedBoard.map((entry) => (
-            <div
-              key={entry.name}
-              className={`grid grid-cols-12 gap-4 p-4 items-center border-b border-gray-700/50 last:border-0 transition-colors ${entry.isUser ? 'bg-blue-900/30 border-blue-500/50' : 'hover:bg-gray-700/30'}`}
-            >
-              <div className="col-span-2 flex justify-center">
-                {getRankIcon(entry.rank)}
-              </div>
-              <div className="col-span-8 flex items-center gap-3">
-                {entry.isUser && <span className="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-black uppercase">YOU</span>}
-                <span className={`font-black text-lg ${entry.isUser ? 'text-blue-400' : 'text-gray-200'}`}>{entry.name}</span>
-              </div>
-              <div className="col-span-2 text-right pr-4">
-                <span className={`font-black text-2xl ${entry.rank === 1 ? 'text-yellow-400' : 'text-white'}`}>{entry.ovr}</span>
-              </div>
-            </div>
-          ))}
+          <div className="flex flex-col">
+            {board.map((entry, i) => {
+              const rank = i + 1;
+              const isUser = entry.player_id === playerId;
+              return (
+                <motion.div
+                  key={entry.player_id}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`grid grid-cols-12 gap-4 p-4 items-center border-b border-gray-700/50 last:border-0 transition-colors ${
+                    isUser ? 'bg-blue-900/30 border-blue-500/50' : 'hover:bg-gray-700/30'
+                  }`}
+                >
+                  <div className="col-span-1 flex justify-center">
+                    {getRankIcon(rank)}
+                  </div>
+                  <div className="col-span-3 flex items-center gap-2">
+                    {isUser && (
+                      <span className="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-black uppercase">YOU</span>
+                    )}
+                    <span className={`font-black text-lg ${isUser ? 'text-blue-400' : 'text-gray-200'}`}>
+                      {entry.nickname}
+                    </span>
+                  </div>
+                  <div className="col-span-2 text-center">
+                    <span className="text-green-400 font-bold">{entry.wins}</span>
+                    <span className="text-gray-600 mx-1">/</span>
+                    <span className="text-red-400 font-bold">{entry.losses}</span>
+                  </div>
+                  <div className="col-span-2 text-center">
+                    <span className={`font-black text-lg ${entry.win_rate >= 60 ? 'text-green-400' : entry.win_rate >= 40 ? 'text-yellow-400' : 'text-red-400'}`}>
+                      {entry.win_rate}%
+                    </span>
+                  </div>
+                  <div className="col-span-2 text-center">
+                    <span className={`font-black text-lg ${rank === 1 ? 'text-yellow-400' : 'text-white'}`}>
+                      {entry.best_score}
+                    </span>
+                  </div>
+                  <div className="col-span-2 text-center text-gray-400 font-bold">
+                    {entry.total_battles}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
+      )}
+
+      <div className="flex gap-4">
+        <button
+          onClick={onHistory}
+          className="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2"
+        >
+          <History className="w-4 h-4" />
+          Battle History
+        </button>
+        <button
+          onClick={onRestart}
+          className="bg-white text-black hover:bg-gray-200 font-black text-lg px-8 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 flex items-center gap-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Draft Another Team
+        </button>
       </div>
-
-      <button
-        onClick={onRestart}
-        className="mt-12 bg-white text-black hover:bg-gray-200 font-black text-lg px-8 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105"
-      >
-        Draft Another Team
-      </button>
     </div>
   );
 }

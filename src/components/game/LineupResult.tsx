@@ -27,12 +27,12 @@ const STAT_DISPLAY: Record<string, string> = {
 export default function LineupResult({ lineup, onUpload }: Props) {
   const players = Object.values(lineup);
 
-  const totalOvr = Math.round(players.reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5);
+  const totalOvr = players.reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5;
 
   const avgStats = useMemo(() => {
     return STAT_KEYS.map(key => {
       const sum = players.reduce((s, p) => s + (p ? p.stats[key] : 0), 0);
-      return { subject: STAT_DISPLAY[key], A: Math.round(sum / 5), fullMark: 100 };
+      return { subject: STAT_DISPLAY[key], A: Math.round(sum / 5 * 10) / 10, fullMark: 100 };
     });
   }, [players]);
 
@@ -58,20 +58,41 @@ export default function LineupResult({ lineup, onUpload }: Props) {
         </div>
       </motion.div>
 
-      <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-16 w-full max-w-7xl">
-        {players.map((p, i) => p && (
+      {/* Lineup Layout: PF SF / C / PG SG */}
+      {(() => {
+        const SCALE = 0.5;
+        const CW = 320 * SCALE; // 160
+        const CH = 480 * SCALE; // 240
+        const cardWrapper = (p: any, delay: number) => (
           <motion.div
             key={p.id}
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: i * 0.1, type: 'spring' }}
-            className="transform scale-[0.5] md:scale-[0.65] lg:scale-[0.8] origin-center h-[320px] md:h-[390px] lg:h-[480px] mx-[-30px] md:mx-[-15px] lg:mx-0"
+            transition={{ delay, type: 'spring' }}
+            className="flex flex-col items-center"
           >
-            <Card player={p} isFlipped={true} />
-            <div className="text-center mt-2 font-black text-white text-xl uppercase tracking-wider">{p.position}</div>
+            <div className="overflow-hidden" style={{ width: CW, height: CH }}>
+              <div className="origin-top-left" style={{ transform: `scale(${SCALE})`, width: 320, height: 480 }}>
+                <Card player={p} isFlipped={true} />
+              </div>
+            </div>
+            <div className="text-center mt-2 font-black text-white text-lg uppercase tracking-wider">{p.position}</div>
           </motion.div>
-        ))}
-      </div>
+        );
+        return (
+          <div className="flex flex-col items-center gap-4 mb-16">
+            <div className="flex justify-center gap-4">
+              {['PF', 'SF'].map(pos => { const p = lineup[pos as keyof Lineup]; return p && cardWrapper(p, 0); })}
+            </div>
+            <div className="flex justify-center gap-4">
+              {lineup.C && cardWrapper(lineup.C, 0.1)}
+            </div>
+            <div className="flex justify-center gap-4">
+              {['PG', 'SG'].map(pos => { const p = lineup[pos as keyof Lineup]; return p && cardWrapper(p, 0.2); })}
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl bg-gray-800 rounded-3xl p-8 border border-gray-700 shadow-2xl">
         <div className="flex flex-col items-center justify-center">

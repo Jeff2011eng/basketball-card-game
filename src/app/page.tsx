@@ -4,19 +4,28 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, PackCard } from '@/lib/types';
 import { calcLineupScore } from '@/lib/game-logic';
+import { BattleResult as BattleResultType } from '@/lib/battle-logic';
+import { getPlayerId } from '@/lib/player-identity';
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
 import LineupResult from '@/components/game/LineupResult';
 import Leaderboard from '@/components/game/Leaderboard';
+import NicknameModal from '@/components/game/NicknameModal';
+import BattleResult from '@/components/game/BattleResult';
+import BattleHistory from '@/components/game/BattleHistory';
 import { Play } from 'lucide-react';
 
-type GamePhase = 'INTRO' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'LEADERBOARD';
+type GamePhase = 'INTRO' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'ENTER_NICKNAME' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY';
 
 export default function Home() {
   const [phase, setPhase] = useState<GamePhase>('INTRO');
   const [packPool, setPackPool] = useState<PackCard[]>([]);
   const [finalLineup, setFinalLineup] = useState<Lineup>({ PG: null, SG: null, SF: null, PF: null, C: null });
   const [isLoading, setIsLoading] = useState(false);
+  const [lineupId, setLineupId] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [battleData, setBattleData] = useState<BattleResultType | null>(null);
+  const [loadingMsg, setLoadingMsg] = useState('');
 
   const startOpening = () => {
     setPhase('OPENING');
@@ -33,20 +42,113 @@ export default function Home() {
   }, []);
 
   const handleUpload = () => {
+    setPhase('ENTER_NICKNAME');
+  };
+
+  const handleNicknameSubmit = async (nick: string) => {
+    setNickname(nick);
     setIsLoading(true);
-    setTimeout(() => {
+    setLoadingMsg('Uploading lineup...');
+    setPhase('RESULT');
+
+    try {
+      const playerId = getPlayerId();
+      const score = calcLineupScore(finalLineup);
+      const players = Object.values(finalLineup).filter(Boolean);
+      const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY', 'REB', 'CLU'] as const;
+      const avgStats: Record<string, number> = {};
+      for (const key of STAT_KEYS) {
+        avgStats[key] = Math.round(players.reduce((s, p) => s + (p!.stats[key]), 0) / players.length * 10) / 10;
+      }
+
+      // Upload lineup
+      const uploadRes = await fetch('/api/battle/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerId,
+          nickname: nick,
+          pg: finalLineup.PG,
+          sg: finalLineup.SG,
+          sf: finalLineup.SF,
+          pf: finalLineup.PF,
+          c: finalLineup.C,
+          score,
+          avgStats,
+        }),
+      });
+
+      const uploadData = await uploadRes.json();
+      if (!uploadRes.ok) {
+        alert(uploadData.error || 'Upload failed');
+        setIsLoading(false);
+        return;
+      }
+
+      setLineupId(uploadData.lineupId);
+
+      // Matchmake
+      setLoadingMsg('Finding opponent...');
+      const matchRes = await fetch('/api/battle/matchmake', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lineupId: uploadData.lineupId, playerId }),
+      });
+
+      const matchData = await matchRes.json();
+      setIsLoading(false);
+
+      if (!matchRes.ok) {
+        alert(matchData.error || 'Matchmaking failed');
+        setPhase('LEADERBOARD');
+        return;
+      }
+
+      setBattleData(matchData);
+      setPhase('BATTLE');
+    } catch (err: any) {
+      alert(err.message || 'Something went wrong');
+      setIsLoading(false);
+    }
+  };
+
+  const handleBattleAgain = async () => {
+    const playerId = getPlayerId();
+    setIsLoading(true);
+    setLoadingMsg('Finding new opponent...');
+    setPhase('BATTLE');
+
+    try {
+      const matchRes = await fetch('/api/battle/matchmake', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lineupId, playerId }),
+      });
+
+      const matchData = await matchRes.json();
+      setIsLoading(false);
+
+      if (!matchRes.ok) {
+        alert(matchData.error || 'Matchmaking failed');
+        setPhase('LEADERBOARD');
+        return;
+      }
+
+      setBattleData(matchData);
+    } catch {
       setIsLoading(false);
       setPhase('LEADERBOARD');
-    }, 1500);
+    }
   };
 
   const handleRestart = () => {
     setPhase('INTRO');
     setPackPool([]);
     setFinalLineup({ PG: null, SG: null, SF: null, PF: null, C: null });
+    setLineupId('');
+    setNickname('');
+    setBattleData(null);
   };
-
-  const lineupScore = finalLineup ? calcLineupScore(finalLineup) : 0;
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500/30">
@@ -98,7 +200,35 @@ export default function Home() {
                 transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
                 className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-4"
               />
-              <h2 className="text-2xl font-black text-blue-400 uppercase tracking-widest">Uploading Lineup...</h2>
+              <h2 className="text-2xl font-black text-blue-400 uppercase tracking-widest">{loadingMsg}</h2>
+            </div>
+          )}
+        </div>
+      )}
+
+      {phase === 'ENTER_NICKNAME' && (
+        <NicknameModal
+          onSubmit={handleNicknameSubmit}
+          onCancel={() => setPhase('RESULT')}
+        />
+      )}
+
+      {phase === 'BATTLE' && battleData && (
+        <div className="relative">
+          <BattleResult
+            result={battleData}
+            onLeaderboard={() => setPhase('LEADERBOARD')}
+            onBattleAgain={handleBattleAgain}
+            onHistory={() => setPhase('BATTLE_HISTORY')}
+          />
+          {isLoading && (
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mb-4"
+              />
+              <h2 className="text-2xl font-black text-purple-400 uppercase tracking-widest">{loadingMsg}</h2>
             </div>
           )}
         </div>
@@ -106,9 +236,14 @@ export default function Home() {
 
       {phase === 'LEADERBOARD' && (
         <Leaderboard
-          userLineup={finalLineup}
-          userTotalOvr={lineupScore}
           onRestart={handleRestart}
+          onHistory={() => setPhase('BATTLE_HISTORY')}
+        />
+      )}
+
+      {phase === 'BATTLE_HISTORY' && (
+        <BattleHistory
+          onBack={() => setPhase('LEADERBOARD')}
         />
       )}
     </div>

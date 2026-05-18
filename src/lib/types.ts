@@ -159,3 +159,25 @@ export const STAT_LABELS: Record<string, string> = {
   REB: '篮板',
   CLU: '关键',
 };
+
+// PK Battle types
+export interface BattleHistoryEntry {
+  id: string;
+  challenger_nickname: string;
+  defender_nickname: string;
+  challenger_score: number;
+  defender_score: number;
+  winner: 'challenger' | 'defender' | 'draw';
+  created_at: string;
+}
+
+export interface LeaderboardEntry {
+  player_id: string;
+  nickname: string;
+  wins: number;
+  losses: number;
+  draws: number;
+  total_battles: number;
+  best_score: number;
+  win_rate: number;
+}
