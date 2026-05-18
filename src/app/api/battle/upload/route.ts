@@ -19,8 +19,8 @@ interface UploadBody {
 
 function loadPlayersMap(): Map<number, any> {
   const paths = [
-    path.join(process.cwd(), '..', 'data', 'players.json'),
     path.join(process.cwd(), 'public', 'data', 'players.json'),
+    path.join(process.cwd(), '..', 'data', 'players.json'),
   ];
   for (const p of paths) {
     try {
