@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BattleHistoryEntry } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
-import { ArrowLeft, Trophy, Swords } from 'lucide-react';
+import { fetchBattleHistory } from '@/lib/supabase-service';
+import { ArrowLeft, Swords } from 'lucide-react';
 
 interface Props {
   onBack: () => void;
@@ -13,16 +14,13 @@ interface Props {
 export default function BattleHistory({ onBack }: Props) {
   const [history, setHistory] = useState<BattleHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const playerId = getPlayerId();
-    fetch(`/api/battle/history?playerId=${playerId}`)
-      .then(res => res.json())
-      .then(data => {
-        setHistory(data.history || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchBattleHistory(playerId)
+      .then(data => { setHistory(data); setLoading(false); })
+      .catch(err => { setError(err.message); setLoading(false); });
   }, []);
 
   const formatDate = (dateStr: string) => {
@@ -34,10 +32,7 @@ export default function BattleHistory({ onBack }: Props) {
     <div className="min-h-screen bg-gray-900 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={onBack}
-            className="text-white/50 hover:text-white transition-colors"
-          >
+          <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
             <ArrowLeft className="w-6 h-6" />
           </button>
           <h1 className="text-3xl font-black text-white uppercase tracking-tighter">Battle History</h1>
@@ -51,11 +46,14 @@ export default function BattleHistory({ onBack }: Props) {
               className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
             />
           </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-400 font-bold text-lg">{error}</p>
+          </div>
         ) : history.length === 0 ? (
           <div className="text-center py-20">
             <Swords className="w-16 h-16 text-gray-600 mx-auto mb-4" />
             <p className="text-gray-500 font-bold text-lg">No battles yet</p>
-            <p className="text-gray-600 text-sm mt-2">Upload a lineup and battle to see your history here</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -84,11 +82,9 @@ export default function BattleHistory({ onBack }: Props) {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-black text-lg">
-                      <span className={isWin ? 'text-green-400' : 'text-white'}>{entry.challenger_score}</span>
-                      <span className="text-gray-600 mx-1">:</span>
-                      <span className={!isWin && !isDraw ? 'text-red-400' : 'text-white'}>{entry.defender_score}</span>
-                    </div>
+                    <span className={isWin ? 'text-green-400' : 'text-white'}>{entry.challenger_score}</span>
+                    <span className="text-gray-600 mx-1">:</span>
+                    <span className={!isWin && !isDraw ? 'text-red-400' : 'text-white'}>{entry.defender_score}</span>
                   </div>
                 </motion.div>
               );

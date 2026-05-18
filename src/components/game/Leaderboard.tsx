@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { LeaderboardEntry } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
+import { fetchLeaderboard } from '@/lib/supabase-service';
 import { Trophy, Medal, Crown, History, RotateCcw } from 'lucide-react';
 
 interface Props {
@@ -14,16 +15,13 @@ interface Props {
 export default function Leaderboard({ onRestart, onHistory }: Props) {
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const playerId = getPlayerId();
 
   useEffect(() => {
-    fetch('/api/leaderboard')
-      .then(res => res.json())
-      .then(data => {
-        setBoard(data.leaderboard || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchLeaderboard()
+      .then(data => { setBoard(data); setLoading(false); })
+      .catch(err => { setError(err.message); setLoading(false); });
   }, []);
 
   const getRankIcon = (rank: number) => {
@@ -52,6 +50,11 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
             className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
           />
+        </div>
+      ) : error ? (
+        <div className="text-center py-20">
+          <p className="text-red-400 font-bold text-lg">{error}</p>
+          <p className="text-gray-600 text-sm mt-2">Make sure Supabase is configured</p>
         </div>
       ) : board.length === 0 ? (
         <div className="text-center py-20">
@@ -83,16 +86,10 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                     isUser ? 'bg-blue-900/30 border-blue-500/50' : 'hover:bg-gray-700/30'
                   }`}
                 >
-                  <div className="col-span-1 flex justify-center">
-                    {getRankIcon(rank)}
-                  </div>
+                  <div className="col-span-1 flex justify-center">{getRankIcon(rank)}</div>
                   <div className="col-span-3 flex items-center gap-2">
-                    {isUser && (
-                      <span className="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-black uppercase">YOU</span>
-                    )}
-                    <span className={`font-black text-lg ${isUser ? 'text-blue-400' : 'text-gray-200'}`}>
-                      {entry.nickname}
-                    </span>
+                    {isUser && <span className="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-black uppercase">YOU</span>}
+                    <span className={`font-black text-lg ${isUser ? 'text-blue-400' : 'text-gray-200'}`}>{entry.nickname}</span>
                   </div>
                   <div className="col-span-2 text-center">
                     <span className="text-green-400 font-bold">{entry.wins}</span>
@@ -105,13 +102,9 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                     </span>
                   </div>
                   <div className="col-span-2 text-center">
-                    <span className={`font-black text-lg ${rank === 1 ? 'text-yellow-400' : 'text-white'}`}>
-                      {entry.best_score}
-                    </span>
+                    <span className={`font-black text-lg ${rank === 1 ? 'text-yellow-400' : 'text-white'}`}>{entry.best_score}</span>
                   </div>
-                  <div className="col-span-2 text-center text-gray-400 font-bold">
-                    {entry.total_battles}
-                  </div>
+                  <div className="col-span-2 text-center text-gray-400 font-bold">{entry.total_battles}</div>
                 </motion.div>
               );
             })}

@@ -26,7 +26,7 @@ export default function PackOpener({ onComplete }: Props) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/players');
+        const res = await fetch('/data/players.json');
         const data = await res.json();
         const players = data.players || data;
         if (!Array.isArray(players) || players.length < TOTAL_ROUNDS * CARDS_PER_ROUND) throw new Error('Not enough players');

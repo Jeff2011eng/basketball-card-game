@@ -3,9 +3,9 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, PackCard } from '@/lib/types';
-import { calcLineupScore } from '@/lib/game-logic';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { getPlayerId } from '@/lib/player-identity';
+import { uploadLineup, matchmake } from '@/lib/supabase-service';
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
 import LineupResult from '@/components/game/LineupResult';
@@ -27,10 +27,6 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
 
-  const startOpening = () => {
-    setPhase('OPENING');
-  };
-
   const handleOpeningComplete = useCallback((revealedCards: PackCard[]) => {
     setPackPool(revealedCards);
     setPhase('DRAFTING');
@@ -49,66 +45,20 @@ export default function Home() {
     setNickname(nick);
     setIsLoading(true);
     setLoadingMsg('Uploading lineup...');
-    setPhase('RESULT');
 
     try {
       const playerId = getPlayerId();
-      const score = calcLineupScore(finalLineup);
-      const players = Object.values(finalLineup).filter(Boolean);
-      const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY', 'REB', 'CLU'] as const;
-      const avgStats: Record<string, number> = {};
-      for (const key of STAT_KEYS) {
-        avgStats[key] = Math.round(players.reduce((s, p) => s + (p!.stats[key]), 0) / players.length * 10) / 10;
-      }
+      const { lineupId: lid } = await uploadLineup(playerId, nick, finalLineup);
+      setLineupId(lid);
 
-      // Upload lineup
-      const uploadRes = await fetch('/api/battle/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          playerId,
-          nickname: nick,
-          pg: finalLineup.PG,
-          sg: finalLineup.SG,
-          sf: finalLineup.SF,
-          pf: finalLineup.PF,
-          c: finalLineup.C,
-          score,
-          avgStats,
-        }),
-      });
-
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) {
-        alert(uploadData.error || 'Upload failed');
-        setIsLoading(false);
-        return;
-      }
-
-      setLineupId(uploadData.lineupId);
-
-      // Matchmake
       setLoadingMsg('Finding opponent...');
-      const matchRes = await fetch('/api/battle/matchmake', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lineupId: uploadData.lineupId, playerId }),
-      });
-
-      const matchData = await matchRes.json();
+      const result = await matchmake(playerId, lid);
       setIsLoading(false);
-
-      if (!matchRes.ok) {
-        alert(matchData.error || 'Matchmaking failed');
-        setPhase('LEADERBOARD');
-        return;
-      }
-
-      setBattleData(matchData);
+      setBattleData(result);
       setPhase('BATTLE');
     } catch (err: any) {
-      alert(err.message || 'Something went wrong');
       setIsLoading(false);
+      alert(err.message || 'Something went wrong');
     }
   };
 
@@ -116,27 +66,14 @@ export default function Home() {
     const playerId = getPlayerId();
     setIsLoading(true);
     setLoadingMsg('Finding new opponent...');
-    setPhase('BATTLE');
 
     try {
-      const matchRes = await fetch('/api/battle/matchmake', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lineupId, playerId }),
-      });
-
-      const matchData = await matchRes.json();
+      const result = await matchmake(playerId, lineupId);
       setIsLoading(false);
-
-      if (!matchRes.ok) {
-        alert(matchData.error || 'Matchmaking failed');
-        setPhase('LEADERBOARD');
-        return;
-      }
-
-      setBattleData(matchData);
-    } catch {
+      setBattleData(result);
+    } catch (err: any) {
       setIsLoading(false);
+      alert(err.message || 'Matchmaking failed');
       setPhase('LEADERBOARD');
     }
   };
@@ -169,7 +106,7 @@ export default function Home() {
             </p>
 
             <button
-              onClick={startOpening}
+              onClick={() => setPhase('OPENING')}
               className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
             >
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -242,9 +179,7 @@ export default function Home() {
       )}
 
       {phase === 'BATTLE_HISTORY' && (
-        <BattleHistory
-          onBack={() => setPhase('LEADERBOARD')}
-        />
+        <BattleHistory onBack={() => setPhase('LEADERBOARD')} />
       )}
     </div>
   );
