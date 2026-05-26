@@ -14,7 +14,7 @@ import NicknameModal from '@/components/game/NicknameModal';
 import BattleResult from '@/components/game/BattleResult';
 import BattleHistory from '@/components/game/BattleHistory';
 import LineupReview from '@/components/game/LineupReview';
-import { Play, Trophy, History, Users, Share2 } from 'lucide-react';
+import { Play, Trophy, History, Users } from 'lucide-react';
 
 type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY' | 'LINEUP_REVIEW';
 
@@ -128,31 +128,6 @@ export default function Home() {
     setBattleData(null);
   };
 
-  const handleShare = async () => {
-    if (!nickname) return;
-    const playerId = getPlayerId();
-    try {
-      const { createClient } = await import('@supabase/supabase-js');
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (!url || !key) return;
-      const sb = createClient(url, key);
-      const { data } = await sb.from('player_stats').select('wins, losses, best_score').eq('player_id', playerId).maybeSingle();
-      if (!data) { alert('暂无战绩数据'); return; }
-
-      const text = `🏀 NBA Draft Battle\n👤 ${nickname}\n🏆 ${data.wins}胜 ${data.losses}负\n⭐ 最高评分 ${data.best_score}\n🔗 ${window.location.href}`;
-
-      if (navigator.share) {
-        await navigator.share({ title: 'NBA Draft Battle', text });
-      } else {
-        await navigator.clipboard.writeText(text);
-        alert('战绩已复制到剪贴板！');
-      }
-    } catch {
-      // user cancelled share
-    }
-  };
-
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500/30">
       {phase === 'INTRO' && (
@@ -212,13 +187,6 @@ export default function Home() {
                   <Users className="w-4 h-4 text-green-400" />
                   我的阵容
                 </button>
-                <button
-                  onClick={handleShare}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
-                >
-                  <Share2 className="w-4 h-4 text-purple-400" />
-                  分享战绩
-                </button>
               </div>
             )}
           </motion.div>
@@ -244,7 +212,7 @@ export default function Home() {
         <div className="relative">
           <LineupResult lineup={finalLineup} onUpload={handleUpload} />
           {isLoading && (
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
@@ -265,7 +233,7 @@ export default function Home() {
             onHistory={() => setPhase('BATTLE_HISTORY')}
           />
           {isLoading && (
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}

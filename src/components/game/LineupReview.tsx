@@ -7,7 +7,8 @@ import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
-import { ArrowLeft, Users, Download } from 'lucide-react';
+import { ArrowLeft, Users, Share2 } from 'lucide-react';
+import QRCode from 'qrcode';
 
 interface Props {
   onBack: () => void;
@@ -16,10 +17,12 @@ interface Props {
 export default function LineupReview({ onBack }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
+  const [qrDataUrl, setQrDataUrl] = useState('');
 
   const nickname = typeof window !== 'undefined' ? localStorage.getItem('nickname') || '' : '';
+  const pageUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : '';
 
   useEffect(() => {
     const playerId = getPlayerId();
@@ -28,27 +31,37 @@ export default function LineupReview({ onBack }: Props) {
       .catch(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (pageUrl) {
+      QRCode.toDataURL(pageUrl, { width: 120, margin: 1, color: { dark: '#ffffff', light: '#00000000' } })
+        .then(url => setQrDataUrl(url))
+        .catch(() => {});
+    }
+  }, [pageUrl]);
+
   const totalOvr = lineup ? Math.round(Object.values(lineup).reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100 : 0;
   const score = lineup ? calcLineupScore(lineup) : 0;
 
-  const handleSaveImage = async () => {
-    if (!captureRef.current || saving) return;
-    setSaving(true);
+  const handleGenerateImage = async () => {
+    if (!captureRef.current || generating) return;
+    setGenerating(true);
     try {
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(captureRef.current, {
         backgroundColor: '#111827',
         scale: 2,
         useCORS: true,
+        allowTaint: true,
       });
       const link = document.createElement('a');
       link.download = `NBA_Draft_Battle_${nickname || 'lineup'}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-    } catch {
-      alert('保存失败，请截图保存');
+    } catch (e) {
+      console.error(e);
+      alert('生成图片失败，请截图保存');
     }
-    setSaving(false);
+    setGenerating(false);
   };
 
   const SCALE = 0.5;
@@ -89,12 +102,12 @@ export default function LineupReview({ onBack }: Props) {
           </div>
           {lineup && (
             <button
-              onClick={handleSaveImage}
-              disabled={saving}
+              onClick={handleGenerateImage}
+              disabled={generating}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors disabled:opacity-50 text-sm"
             >
-              <Download className="w-4 h-4" />
-              {saving ? '保存中...' : '保存图片'}
+              <Share2 className="w-4 h-4" />
+              {generating ? '生成中...' : '生成海报'}
             </button>
           )}
         </div>
@@ -114,7 +127,7 @@ export default function LineupReview({ onBack }: Props) {
           </div>
         ) : (
           <>
-            {/* Capturable area */}
+            {/* 截图区域 */}
             <div ref={captureRef} className="bg-gray-900 rounded-2xl py-8 px-6">
               <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-2 uppercase tracking-tighter">
@@ -139,7 +152,6 @@ export default function LineupReview({ onBack }: Props) {
                 </div>
               </div>
 
-              {/* PF SF / C / PG SG */}
               <div className="flex flex-col items-center gap-4">
                 <div className="flex justify-center gap-4">
                   {renderCard('PF', 0)}
@@ -154,7 +166,19 @@ export default function LineupReview({ onBack }: Props) {
                 </div>
               </div>
 
-              <p className="text-center text-gray-600 text-xs mt-8">NBA 选秀对战 · 虎扑JRS</p>
+              {/* 底部 QR 码和水印 */}
+              <div className="flex items-center justify-between mt-8 px-4">
+                <div>
+                  <p className="text-white font-black text-lg">NBA 选秀对战</p>
+                  <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
+                </div>
+                {qrDataUrl && (
+                  <div className="flex flex-col items-center">
+                    <img src={qrDataUrl} alt="QR Code" width={80} height={80} className="rounded" />
+                    <p className="text-gray-500 text-[10px] mt-1">扫码参与</p>
+                  </div>
+                )}
+              </div>
             </div>
           </>
         )}
