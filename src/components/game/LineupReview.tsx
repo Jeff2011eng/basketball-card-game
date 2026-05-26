@@ -7,7 +7,7 @@ import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
-import { ArrowLeft, Users, Share2 } from 'lucide-react';
+import { ArrowLeft, Share2 } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import QRCode from 'qrcode';
 
@@ -117,21 +117,16 @@ export default function LineupReview({ onBack }: Props) {
     <div className="min-h-screen bg-gray-900 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <Users className="w-6 h-6 text-green-400" />
-            <h1 className="text-3xl font-black text-white uppercase tracking-tighter">我的阵容</h1>
-          </div>
+          <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
+            <ArrowLeft className="w-6 h-6" />
+          </button>
           {lineup && (
             <button
               onClick={handleGenerateImage}
               disabled={generating}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors disabled:opacity-50 text-sm"
+              className="text-white/50 hover:text-white transition-colors disabled:opacity-50"
             >
-              <Share2 className="w-4 h-4" />
-              {generating ? '生成中...' : '生成海报'}
+              <Share2 className="w-6 h-6" />
             </button>
           )}
         </div>
