@@ -229,7 +229,7 @@ export default function LineupReview({ onBack }: Props) {
               {/* 底部 QR 码和水印 */}
               <div className="flex items-center justify-between mt-8 px-4">
                 <div>
-                  <p className="text-white font-black text-lg">NBA 选秀对战</p>
+                  <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
                   <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
                 </div>
                 {qrDataUrl && (
