@@ -31,6 +31,9 @@ export default function DraftBoard({ pool, onComplete }: Props) {
   }, [pool, filter, search]);
 
   const handleSelect = (player: PackCard) => {
+    // Already in lineup
+    if (lineupCardIds.has(player.id)) return;
+
     const eligiblePositions = POSITIONS.filter(p => player.position.includes(p));
     if (eligiblePositions.length === 0) return;
 
