@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import { getSupabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
@@ -39,11 +40,7 @@ export default function Home() {
     const playerId = getPlayerId();
     const checkCount = async () => {
       try {
-        const { createClient } = await import('@supabase/supabase-js');
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-        if (!url || !key) return;
-        const sb = createClient(url, key);
+        const sb = getSupabase();
         const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
         setPlayCount(data?.total_battles ?? 0);
       } catch {

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { getPlayerId } from '@/lib/player-identity';
+import { getSupabase } from '@/lib/supabase';
 
 interface Props {
   onSubmit: (nickname: string) => void;
@@ -30,11 +31,7 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
 
     try {
       const playerId = getPlayerId();
-      const { createClient } = await import('@supabase/supabase-js');
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (!url || !key) { setError('Supabase 未配置'); setChecking(false); return; }
-      const sb = createClient(url, key);
+      const sb = getSupabase();
 
       // Check play count
       const { data: stats } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
