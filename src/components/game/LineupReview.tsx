@@ -156,7 +156,15 @@ export default function LineupReview({ onBack }: Props) {
             {/* 截图区域 */}
             <div ref={captureRef} className="bg-gray-900 rounded-2xl py-8 px-6">
               <div className="text-center mb-8">
-                <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-2 uppercase tracking-tighter">
+                <h1
+                  className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right, #facc15, #f97316, #ef4444)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
                   我的阵容
                 </h1>
                 {nickname && (
@@ -164,14 +172,8 @@ export default function LineupReview({ onBack }: Props) {
                 )}
                 <div className="flex items-center justify-center gap-6">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">阵容评分</span>
-                    <div className="bg-black text-white text-3xl font-black px-4 py-1 rounded-xl border-4 border-yellow-500">
-                      {totalOvr}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
                     <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">战力</span>
-                    <div className="bg-black text-white text-3xl font-black px-4 py-1 rounded-xl border-4 border-purple-500">
+                    <div className="bg-black text-white text-3xl font-black px-4 py-1 rounded-xl" style={{ border: '4px solid #a855f7' }}>
                       {score}
                     </div>
                   </div>
@@ -213,7 +215,7 @@ export default function LineupReview({ onBack }: Props) {
                   <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">激活徽章</h3>
                   <div className="flex flex-wrap gap-2">
                     {allBadges.slice(0, 8).map(b => (
-                      <span key={b} className="bg-blue-900/50 text-blue-300 border border-blue-700/50 px-3 py-1 rounded-full text-xs font-bold">
+                      <span key={b} className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: 'rgba(30,58,138,0.5)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.5)' }}>
                         {b}
                       </span>
                     ))}
