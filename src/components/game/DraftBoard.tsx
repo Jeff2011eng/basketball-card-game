@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { PackCard, Lineup } from '@/lib/types';
 import { getRarity } from '@/lib/game-logic';
 import Card from './Card';
-import { Search, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 type Position = 'PG' | 'SG' | 'SF' | 'PF' | 'C';
 const POSITIONS: Position[] = ['PG', 'SG', 'SF', 'PF', 'C'];
@@ -17,7 +17,6 @@ interface Props {
 
 export default function DraftBoard({ pool, onComplete }: Props) {
   const [filter, setFilter] = useState<Position | 'ALL'>('ALL');
-  const [search, setSearch] = useState('');
   const [lineup, setLineup] = useState<Lineup>({
     PG: null, SG: null, SF: null, PF: null, C: null,
   });
@@ -41,16 +40,11 @@ export default function DraftBoard({ pool, onComplete }: Props) {
   }, []);
 
   const filteredPool = useMemo(() => {
-    const q = search.trim().toLowerCase();
     return pool.filter(p => {
       if (filter !== 'ALL' && !p.position.includes(filter)) return false;
-      if (q) {
-        const fields = [p.name_en, p.name_cn, p.nickname, p.team].map(s => (s || '').toLowerCase());
-        if (!fields.some(f => f.includes(q))) return false;
-      }
       return true;
     }).sort((a, b) => b.ovr - a.ovr);
-  }, [pool, filter, search]);
+  }, [pool, filter]);
 
   const handleSelect = (player: PackCard) => {
     // Already in lineup
@@ -146,8 +140,8 @@ export default function DraftBoard({ pool, onComplete }: Props) {
         </div>
       </div>
 
-      {/* Filters & Search */}
-      <div className="max-w-6xl mx-auto w-full p-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+      {/* Filters */}
+      <div className="max-w-6xl mx-auto w-full p-6 flex justify-center">
         <div className="flex gap-2 bg-gray-800 p-1 rounded-lg">
           {(['ALL', ...POSITIONS] as const).map(pos => (
             <button
@@ -160,17 +154,6 @@ export default function DraftBoard({ pool, onComplete }: Props) {
               {pos}
             </button>
           ))}
-        </div>
-
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
-          <input
-            type="text"
-            placeholder="搜索球员..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-gray-800 text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
-          />
         </div>
       </div>
 
