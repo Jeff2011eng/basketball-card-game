@@ -72,16 +72,14 @@ export default function LineupReview({ onBack }: Props) {
     if (!captureRef.current || generating) return;
     setGenerating(true);
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(captureRef.current, {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(captureRef.current, {
         backgroundColor: '#111827',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
+        pixelRatio: 2,
       });
       const link = document.createElement('a');
-      link.download = `NBA_Draft_Battle_${nickname || 'lineup'}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.download = `NBA_Lineup_${nickname || 'lineup'}.png`;
+      link.href = dataUrl;
       link.click();
     } catch (e) {
       console.error(e);
