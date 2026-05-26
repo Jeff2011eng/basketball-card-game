@@ -163,7 +163,7 @@ export default function PackOpener({ onComplete }: Props) {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
                 className="w-full overflow-hidden"
-                style={{ containerType: 'inline-size' }}
+                style={{ containerType: 'inline-size', aspectRatio: '2/3' }}
               >
                 <div
                   className="origin-top-left"

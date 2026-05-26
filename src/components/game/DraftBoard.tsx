@@ -157,8 +157,8 @@ export default function DraftBoard({ pool, onComplete }: Props) {
       </div>
 
       {/* Pool Grid */}
-      <div className="max-w-6xl mx-auto w-full p-6 flex-1">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 pb-20">
+      <div className="max-w-6xl mx-auto w-full p-3 sm:p-6 flex-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-6 pb-20">
           {filteredPool.map(player => {
             const isSelected = lineupCardIds.has(player.id);
             return (
@@ -167,7 +167,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
-                <div className="overflow-hidden w-full" style={{ containerType: 'inline-size' }}>
+                <div className="overflow-hidden w-full" style={{ containerType: 'inline-size', aspectRatio: '2/3' }}>
                   <div className="origin-top-left" style={{ width: 320, height: 480, transform: 'scale(calc(100cqw / 320))' }}>
                     <Card
                       player={player}
