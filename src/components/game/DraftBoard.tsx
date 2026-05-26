@@ -88,7 +88,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 setLineup(prev => ({ ...prev, [pos]: null }));
               }}
             >
-              <span className="text-white font-bold text-xs">REMOVE</span>
+              <span className="text-white font-bold text-xs">移除</span>
             </div>
           </div>
         ) : (
@@ -104,7 +104,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
       <div className="bg-gray-950 p-6 sticky top-0 z-30 shadow-2xl border-b border-gray-800">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col gap-2 w-full md:w-auto">
-            <h2 className="text-2xl font-black text-white tracking-wider uppercase">Build Your Lineup</h2>
+            <h2 className="text-2xl font-black text-white tracking-wider uppercase">组建阵容</h2>
             <div className="flex gap-4">
               {POSITIONS.map(renderSlot)}
             </div>
@@ -119,7 +119,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 : 'bg-gray-800 text-gray-500 cursor-not-allowed'
             }`}
           >
-            CONFIRM LINEUP <ChevronRight />
+            确认阵容 <ChevronRight />
           </button>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
           <input
             type="text"
-            placeholder="Search players..."
+            placeholder="搜索球员..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-gray-800 text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
@@ -175,7 +175,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 </div>
                 {isSelected && (
                   <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-black px-2 py-1 rounded-full z-10 shadow-lg">
-                    SELECTED
+                    已选
                   </div>
                 )}
               </motion.div>
@@ -184,7 +184,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
         </div>
         {filteredPool.length === 0 && (
           <div className="text-center text-gray-500 py-20 font-bold text-xl">
-            No players found for this filter.
+            该位置没有可用球员。
           </div>
         )}
       </div>

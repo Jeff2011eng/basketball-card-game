@@ -112,7 +112,7 @@ export default function PackOpener({ onComplete }: Props) {
           transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
           className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
         />
-        <span className="mt-4 text-white/50 font-bold">Loading...</span>
+        <span className="mt-4 text-white/50 font-bold">加载中...</span>
       </div>
     );
   }
@@ -126,12 +126,12 @@ export default function PackOpener({ onComplete }: Props) {
           exit={{ scale: 1.5, opacity: 0 }}
           className="text-center"
         >
-          <div className="text-white/30 text-lg font-bold uppercase tracking-widest mb-2">Round</div>
+          <div className="text-white/30 text-lg font-bold uppercase tracking-widest mb-2">第</div>
           <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
             {currentRound + 1}
           </div>
           <div className="text-white/40 text-sm font-bold uppercase tracking-widest mt-4">
-            {CARDS_PER_ROUND} cards to reveal
+            {CARDS_PER_ROUND} 张卡待揭晓
           </div>
         </motion.div>
       </div>
@@ -148,10 +148,10 @@ export default function PackOpener({ onComplete }: Props) {
           className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter mb-2">
-            Round {currentRound + 1} Complete
+            第 {currentRound + 1} 轮完成
           </h2>
           <p className="text-white/50 font-bold uppercase tracking-widest text-sm">
-            {currentRound + 1} of {TOTAL_ROUNDS} rounds done
+            已完成 {currentRound + 1} / {TOTAL_ROUNDS} 轮
           </p>
         </motion.div>
 
@@ -181,7 +181,7 @@ export default function PackOpener({ onComplete }: Props) {
         onClick={handleNextRound}
         className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black text-xl px-10 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-purple-500/30 z-30 whitespace-nowrap"
       >
-        Next Round →
+        下一轮 →
       </motion.button>
       </>
     );
@@ -198,7 +198,7 @@ export default function PackOpener({ onComplete }: Props) {
       <div className="absolute top-8 left-0 right-0 flex justify-between px-8 z-20">
         <div className="flex flex-col gap-2">
           <div className="text-white font-bold text-xl bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
-            Round {currentRound + 1} / {TOTAL_ROUNDS}
+            第 {currentRound + 1} / {TOTAL_ROUNDS} 轮
           </div>
           <div className="text-white/70 font-bold text-base bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
             {roundCards.length - roundIndex} / {CARDS_PER_ROUND}
@@ -208,7 +208,7 @@ export default function PackOpener({ onComplete }: Props) {
           onClick={handleSkipRound}
           className="text-white font-bold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg backdrop-blur transition-colors h-fit"
         >
-          Skip Round
+          跳过本轮
         </button>
       </div>
 
@@ -274,9 +274,9 @@ export default function PackOpener({ onComplete }: Props) {
 
       <div className="absolute bottom-12 text-white/50 text-sm font-medium flex flex-col items-center gap-2">
         {!isFlipped ? (
-          <span>Tap to reveal · Swipe up to skip</span>
+          <span>点击翻牌 · 上滑跳过</span>
         ) : (
-          <span>Tap again or swipe up to collect</span>
+          <span>再次点击或上滑收牌</span>
         )}
       </div>
     </div>

@@ -16,12 +16,12 @@ interface Props {
 const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
 
 const STAT_DISPLAY: Record<string, string> = {
-  SHO: 'Shooting',
-  SLA: 'Slashing',
-  DEF: 'Defense',
-  ATH: 'Athleticism',
-  PLM: 'Playmaking',
-  PHY: 'Physical',
+  SHO: '投射',
+  SLA: '突破',
+  DEF: '防守',
+  ATH: '运动',
+  PLM: '组织',
+  PHY: '对抗',
 };
 
 export default function LineupResult({ lineup, onUpload }: Props) {
@@ -49,10 +49,10 @@ export default function LineupResult({ lineup, onUpload }: Props) {
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-2 uppercase tracking-tighter">
-            Your Ultimate Team
+            你的终极阵容
           </h1>
           <div className="flex items-center justify-center gap-4">
-            <span className="text-gray-400 text-xl font-bold uppercase tracking-widest">Team OVR</span>
+            <span className="text-gray-400 text-xl font-bold uppercase tracking-widest">阵容评分</span>
             <div className="bg-black text-white text-5xl font-black px-6 py-2 rounded-xl border-4 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.5)]">
               {totalOvr}
             </div>
@@ -97,14 +97,14 @@ export default function LineupResult({ lineup, onUpload }: Props) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl bg-gray-800 rounded-3xl p-8 border border-gray-700 shadow-2xl">
           <div className="flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-black text-white mb-6 uppercase tracking-wider">Team Synergy & Stats</h3>
+            <h3 className="text-2xl font-black text-white mb-6 uppercase tracking-wider">阵容协同 & 属性</h3>
             <div className="w-full h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={avgStats}>
                   <PolarGrid stroke="#374151" />
                   <PolarAngleAxis dataKey="subject" tick={{ fill: '#9CA3AF', fontSize: 12, fontWeight: 'bold' }} />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                  <Radar name="Team Stats" dataKey="A" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.5} />
+                  <Radar name="阵容属性" dataKey="A" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.5} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -112,7 +112,7 @@ export default function LineupResult({ lineup, onUpload }: Props) {
 
           <div className="flex flex-col justify-center gap-6">
             <div className="bg-gray-900 rounded-xl p-6 border border-gray-700">
-              <h4 className="text-gray-400 font-bold mb-4 uppercase text-sm tracking-wider">Top Badges Active</h4>
+              <h4 className="text-gray-400 font-bold mb-4 uppercase text-sm tracking-wider">激活徽章</h4>
               <div className="flex flex-wrap gap-2">
                 {allBadges.slice(0, 8).map(b => (
                   <span key={b} className="bg-blue-900/50 text-blue-300 border border-blue-700/50 px-3 py-1 rounded-full text-xs font-bold">

@@ -165,10 +165,10 @@ export default function Home() {
             className="relative z-10 flex flex-col items-center text-center p-6"
           >
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 filter drop-shadow-[0_0_20px_rgba(168,85,247,0.5)]">
-              NBA DRAFT BATTLE
+              NBA 选秀对战
             </h1>
             <p className="text-xl md:text-2xl font-bold text-gray-300 uppercase tracking-widest mb-12">
-              Open Packs &bull; Build Your Squad &bull; Rule The Board
+              开包抽卡 &bull; 组建阵容 &bull; 统治赛场
             </p>
 
             <button
@@ -178,7 +178,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               <div className="flex items-center gap-3">
                 <Play className="w-8 h-8 fill-current" />
-                START DRAFT
+                开始抽卡
               </div>
             </button>
 

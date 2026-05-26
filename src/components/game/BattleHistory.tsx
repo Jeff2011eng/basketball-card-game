@@ -35,7 +35,7 @@ export default function BattleHistory({ onBack }: Props) {
           <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-3xl font-black text-white uppercase tracking-tighter">Battle History</h1>
+          <h1 className="text-3xl font-black text-white uppercase tracking-tighter">对战记录</h1>
         </div>
 
         {loading ? (
@@ -53,7 +53,7 @@ export default function BattleHistory({ onBack }: Props) {
         ) : history.length === 0 ? (
           <div className="text-center py-20">
             <Swords className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-500 font-bold text-lg">No battles yet</p>
+            <p className="text-gray-500 font-bold text-lg">暂无对战记录</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
