@@ -4,18 +4,18 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
-import { Trophy, Swords, History } from 'lucide-react';
+import { Trophy, Swords, History, RotateCcw } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import Card from './Card';
 
 interface Props {
   result: BattleResultType;
   onLeaderboard: () => void;
-  onBattleAgain: () => void;
+  onRestart: () => void;
   onHistory: () => void;
 }
 
-export default function BattleResult({ result, onLeaderboard, onBattleAgain, onHistory }: Props) {
+export default function BattleResult({ result, onLeaderboard, onRestart, onHistory }: Props) {
   const isWin = result.winner === 'challenger';
   const isDraw = result.winner === 'draw';
 
@@ -175,11 +175,11 @@ export default function BattleResult({ result, onLeaderboard, onBattleAgain, onH
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4 z-30">
         <div className="max-w-md mx-auto flex flex-col gap-2">
           <button
-            onClick={onBattleAgain}
+            onClick={onRestart}
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
           >
-            <Swords className="w-5 h-5" />
-            再来一局
+            <RotateCcw className="w-5 h-5" />
+            重新开始抽卡
           </button>
           <div className="flex gap-2">
             <button

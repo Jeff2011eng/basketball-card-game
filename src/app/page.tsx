@@ -261,7 +261,7 @@ export default function Home() {
           <BattleResult
             result={battleData}
             onLeaderboard={() => setPhase('LEADERBOARD')}
-            onBattleAgain={handleBattleAgain}
+            onRestart={handleRestart}
             onHistory={() => setPhase('BATTLE_HISTORY')}
           />
           {isLoading && (
