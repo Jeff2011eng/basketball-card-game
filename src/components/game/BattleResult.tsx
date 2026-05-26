@@ -135,7 +135,7 @@ export default function BattleResult({ result, onLeaderboard, onBattleAgain, onH
                   <div className="text-red-300 font-black text-xs">{m.defenderScore}</div>
                 </div>
                 <div className="overflow-hidden" style={{ width: CW, height: CH }}>
-                  <div className="origin-top-right" style={{ transform: `scale(${SCALE})`, width: 320, height: 480, transformOrigin: 'top right' }}>
+                  <div className="origin-top-left" style={{ transform: `scale(${SCALE})`, width: 320, height: 480 }}>
                     <Card player={m.defender} isFlipped={true} />
                   </div>
                 </div>
