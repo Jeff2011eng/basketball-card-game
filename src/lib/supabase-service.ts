@@ -173,3 +173,18 @@ export async function fetchBattleHistory(playerId: string): Promise<BattleHistor
   if (error) throw new Error(error.message);
   return data || [];
 }
+
+export async function fetchMyLineup(playerId: string): Promise<Lineup | null> {
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('lineups')
+    .select('pg_data, sg_data, sf_data, pf_data, c_data')
+    .eq('player_id', playerId)
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return { PG: data.pg_data, SG: data.sg_data, SF: data.sf_data, PF: data.pf_data, C: data.c_data };
+}

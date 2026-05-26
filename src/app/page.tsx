@@ -13,9 +13,10 @@ import Leaderboard from '@/components/game/Leaderboard';
 import NicknameModal from '@/components/game/NicknameModal';
 import BattleResult from '@/components/game/BattleResult';
 import BattleHistory from '@/components/game/BattleHistory';
-import { Play } from 'lucide-react';
+import LineupReview from '@/components/game/LineupReview';
+import { Play, Trophy, History, Users, Share2 } from 'lucide-react';
 
-type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY';
+type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY' | 'LINEUP_REVIEW';
 
 export default function Home() {
   const [phase, setPhase] = useState<GamePhase>('INTRO');
@@ -26,13 +27,40 @@ export default function Home() {
   const [nickname, setNickname] = useState<string>('');
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
+  const [playCount, setPlayCount] = useState<number>(-1); // -1 = unknown
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
   }, []);
 
+  useEffect(() => {
+    if (!nickname) return;
+    const playerId = getPlayerId();
+    const checkCount = async () => {
+      try {
+        const { createClient } = await import('@supabase/supabase-js');
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (!url || !key) return;
+        const sb = createClient(url, key);
+        const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
+        setPlayCount(data?.total_battles ?? 0);
+      } catch {
+        // ignore
+      }
+    };
+    checkCount();
+  }, [nickname, phase]);
+
+  const remaining = playCount === -1 ? -1 : 3 - playCount;
+  const isExhausted = remaining === 0;
+
   const handleStartDraft = () => {
+    if (isExhausted) {
+      alert('你已用完 3 次游戏机会');
+      return;
+    }
     if (nickname) {
       setPhase('OPENING');
     } else {
@@ -97,8 +125,32 @@ export default function Home() {
     setPackPool([]);
     setFinalLineup({ PG: null, SG: null, SF: null, PF: null, C: null });
     setLineupId('');
-    setNickname('');
     setBattleData(null);
+  };
+
+  const handleShare = async () => {
+    if (!nickname) return;
+    const playerId = getPlayerId();
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key) return;
+      const sb = createClient(url, key);
+      const { data } = await sb.from('player_stats').select('wins, losses, best_score').eq('player_id', playerId).maybeSingle();
+      if (!data) { alert('暂无战绩数据'); return; }
+
+      const text = `🏀 NBA Draft Battle\n👤 ${nickname}\n🏆 ${data.wins}胜 ${data.losses}负\n⭐ 最高评分 ${data.best_score}\n🔗 ${window.location.href}`;
+
+      if (navigator.share) {
+        await navigator.share({ title: 'NBA Draft Battle', text });
+      } else {
+        await navigator.clipboard.writeText(text);
+        alert('战绩已复制到剪贴板！');
+      }
+    } catch {
+      // user cancelled share
+    }
   };
 
   return (
@@ -129,6 +181,46 @@ export default function Home() {
                 START DRAFT
               </div>
             </button>
+
+            {nickname && remaining >= 0 && (
+              <p className="text-gray-400 text-sm font-bold mt-4">
+                剩余次数：{remaining}/3
+              </p>
+            )}
+
+            {/* Quick access links */}
+            {nickname && (
+              <div className="flex flex-wrap justify-center gap-3 mt-8">
+                <button
+                  onClick={() => setPhase('LEADERBOARD')}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                >
+                  <Trophy className="w-4 h-4 text-yellow-400" />
+                  排行榜
+                </button>
+                <button
+                  onClick={() => setPhase('BATTLE_HISTORY')}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                >
+                  <History className="w-4 h-4 text-blue-400" />
+                  战绩
+                </button>
+                <button
+                  onClick={() => setPhase('LINEUP_REVIEW')}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                >
+                  <Users className="w-4 h-4 text-green-400" />
+                  我的阵容
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                >
+                  <Share2 className="w-4 h-4 text-purple-400" />
+                  分享战绩
+                </button>
+              </div>
+            )}
           </motion.div>
         </div>
       )}
@@ -193,7 +285,11 @@ export default function Home() {
       )}
 
       {phase === 'BATTLE_HISTORY' && (
-        <BattleHistory onBack={() => setPhase('LEADERBOARD')} />
+        <BattleHistory onBack={() => setPhase('INTRO')} />
+      )}
+
+      {phase === 'LINEUP_REVIEW' && (
+        <LineupReview onBack={() => setPhase('INTRO')} />
       )}
     </div>
   );
