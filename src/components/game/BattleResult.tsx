@@ -1,23 +1,35 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
-import { Trophy, Swords, History, RotateCcw } from 'lucide-react';
+import { Trophy, Swords, RotateCcw, Share2 } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import Card from './Card';
+import QRCode from 'qrcode';
 
 interface Props {
   result: BattleResultType;
-  onLeaderboard: () => void;
   onRestart: () => void;
-  onHistory: () => void;
 }
 
-export default function BattleResult({ result, onLeaderboard, onRestart, onHistory }: Props) {
+export default function BattleResult({ result, onRestart }: Props) {
   const isWin = result.winner === 'challenger';
   const isDraw = result.winner === 'draw';
+  const captureRef = useRef<HTMLDivElement>(null);
+  const [generating, setGenerating] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState('');
+
+  const pageUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : '';
+
+  useEffect(() => {
+    if (pageUrl) {
+      QRCode.toDataURL(pageUrl, { width: 80, margin: 1, color: { dark: '#ffffff', light: '#00000000' } })
+        .then(url => setQrDataUrl(url))
+        .catch(() => {});
+    }
+  }, [pageUrl]);
 
   const radarData = useMemo(() => {
     return result.statComparison.map(s => ({
@@ -32,9 +44,29 @@ export default function BattleResult({ result, onLeaderboard, onRestart, onHisto
   const CW = 320 * SCALE;
   const CH = 480 * SCALE;
 
+  const handleShare = async () => {
+    if (!captureRef.current || generating) return;
+    setGenerating(true);
+    try {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(captureRef.current, {
+        backgroundColor: '#111827',
+        pixelRatio: 2,
+      });
+      const link = document.createElement('a');
+      link.download = `NBA_Battle_${result.challengerNickname}_vs_${result.defenderNickname}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (e) {
+      console.error(e);
+      alert('生成图片失败，请截图保存');
+    }
+    setGenerating(false);
+  };
+
   return (
     <>
-      <div className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
+      <div ref={captureRef} className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
         {/* 胜负公告 */}
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
@@ -45,7 +77,7 @@ export default function BattleResult({ result, onLeaderboard, onRestart, onHisto
           {isWin ? (
             <>
               <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-3" />
-              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 uppercase tracking-tighter">
+              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter" style={{ color: '#facc15' }}>
                 胜利!
               </h1>
             </>
@@ -169,34 +201,40 @@ export default function BattleResult({ result, onLeaderboard, onRestart, onHisto
             <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-red-500" /><span className="text-sm text-gray-400 font-bold">对方</span></div>
           </div>
         </div>
+
+        {/* 底部 QR 码和水印 */}
+        <div className="flex items-center justify-between max-w-xl mx-auto px-4">
+          <div>
+            <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
+            <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
+          </div>
+          {qrDataUrl && (
+            <div className="flex flex-col items-center">
+              <img src={qrDataUrl} alt="QR Code" width={60} height={60} className="rounded" />
+              <p className="text-gray-500 text-[10px] mt-1">扫码参与</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 底部操作栏 */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4 z-30">
         <div className="max-w-md mx-auto flex flex-col gap-2">
           <button
+            onClick={handleShare}
+            disabled={generating}
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            <Share2 className="w-5 h-5" />
+            {generating ? '生成中...' : '分享战绩'}
+          </button>
+          <button
             onClick={onRestart}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+            className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
             重新开始抽卡
           </button>
-          <div className="flex gap-2">
-            <button
-              onClick={onLeaderboard}
-              className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <Trophy className="w-4 h-4" />
-              排行榜
-            </button>
-            <button
-              onClick={onHistory}
-              className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <History className="w-4 h-4" />
-              战绩
-            </button>
-          </div>
         </div>
       </div>
     </>

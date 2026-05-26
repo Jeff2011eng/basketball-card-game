@@ -225,9 +225,7 @@ export default function Home() {
         <div className="relative">
           <BattleResult
             result={battleData}
-            onLeaderboard={() => setPhase('LEADERBOARD')}
             onRestart={handleRestart}
-            onHistory={() => setPhase('BATTLE_HISTORY')}
           />
           {isLoading && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
