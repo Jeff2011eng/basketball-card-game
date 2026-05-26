@@ -216,7 +216,7 @@ export default function PackOpener({ onComplete }: Props) {
           onClick={handleSkipRound}
           className="text-white font-bold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg backdrop-blur transition-colors h-fit"
         >
-          跳过本轮
+          解锁全部
         </button>
       </div>
 
