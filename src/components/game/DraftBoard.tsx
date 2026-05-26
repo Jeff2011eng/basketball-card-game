@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { PackCard, Lineup } from '@/lib/types';
 import { getRarity } from '@/lib/game-logic';
@@ -21,6 +21,24 @@ export default function DraftBoard({ pool, onComplete }: Props) {
   const [lineup, setLineup] = useState<Lineup>({
     PG: null, SG: null, SF: null, PF: null, C: null,
   });
+  const poolGridRef = useRef<HTMLDivElement>(null);
+  const [cardScale, setCardScale] = useState(0.5);
+
+  useEffect(() => {
+    const el = poolGridRef.current;
+    if (!el) return;
+    const update = () => {
+      const style = getComputedStyle(el);
+      const cols = style.gridTemplateColumns.split(' ').length;
+      const gap = parseFloat(style.gap) || 8;
+      const colWidth = (el.clientWidth - gap * (cols - 1)) / cols;
+      setCardScale(colWidth / 320);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const filteredPool = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -158,7 +176,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
 
       {/* Pool Grid */}
       <div className="max-w-6xl mx-auto w-full p-3 sm:p-6 flex-1">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-6 pb-20">
+        <div ref={poolGridRef} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-6 pb-20">
           {filteredPool.map(player => {
             const isSelected = lineupCardIds.has(player.id);
             return (
@@ -167,8 +185,14 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
-                <div className="overflow-hidden w-full" style={{ containerType: 'inline-size', aspectRatio: '2/3' }}>
-                  <div className="origin-top-left" style={{ width: 320, height: 480, transform: 'scale(calc(100cqw / 320))' }}>
+                <div
+                  className="overflow-hidden"
+                  style={{ width: 320 * cardScale, height: 480 * cardScale }}
+                >
+                  <div
+                    className="origin-top-left"
+                    style={{ width: 320, height: 480, transform: `scale(${cardScale})` }}
+                  >
                     <Card
                       player={player}
                       isFlipped={true}

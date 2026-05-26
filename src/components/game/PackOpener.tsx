@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PackCard } from '@/lib/types';
 import { drawPacks } from '@/lib/game-logic';
@@ -22,6 +22,22 @@ export default function PackOpener({ onComplete }: Props) {
   const [flyingCards, setFlyingCards] = useState<number[]>([]);
   const [showRoundIntro, setShowRoundIntro] = useState(true);
   const [showRoundSummary, setShowRoundSummary] = useState(false);
+  const summaryGridRef = useRef<HTMLDivElement>(null);
+  const [cardScale, setCardScale] = useState(0.5);
+
+  useEffect(() => {
+    const el = summaryGridRef.current;
+    if (!el) return;
+    const update = () => {
+      const gap = 8;
+      const colWidth = (el.clientWidth - gap) / 2;
+      setCardScale(colWidth / 320);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [showRoundSummary]);
 
   useEffect(() => {
     (async () => {
@@ -155,23 +171,19 @@ export default function PackOpener({ onComplete }: Props) {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-2 w-full max-w-md mb-10">
+        <div ref={summaryGridRef} className="grid grid-cols-2 gap-2 w-full max-w-md mb-10">
           {roundCards.map((player, i) => (
             <div key={player.id} className="flex justify-center">
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
-                className="w-full overflow-hidden"
-                style={{ containerType: 'inline-size', aspectRatio: '2/3' }}
+                className="overflow-hidden"
+                style={{ width: 320 * cardScale, height: 480 * cardScale }}
               >
                 <div
                   className="origin-top-left"
-                  style={{
-                    width: 320,
-                    height: 480,
-                    transform: `scale(calc(100cqw / 320))`,
-                  }}
+                  style={{ width: 320, height: 480, transform: `scale(${cardScale})` }}
                 >
                   <Card player={player} isFlipped={true} />
                 </div>
