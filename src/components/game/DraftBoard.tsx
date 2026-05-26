@@ -31,10 +31,20 @@ export default function DraftBoard({ pool, onComplete }: Props) {
   }, [pool, filter, search]);
 
   const handleSelect = (player: PackCard) => {
-    // Find matching position slot
-    const pos = POSITIONS.find(p => player.position.includes(p));
-    if (!pos) return;
-    setLineup(prev => ({ ...prev, [pos]: player }));
+    const eligiblePositions = POSITIONS.filter(p => player.position.includes(p));
+    if (eligiblePositions.length === 0) return;
+
+    // If the current filter matches an eligible position and slot is empty, use it
+    if (filter !== 'ALL' && eligiblePositions.includes(filter) && !lineup[filter]) {
+      setLineup(prev => ({ ...prev, [filter]: player }));
+      return;
+    }
+
+    // Otherwise, find the first empty eligible position
+    const pos = eligiblePositions.find(p => !lineup[p]);
+    if (pos) {
+      setLineup(prev => ({ ...prev, [pos]: player }));
+    }
   };
 
   const isComplete = Object.values(lineup).every(p => p !== null);

@@ -27,7 +27,7 @@ const STAT_DISPLAY: Record<string, string> = {
 export default function LineupResult({ lineup, onUpload }: Props) {
   const players = Object.values(lineup);
 
-  const totalOvr = players.reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5;
+  const totalOvr = Math.round(players.reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100;
 
   const avgStats = useMemo(() => {
     return STAT_KEYS.map(key => {
@@ -126,7 +126,7 @@ export default function LineupResult({ lineup, onUpload }: Props) {
             className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black text-xl py-6 rounded-xl flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/20"
           >
             <Trophy className="w-6 h-6" />
-            UPLOAD & BATTLE (PK)
+            上传并开始对战 (PK)
           </button>
         </div>
       </div>

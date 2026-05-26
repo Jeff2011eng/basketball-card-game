@@ -18,14 +18,16 @@ export async function uploadLineup(
   }
 
   // Check nickname uniqueness
-  const { data: existing } = await sb
+  const { data: existing, error: nickError } = await sb
     .from('players_identity')
     .select('id')
     .eq('nickname', nickname)
-    .single();
+    .maybeSingle();
+
+  if (nickError) throw new Error(`Nickname check failed: ${nickError.message}`);
 
   if (existing && existing.id !== playerId) {
-    throw new Error('Nickname already taken');
+    throw new Error('该昵称已被使用');
   }
 
   // Upsert identity
@@ -67,6 +69,12 @@ export async function matchmake(
   lineupId: string,
 ): Promise<BattleResult> {
   const sb = getSupabase();
+
+  // Check play count limit (3 times)
+  const { data: statsCheck } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
+  if (statsCheck && statsCheck.total_battles >= 3) {
+    throw new Error('你已用完 3 次游戏机会');
+  }
 
   // Fetch challenger lineup
   const { data: challenger } = await sb.from('lineups').select('*').eq('id', lineupId).single();

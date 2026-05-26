@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { getPlayerId } from '@/lib/player-identity';
 
 interface Props {
   onSubmit: (nickname: string) => void;
@@ -11,19 +12,44 @@ interface Props {
 export default function NicknameModal({ onSubmit, onCancel }: Props) {
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState('');
+  const [checking, setChecking] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const trimmed = nickname.trim();
     if (trimmed.length < 2 || trimmed.length > 32) {
-      setError('Nickname must be 2-32 characters');
+      setError('昵称需要 2-32 个字符');
       return;
     }
     if (!/^[a-zA-Z0-9_一-龥]+$/.test(trimmed)) {
-      setError('Only letters, numbers, Chinese characters and underscores');
+      setError('仅支持字母、数字、中文和下划线');
       return;
     }
+
+    setChecking(true);
     setError('');
-    onSubmit(trimmed);
+
+    try {
+      const playerId = getPlayerId();
+      const { createClient } = await import('@supabase/supabase-js');
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key) { setError('Supabase 未配置'); setChecking(false); return; }
+      const sb = createClient(url, key);
+
+      // Check play count
+      const { data: stats } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
+      if (stats && stats.total_battles >= 3) {
+        setError('你已用完 3 次游戏机会');
+        setChecking(false);
+        return;
+      }
+
+      setChecking(false);
+      onSubmit(trimmed);
+    } catch {
+      setChecking(false);
+      setError('检查失败，请重试');
+    }
   };
 
   return (
@@ -34,10 +60,10 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
         className="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl w-full max-w-md mx-4"
       >
         <h2 className="text-2xl font-black text-white uppercase tracking-wider text-center mb-2">
-          Enter Your Name
+          输入虎扑Jrs的用户昵称
         </h2>
         <p className="text-gray-400 text-sm text-center mb-6">
-          This name will appear on the leaderboard
+          每个用户仅有 3 次游戏机会
         </p>
 
         <input
@@ -45,7 +71,7 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
           value={nickname}
           onChange={e => { setNickname(e.target.value); setError(''); }}
           onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-          placeholder="Your nickname..."
+          placeholder="输入你的昵称..."
           maxLength={32}
           className="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-white text-lg font-bold focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-600"
           autoFocus
@@ -60,13 +86,14 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
             onClick={onCancel}
             className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition-colors"
           >
-            Cancel
+            取消
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/20"
+            disabled={checking}
+            className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/20 disabled:opacity-50"
           >
-            BATTLE!
+            {checking ? '验证中...' : '开始抽卡!'}
           </button>
         </div>
       </motion.div>

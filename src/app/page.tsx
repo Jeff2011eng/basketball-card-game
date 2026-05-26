@@ -15,7 +15,7 @@ import BattleResult from '@/components/game/BattleResult';
 import BattleHistory from '@/components/game/BattleHistory';
 import { Play } from 'lucide-react';
 
-type GamePhase = 'INTRO' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'ENTER_NICKNAME' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY';
+type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY';
 
 export default function Home() {
   const [phase, setPhase] = useState<GamePhase>('INTRO');
@@ -27,6 +27,15 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
 
+  const handleStartDraft = () => {
+    setPhase('ENTER_NICKNAME');
+  };
+
+  const handleNicknameSubmit = (nick: string) => {
+    setNickname(nick);
+    setPhase('OPENING');
+  };
+
   const handleOpeningComplete = useCallback((revealedCards: PackCard[]) => {
     setPackPool(revealedCards);
     setPhase('DRAFTING');
@@ -37,35 +46,30 @@ export default function Home() {
     setPhase('RESULT');
   }, []);
 
-  const handleUpload = () => {
-    setPhase('ENTER_NICKNAME');
-  };
-
-  const handleNicknameSubmit = async (nick: string) => {
-    setNickname(nick);
+  const handleUpload = async () => {
     setIsLoading(true);
-    setLoadingMsg('Uploading lineup...');
+    setLoadingMsg('上传阵容中...');
 
     try {
       const playerId = getPlayerId();
-      const { lineupId: lid } = await uploadLineup(playerId, nick, finalLineup);
+      const { lineupId: lid } = await uploadLineup(playerId, nickname, finalLineup);
       setLineupId(lid);
 
-      setLoadingMsg('Finding opponent...');
+      setLoadingMsg('匹配对手中...');
       const result = await matchmake(playerId, lid);
       setIsLoading(false);
       setBattleData(result);
       setPhase('BATTLE');
     } catch (err: any) {
       setIsLoading(false);
-      alert(err.message || 'Something went wrong');
+      alert(err.message || '出错了，请重试');
     }
   };
 
   const handleBattleAgain = async () => {
     const playerId = getPlayerId();
     setIsLoading(true);
-    setLoadingMsg('Finding new opponent...');
+    setLoadingMsg('寻找新对手...');
 
     try {
       const result = await matchmake(playerId, lineupId);
@@ -73,7 +77,7 @@ export default function Home() {
       setBattleData(result);
     } catch (err: any) {
       setIsLoading(false);
-      alert(err.message || 'Matchmaking failed');
+      alert(err.message || '匹配失败');
       setPhase('LEADERBOARD');
     }
   };
@@ -106,7 +110,7 @@ export default function Home() {
             </p>
 
             <button
-              onClick={() => setPhase('OPENING')}
+              onClick={handleStartDraft}
               className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
             >
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -117,6 +121,13 @@ export default function Home() {
             </button>
           </motion.div>
         </div>
+      )}
+
+      {phase === 'ENTER_NICKNAME' && (
+        <NicknameModal
+          onSubmit={handleNicknameSubmit}
+          onCancel={() => setPhase('INTRO')}
+        />
       )}
 
       {phase === 'OPENING' && (
@@ -141,13 +152,6 @@ export default function Home() {
             </div>
           )}
         </div>
-      )}
-
-      {phase === 'ENTER_NICKNAME' && (
-        <NicknameModal
-          onSubmit={handleNicknameSubmit}
-          onCancel={() => setPhase('RESULT')}
-        />
       )}
 
       {phase === 'BATTLE' && battleData && (
