@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
@@ -27,12 +27,22 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
 
+  useEffect(() => {
+    const saved = localStorage.getItem('nickname');
+    if (saved) setNickname(saved);
+  }, []);
+
   const handleStartDraft = () => {
-    setPhase('ENTER_NICKNAME');
+    if (nickname) {
+      setPhase('OPENING');
+    } else {
+      setPhase('ENTER_NICKNAME');
+    }
   };
 
   const handleNicknameSubmit = (nick: string) => {
     setNickname(nick);
+    localStorage.setItem('nickname', nick);
     setPhase('OPENING');
   };
 
