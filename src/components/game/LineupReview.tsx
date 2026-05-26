@@ -1,18 +1,30 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Lineup } from '@/lib/types';
+import { Lineup, STAT_LABELS } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { ArrowLeft, Users, Share2 } from 'lucide-react';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import QRCode from 'qrcode';
 
 interface Props {
   onBack: () => void;
 }
+
+const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
+
+const STAT_DISPLAY: Record<string, string> = {
+  SHO: '投射',
+  SLA: '突破',
+  DEF: '防守',
+  ATH: '运动',
+  PLM: '组织',
+  PHY: '对抗',
+};
 
 export default function LineupReview({ onBack }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
@@ -41,6 +53,20 @@ export default function LineupReview({ onBack }: Props) {
 
   const totalOvr = lineup ? Math.round(Object.values(lineup).reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100 : 0;
   const score = lineup ? calcLineupScore(lineup) : 0;
+
+  const players = lineup ? Object.values(lineup).filter(Boolean) : [];
+
+  const avgStats = useMemo(() => {
+    if (players.length === 0) return [];
+    return STAT_KEYS.map(key => {
+      const sum = players.reduce((s, p) => s + (p ? p.stats[key] : 0), 0);
+      return { subject: STAT_DISPLAY[key], A: Math.round(sum / 5 * 10) / 10, fullMark: 100 };
+    });
+  }, [players]);
+
+  const allBadges = useMemo(() => {
+    return Array.from(new Set(players.flatMap(p => p?.badges?.map((b: {name: string}) => b.name) || [] as string[])));
+  }, [players]);
 
   const handleGenerateImage = async () => {
     if (!captureRef.current || generating) return;
@@ -152,6 +178,7 @@ export default function LineupReview({ onBack }: Props) {
                 </div>
               </div>
 
+              {/* 球星卡钻石排列 */}
               <div className="flex flex-col items-center gap-4">
                 <div className="flex justify-center gap-4">
                   {renderCard('PF', 0)}
@@ -163,6 +190,37 @@ export default function LineupReview({ onBack }: Props) {
                 <div className="flex justify-center gap-4">
                   {renderCard('PG', 0.15)}
                   {renderCard('SG', 0.2)}
+                </div>
+              </div>
+
+              {/* 雷达图 + 徽章 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div className="flex flex-col items-center">
+                  <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">阵容属性</h3>
+                  <div className="w-full h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={avgStats}>
+                        <PolarGrid stroke="#374151" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#9CA3AF', fontSize: 12, fontWeight: 'bold' }} />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                        <Radar name="属性" dataKey="A" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.5} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center">
+                  <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">激活徽章</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {allBadges.slice(0, 8).map(b => (
+                      <span key={b} className="bg-blue-900/50 text-blue-300 border border-blue-700/50 px-3 py-1 rounded-full text-xs font-bold">
+                        {b}
+                      </span>
+                    ))}
+                    {allBadges.length === 0 && (
+                      <span className="text-gray-600 text-sm">暂无徽章</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
