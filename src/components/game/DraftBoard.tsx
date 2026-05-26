@@ -167,15 +167,17 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
-                <div className="transform scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.75] origin-top">
-                  <Card
-                    player={player}
-                    isFlipped={true}
-                    onClick={() => handleSelect(player)}
-                    className={`hover:-translate-y-4 transition-transform shadow-lg ${
-                      isSelected ? 'ring-4 ring-blue-500 scale-95 opacity-50' : ''
-                    }`}
-                  />
+                <div className="overflow-hidden origin-top" style={{ width: 160, height: 240 }}>
+                  <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: 320, height: 480 }}>
+                    <Card
+                      player={player}
+                      isFlipped={true}
+                      onClick={() => handleSelect(player)}
+                      className={`hover:-translate-y-4 transition-transform shadow-lg ${
+                        isSelected ? 'ring-4 ring-blue-500 scale-95 opacity-50' : ''
+                      }`}
+                    />
+                  </div>
                 </div>
                 {isSelected && (
                   <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-black px-2 py-1 rounded-full z-10 shadow-lg">
