@@ -23,9 +23,13 @@ export default function DraftBoard({ pool, onComplete }: Props) {
   });
 
   const filteredPool = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return pool.filter(p => {
       if (filter !== 'ALL' && !p.position.includes(filter)) return false;
-      if (search && !p.name_en.toLowerCase().includes(search.toLowerCase()) && !p.name_cn.includes(search)) return false;
+      if (q) {
+        const fields = [p.name_en, p.name_cn, p.nickname, p.team].map(s => (s || '').toLowerCase());
+        if (!fields.some(f => f.includes(q))) return false;
+      }
       return true;
     }).sort((a, b) => b.ovr - a.ovr);
   }, [pool, filter, search]);
@@ -163,7 +167,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
-                <div className="transform scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.75] origin-top h-[320px] sm:h-[380px] md:h-[420px] lg:h-[460px]">
+                <div className="transform scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.75] origin-top">
                   <Card
                     player={player}
                     isFlipped={true}
