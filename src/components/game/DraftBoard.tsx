@@ -167,8 +167,8 @@ export default function DraftBoard({ pool, onComplete }: Props) {
                 layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
-                <div className="overflow-hidden origin-top" style={{ width: 160, height: 240 }}>
-                  <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: 320, height: 480 }}>
+                <div className="overflow-hidden w-full" style={{ containerType: 'inline-size' }}>
+                  <div className="origin-top-left" style={{ width: 320, height: 480, transform: 'scale(calc(100cqw / 320))' }}>
                     <Card
                       player={player}
                       isFlipped={true}

@@ -162,9 +162,17 @@ export default function PackOpener({ onComplete }: Props) {
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
-                className="w-[184px] h-[276px] overflow-hidden"
+                className="w-full overflow-hidden"
+                style={{ containerType: 'inline-size' }}
               >
-                <div className="transform scale-[0.575] origin-top-left w-[320px] h-[480px]">
+                <div
+                  className="origin-top-left"
+                  style={{
+                    width: 320,
+                    height: 480,
+                    transform: `scale(calc(100cqw / 320))`,
+                  }}
+                >
                   <Card player={player} isFlipped={true} />
                 </div>
               </motion.div>
