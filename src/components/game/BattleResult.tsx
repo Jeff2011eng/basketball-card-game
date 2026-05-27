@@ -177,11 +177,6 @@ export default function BattleResult({ result, onRestart }: Props) {
           </div>
         </div>
 
-        {/* 底部水印 */}
-        <div className="max-w-xl mx-auto px-4">
-          <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
-          <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
-        </div>
       </div>
 
       {/* 底部操作栏 */}

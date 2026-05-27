@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NBA Draft Battle",
-  description: "NBA Draft Battle - Open Packs, Build Your Squad, Rule The Board",
+  title: "NBA 最佳阵容对战",
+  description: "NBA 最佳阵容对战 - 开包抽卡 · 组建阵容 · 统治赛场",
 };
 
 export default function RootLayout({

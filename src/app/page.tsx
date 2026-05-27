@@ -95,6 +95,7 @@ export default function Home() {
       setIsLoading(false);
       setBattleData(result);
       setPhase('BATTLE');
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } catch (err: any) {
       setIsLoading(false);
       alert(err.message || '出错了，请重试');
@@ -110,6 +111,7 @@ export default function Home() {
       const result = await matchmake(playerId, lineupId);
       setIsLoading(false);
       setBattleData(result);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } catch (err: any) {
       setIsLoading(false);
       alert(err.message || '匹配失败');
@@ -136,8 +138,9 @@ export default function Home() {
             animate={{ scale: 1, opacity: 1 }}
             className="relative z-10 flex flex-col items-center text-center p-6"
           >
-            <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 filter drop-shadow-[0_0_20px_rgba(168,85,247,0.5)]">
-              NBA 最佳阵容对战
+            <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 leading-none">
+              <span className="block">NBA</span>
+              <span className="block text-4xl md:text-6xl mt-1">最佳阵容对战</span>
             </h1>
             <p className="text-xl md:text-2xl font-bold text-gray-300 uppercase tracking-widest mb-12">
               开包抽卡 &bull; 组建阵容 &bull; 统治赛场
