@@ -4,25 +4,19 @@ import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
+import { getPlayerId } from '@/lib/player-identity';
+import { getSupabase } from '@/lib/supabase';
+import { uploadLineup, matchmake } from '@/lib/supabase-service';
+import PackOpener from '@/components/game/PackOpener';
+import DraftBoard from '@/components/game/DraftBoard';
+import LineupResult from '@/components/game/LineupResult';
+import NicknameModal from '@/components/game/NicknameModal';
+import BattleResult from '@/components/game/BattleResult';
 import { Play, Trophy, History, Users } from 'lucide-react';
 
-const NicknameModal = dynamic(() => import('@/components/game/NicknameModal'));
-const PackOpener = dynamic(() => import('@/components/game/PackOpener'), { loading: () => <LoadingScreen /> });
-const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'), { loading: () => <LoadingScreen /> });
-const LineupResult = dynamic(() => import('@/components/game/LineupResult'), { loading: () => <LoadingScreen /> });
-const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'), { loading: () => <LoadingScreen /> });
-const BattleResult = dynamic(() => import('@/components/game/BattleResult'), { loading: () => <LoadingScreen /> });
-const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'), { loading: () => <LoadingScreen /> });
-const LineupReview = dynamic(() => import('@/components/game/LineupReview'), { loading: () => <LoadingScreen /> });
-
-function LoadingScreen() {
-  return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center">
-      <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-      <p className="text-gray-400 font-bold mt-4">加载中...</p>
-    </div>
-  );
-}
+const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'));
+const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'));
+const LineupReview = dynamic(() => import('@/components/game/LineupReview'));
 
 type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY' | 'LINEUP_REVIEW';
 
@@ -40,16 +34,12 @@ export default function Home() {
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
-    // Preload PackOpener chunk while user reads the intro
-    import('@/components/game/PackOpener');
   }, []);
 
   useEffect(() => {
     if (!nickname) return;
     const checkCount = async () => {
       try {
-        const { getPlayerId } = await import('@/lib/player-identity');
-        const { getSupabase } = await import('@/lib/supabase');
         const playerId = getPlayerId();
         const sb = getSupabase();
         const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
@@ -97,8 +87,6 @@ export default function Home() {
     setLoadingMsg('上传阵容中...');
 
     try {
-      const { getPlayerId } = await import('@/lib/player-identity');
-      const { uploadLineup, matchmake } = await import('@/lib/supabase-service');
       const playerId = getPlayerId();
       const { lineupId: lid } = await uploadLineup(playerId, nickname, finalLineup);
       setLineupId(lid);
@@ -120,8 +108,6 @@ export default function Home() {
     setLoadingMsg('寻找新对手...');
 
     try {
-      const { getPlayerId } = await import('@/lib/player-identity');
-      const { matchmake } = await import('@/lib/supabase-service');
       const playerId = getPlayerId();
       const result = await matchmake(playerId, lineupId);
       setIsLoading(false);

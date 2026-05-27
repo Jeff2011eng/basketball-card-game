@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PackCard } from '@/lib/types';
 import { drawPacks } from '@/lib/game-logic';
+import playersData from '@/../public/data/players.json';
 import Card from './Card';
 import { PackageOpen } from 'lucide-react';
 
@@ -15,7 +16,10 @@ interface Props {
 }
 
 export default function PackOpener({ onComplete }: Props) {
-  const [allCards, setAllCards] = useState<PackCard[]>([]);
+  const allCards = useMemo(() => {
+    const players = (playersData as any).players || playersData;
+    return drawPacks(players as any[]).slice(0, TOTAL_ROUNDS * CARDS_PER_ROUND);
+  }, []);
   const [currentRound, setCurrentRound] = useState(0);
   const [roundIndex, setRoundIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -38,22 +42,6 @@ export default function PackOpener({ onComplete }: Props) {
     ro.observe(el);
     return () => ro.disconnect();
   }, [showRoundSummary]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const basePath = process.env.NODE_ENV === 'production' ? '/basketball-card-game' : '';
-        const res = await fetch(`${basePath}/data/players.json`);
-        const data = await res.json();
-        const players = data.players || data;
-        if (!Array.isArray(players) || players.length < TOTAL_ROUNDS * CARDS_PER_ROUND) throw new Error('Not enough players');
-        const drawn = drawPacks(players);
-        setAllCards(drawn.slice(0, TOTAL_ROUNDS * CARDS_PER_ROUND));
-      } catch {
-        setAllCards([]);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     if (allCards.length > 0) {
