@@ -7,13 +7,22 @@ import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { Play, Trophy, History, Users } from 'lucide-react';
 
 const NicknameModal = dynamic(() => import('@/components/game/NicknameModal'));
-const PackOpener = dynamic(() => import('@/components/game/PackOpener'));
-const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'));
-const LineupResult = dynamic(() => import('@/components/game/LineupResult'));
-const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'));
-const BattleResult = dynamic(() => import('@/components/game/BattleResult'));
-const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'));
-const LineupReview = dynamic(() => import('@/components/game/LineupReview'));
+const PackOpener = dynamic(() => import('@/components/game/PackOpener'), { loading: () => <LoadingScreen /> });
+const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'), { loading: () => <LoadingScreen /> });
+const LineupResult = dynamic(() => import('@/components/game/LineupResult'), { loading: () => <LoadingScreen /> });
+const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'), { loading: () => <LoadingScreen /> });
+const BattleResult = dynamic(() => import('@/components/game/BattleResult'), { loading: () => <LoadingScreen /> });
+const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'), { loading: () => <LoadingScreen /> });
+const LineupReview = dynamic(() => import('@/components/game/LineupReview'), { loading: () => <LoadingScreen /> });
+
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center">
+      <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <p className="text-gray-400 font-bold mt-4">加载中...</p>
+    </div>
+  );
+}
 
 type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY' | 'LINEUP_REVIEW';
 
@@ -31,6 +40,8 @@ export default function Home() {
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
+    // Preload PackOpener chunk while user reads the intro
+    import('@/components/game/PackOpener');
   }, []);
 
   useEffect(() => {
