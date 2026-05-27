@@ -48,11 +48,8 @@ export default function BattleResult({ result, onRestart }: Props) {
     if (!captureRef.current || generating) return;
     setGenerating(true);
     try {
-      const { toPng } = await import('html-to-image');
-      const dataUrl = await toPng(captureRef.current, {
-        backgroundColor: '#111827',
-        pixelRatio: 2,
-      });
+      const { captureElement } = await import('@/lib/screenshot');
+      const dataUrl = await captureElement(captureRef.current);
       const link = document.createElement('a');
       link.download = `NBA_Battle_${result.challengerNickname}_vs_${result.defenderNickname}.png`;
       link.href = dataUrl;
