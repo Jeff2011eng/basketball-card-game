@@ -6,7 +6,7 @@ import { Player, Rarity, STAT_LABELS } from '@/lib/types';
 import { getRarity } from '@/lib/game-logic';
 
 const NBA_HEADSHOT_URL = (pid: number) =>
-  `https://cdn.nba.com/headshots/nba/latest/1040x760/${pid}.png`;
+  `https://cdn.nba.com/headshots/nba/latest/260x190/${pid}.png`;
 
 const RARITY_COLORS: Record<Rarity, string> = {
   N: 'from-green-400 to-green-700 border-green-400 text-white',
