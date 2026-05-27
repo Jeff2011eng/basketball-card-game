@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { Play, Trophy, History, Users } from 'lucide-react';
 
-const NicknameModal = dynamic(() => import('@/components/game/NicknameModal'));
-const PackOpener = dynamic(() => import('@/components/game/PackOpener'));
-const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'));
-const LineupResult = dynamic(() => import('@/components/game/LineupResult'));
+import PackOpener from '@/components/game/PackOpener';
+import DraftBoard from '@/components/game/DraftBoard';
+import LineupResult from '@/components/game/LineupResult';
+import NicknameModal from '@/components/game/NicknameModal';
+import BattleResult from '@/components/game/BattleResult';
+
 const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'));
-const BattleResult = dynamic(() => import('@/components/game/BattleResult'));
 const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'));
 const LineupReview = dynamic(() => import('@/components/game/LineupReview'));
 
@@ -27,14 +28,10 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
   const [playCount, setPlayCount] = useState<number>(-1); // -1 = unknown
-  const [isStarting, setIsStarting] = useState(false);
-  const preloadRef = useRef<Promise<any> | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
-    // Preload game chunks in background
-    preloadRef.current = import('@/components/game/PackOpener');
   }, []);
 
   useEffect(() => {
@@ -57,21 +54,16 @@ export default function Home() {
   const remaining = playCount === -1 ? -1 : 3 - playCount;
   const isExhausted = remaining === 0;
 
-  const handleStartDraft = async () => {
-    if (isStarting) return;
+  const handleStartDraft = () => {
     if (isExhausted) {
       alert('你已用完 3 次游戏机会');
       return;
     }
-    setIsStarting(true);
-    // Wait for preload to finish if still loading
-    if (preloadRef.current) await preloadRef.current;
     if (nickname) {
       setPhase('OPENING');
     } else {
       setPhase('ENTER_NICKNAME');
     }
-    setIsStarting(false);
   };
 
   const handleNicknameSubmit = (nick: string) => {
@@ -160,17 +152,12 @@ export default function Home() {
 
             <button
               onClick={handleStartDraft}
-              disabled={isStarting}
-              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)] disabled:opacity-70 disabled:hover:scale-100"
+              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
             >
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               <div className="flex items-center gap-3">
-                {isStarting ? (
-                  <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <Play className="w-8 h-8 fill-current" />
-                )}
-                {isStarting ? '加载中...' : '开始抽卡'}
+                <Play className="w-8 h-8 fill-current" />
+                开始抽卡
               </div>
             </button>
 
