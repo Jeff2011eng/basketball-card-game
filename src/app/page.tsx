@@ -1,20 +1,17 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
-import { getPlayerId } from '@/lib/player-identity';
-import { getSupabase } from '@/lib/supabase';
-import { uploadLineup, matchmake } from '@/lib/supabase-service';
-import PackOpener from '@/components/game/PackOpener';
-import DraftBoard from '@/components/game/DraftBoard';
-import LineupResult from '@/components/game/LineupResult';
-import NicknameModal from '@/components/game/NicknameModal';
-import BattleResult from '@/components/game/BattleResult';
 import { Play, Trophy, History, Users } from 'lucide-react';
 
+const NicknameModal = dynamic(() => import('@/components/game/NicknameModal'));
+const PackOpener = dynamic(() => import('@/components/game/PackOpener'));
+const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'));
+const LineupResult = dynamic(() => import('@/components/game/LineupResult'));
 const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'));
+const BattleResult = dynamic(() => import('@/components/game/BattleResult'));
 const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'));
 const LineupReview = dynamic(() => import('@/components/game/LineupReview'));
 
@@ -31,19 +28,21 @@ export default function Home() {
   const [loadingMsg, setLoadingMsg] = useState('');
   const [playCount, setPlayCount] = useState<number>(-1); // -1 = unknown
   const [isStarting, setIsStarting] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => { setHydrated(true); }, []);
+  const preloadRef = useRef<Promise<any> | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
+    // Preload game chunks in background
+    preloadRef.current = import('@/components/game/PackOpener');
   }, []);
 
   useEffect(() => {
     if (!nickname) return;
     const checkCount = async () => {
       try {
+        const { getPlayerId } = await import('@/lib/player-identity');
+        const { getSupabase } = await import('@/lib/supabase');
         const playerId = getPlayerId();
         const sb = getSupabase();
         const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
@@ -58,22 +57,21 @@ export default function Home() {
   const remaining = playCount === -1 ? -1 : 3 - playCount;
   const isExhausted = remaining === 0;
 
-  const handleStartDraft = () => {
+  const handleStartDraft = async () => {
     if (isStarting) return;
     if (isExhausted) {
       alert('你已用完 3 次游戏机会');
       return;
     }
     setIsStarting(true);
-    // Use requestAnimationFrame to let the loading UI render first
-    requestAnimationFrame(() => {
-      if (nickname) {
-        setPhase('OPENING');
-      } else {
-        setPhase('ENTER_NICKNAME');
-      }
-      setIsStarting(false);
-    });
+    // Wait for preload to finish if still loading
+    if (preloadRef.current) await preloadRef.current;
+    if (nickname) {
+      setPhase('OPENING');
+    } else {
+      setPhase('ENTER_NICKNAME');
+    }
+    setIsStarting(false);
   };
 
   const handleNicknameSubmit = (nick: string) => {
@@ -97,6 +95,8 @@ export default function Home() {
     setLoadingMsg('上传阵容中...');
 
     try {
+      const { getPlayerId } = await import('@/lib/player-identity');
+      const { uploadLineup, matchmake } = await import('@/lib/supabase-service');
       const playerId = getPlayerId();
       const { lineupId: lid } = await uploadLineup(playerId, nickname, finalLineup);
       setLineupId(lid);
@@ -118,6 +118,8 @@ export default function Home() {
     setLoadingMsg('寻找新对手...');
 
     try {
+      const { getPlayerId } = await import('@/lib/player-identity');
+      const { matchmake } = await import('@/lib/supabase-service');
       const playerId = getPlayerId();
       const result = await matchmake(playerId, lineupId);
       setIsLoading(false);
@@ -158,17 +160,17 @@ export default function Home() {
 
             <button
               onClick={handleStartDraft}
-              disabled={!hydrated || isStarting}
-              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-wait"
+              disabled={isStarting}
+              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)] disabled:opacity-70 disabled:hover:scale-100"
             >
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               <div className="flex items-center gap-3">
-                {!hydrated || isStarting ? (
+                {isStarting ? (
                   <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <Play className="w-8 h-8 fill-current" />
                 )}
-                {!hydrated ? '加载中...' : isStarting ? '加载中...' : '开始抽卡'}
+                {isStarting ? '加载中...' : '开始抽卡'}
               </div>
             </button>
 
