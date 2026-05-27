@@ -145,7 +145,7 @@ export default function Home() {
       {phase === 'INTRO' && (
         <div
           className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
-          style={{ backgroundImage: `url(${process.env.NODE_ENV === 'production' ? '/basketball-card-game' : ''}/bg-court.jpg)` }}
+          style={{ backgroundImage: "url('/bg-court.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
