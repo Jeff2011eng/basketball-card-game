@@ -1,8 +1,10 @@
 import html2canvas from 'html2canvas';
 
+// ─── helpers ─────────────────────────────────────────────────────────────────
+
 /**
  * Resolve a CSS color function (oklch, lab, etc.) to its computed RGB value.
- * Uses the live browser to resolve the color.
+ * Uses the live browser via a temporary element.
  */
 function resolveColorValue(colorFn: string): string | null {
   try {
@@ -20,15 +22,83 @@ function resolveColorValue(colorFn: string): string | null {
   }
 }
 
+// ─── CSS custom property overrides ───────────────────────────────────────────
+
+interface CssVarOverride {
+  /** CSS custom property name, e.g. "--color-gray-900" */
+  name: string;
+  /** Resolved rgb(...) value */
+  value: string;
+}
+
 /**
- * Build a mapping of oklch()/lab() color function strings → resolved RGB values.
- * Scans all accessible stylesheets in the live document.
+ * Scan ALL accessible stylesheets (including @media, @layer, @supports nests)
+ * for CSS custom properties whose value uses oklch() or lab().
+ *
+ * Returns a list of `:root`-level overrides with resolved RGB values.
+ * We inject these into the html2canvas clone so that var() references
+ * resolve to rgb() instead of oklch()/lab() — which html2canvas cannot parse.
+ */
+function buildCustomPropertyOverrides(): CssVarOverride[] {
+  const overrides: CssVarOverride[] = [];
+  const seen = new Set<string>();
+
+  function scan(ruleList: CSSRuleList) {
+    for (let i = 0; i < ruleList.length; i++) {
+      const rule = ruleList[i];
+
+      // CSSStyleRule → has .style
+      if ('style' in rule && (rule as CSSStyleRule).style) {
+        const style = (rule as CSSStyleRule).style;
+        for (let j = 0; j < style.length; j++) {
+          const prop = style[j];
+          if (prop.startsWith('--')) {
+            const val = style.getPropertyValue(prop).trim();
+            if ((val.includes('oklch(') || val.includes('lab(')) && !seen.has(prop)) {
+              seen.add(prop);
+              const rgb = resolveColorValue(val);
+              if (rgb) {
+                overrides.push({ name: prop, value: rgb });
+              }
+            }
+          }
+        }
+      }
+
+      // Recurse into grouping rules (@media, @layer, @supports, @scope, etc.)
+      if ('cssRules' in rule && (rule as CSSGroupingRule).cssRules) {
+        scan((rule as CSSGroupingRule).cssRules);
+      }
+    }
+  }
+
+  try {
+    for (const sheet of document.styleSheets) {
+      try {
+        scan(sheet.cssRules);
+      } catch {
+        // Cross-origin or inaccessible; skip
+      }
+    }
+  } catch {
+    // Ignore
+  }
+
+  return overrides;
+}
+
+// ─── direct color replacement (for non-custom-property usage) ────────────────
+
+/**
+ * Build a map of ALL unique oklch()/lab() color function strings → RGB.
+ * Used to patch any remaining occurrences in inline styles or <style> elements
+ * that don't go through CSS custom properties.
  */
 function buildColorMap(): Map<string, string> {
   const map = new Map<string, string>();
   const re = /(oklch|lab)\([^)]*\)/gi;
 
-  function scanRules(ruleList: CSSRuleList) {
+  function scan(ruleList: CSSRuleList) {
     for (let i = 0; i < ruleList.length; i++) {
       const rule = ruleList[i];
       let m: RegExpExecArray | null;
@@ -39,10 +109,8 @@ function buildColorMap(): Map<string, string> {
           if (rgb) map.set(fn, rgb);
         }
       }
-      // Recurse into @media, @layer, @supports, etc. to catch colors
-      // that may not be expanded in the parent rule's cssText
       if ('cssRules' in rule && (rule as CSSGroupingRule).cssRules) {
-        scanRules((rule as CSSGroupingRule).cssRules);
+        scan((rule as CSSGroupingRule).cssRules);
       }
     }
   }
@@ -50,47 +118,16 @@ function buildColorMap(): Map<string, string> {
   try {
     for (const sheet of document.styleSheets) {
       try {
-        scanRules(sheet.cssRules);
-      } catch {
-        // Cross-origin or inaccessible stylesheet; skip
-      }
+        scan(sheet.cssRules);
+      } catch { /* skip */ }
     }
-  } catch {
-    // Ignore
-  }
+  } catch { /* ignore */ }
 
   return map;
 }
 
-/**
- * Collect all CSS text from the live document's accessible stylesheets.
- * Reads top-level rules only — group rules (@media, @layer, etc.)
- * already include their nested rules in cssText, so no recursion needed.
- */
-function collectAllCss(): string {
-  const parts: string[] = [];
+// ─── image waiting ───────────────────────────────────────────────────────────
 
-  try {
-    for (const sheet of document.styleSheets) {
-      try {
-        for (let i = 0; i < sheet.cssRules.length; i++) {
-          parts.push(sheet.cssRules[i].cssText);
-        }
-      } catch {
-        // Cross-origin or inaccessible; skip
-      }
-    }
-  } catch {
-    // Ignore
-  }
-
-  return parts.join('\n');
-}
-
-/**
- * Wait for all <img> elements inside the given element to finish loading
- * (or fail), with a per-image timeout.
- */
 async function waitForImages(element: HTMLElement): Promise<void> {
   const images = element.querySelectorAll('img');
   await Promise.all(
@@ -98,7 +135,7 @@ async function waitForImages(element: HTMLElement): Promise<void> {
       img =>
         new Promise<void>(resolve => {
           if (img.complete) return resolve();
-          const timer = setTimeout(resolve, 5000);
+          const timer = setTimeout(resolve, 8000);
           const done = () => {
             clearTimeout(timer);
             resolve();
@@ -110,69 +147,106 @@ async function waitForImages(element: HTMLElement): Promise<void> {
   );
 }
 
+// ─── public API ──────────────────────────────────────────────────────────────
+
 /**
  * Capture a DOM element as a PNG data URL.
  *
- * Handles:
- * - oklch() and lab() CSS color functions (Tailwind v4 uses oklch extensively)
- * - -webkit-background-clip: text (html2canvas doesn't support it)
- * - Cross-origin images (NBA headshots from cdn.nba.com)
- * - Waits for images to load before capture
- *
- * IMPORTANT: This function does NOT touch the live page's DOM.
- * All CSS patching happens inside html2canvas's cloned document via onclone.
+ * Strategy:
+ * - KEEPS original <link>/<style> stylesheets in the clone (never removes them)
+ * - Injects ``:root { --var: rgb(...) !important; }`` overrides for every
+ *   CSS custom property that has an oklch()/lab() value — html2canvas then
+ *   resolves var() references against these rgb() overrides instead of
+ *   encountering oklch()/lab() it cannot parse.
+ * - Also patches any remaining oklch()/lab() in inline <style> text and
+ *   element style attributes.
  */
 export async function captureElement(element: HTMLElement): Promise<string> {
-  // ── 1. Wait for all images to load (or fail) ──
+  // 1. Wait for images
   await waitForImages(element);
 
-  // ── 2. Small delay for layout stabilization ──
-  await new Promise(r => setTimeout(r, 100));
+  // 2. Stabilise layout
+  await new Promise(r => setTimeout(r, 150));
 
-  // ── 3. Pre-compute color-fixed CSS from live stylesheets ──
+  // 3. Pre-compute overrides (reads live document — safe, read‑only)
+  const cssVarOverrides = buildCustomPropertyOverrides();
   const colorMap = buildColorMap();
-  let fixedCss = collectAllCss();
-  for (const [fn, rgb] of colorMap) {
-    // Simple string replacement – color function strings are unique enough
-    fixedCss = fixedCss.split(fn).join(rgb);
-  }
 
-  // ── 4. Capture with html2canvas, patching ONLY the cloned document ──
+  // 4. Capture
   const canvas = await html2canvas(element, {
     backgroundColor: '#111827',
     scale: 2,
     useCORS: true,
     allowTaint: true,
     onclone: (clonedDoc) => {
-      // Remove all stylesheets in the clone
-      clonedDoc.querySelectorAll('style, link[rel="stylesheet"]').forEach(el => el.remove());
+      // ── Inject CSS custom property overrides ──
+      // This is the key fix: instead of removing original stylesheets,
+      // we add an overriding :root block at the end of the cascade.
+      if (cssVarOverrides.length > 0) {
+        const overrideStyle = clonedDoc.createElement('style');
+        overrideStyle.textContent =
+          ':root {\n' +
+          cssVarOverrides.map(o => `  ${o.name}: ${o.value} !important;`).join('\n') +
+          '\n}';
+        clonedDoc.head.appendChild(overrideStyle);
+      }
 
-      // Inject the color-fixed CSS
-      const style = clonedDoc.createElement('style');
-      style.textContent = fixedCss;
-      clonedDoc.head.appendChild(style);
+      // ── Patch any remaining oklch/lab in inline <style> elements ──
+      if (colorMap.size > 0) {
+        clonedDoc.querySelectorAll('style').forEach(el => {
+          let css = el.textContent || '';
+          let changed = false;
+          for (const [fn, rgb] of colorMap) {
+            if (css.includes(fn)) {
+              css = css.split(fn).join(rgb);
+              changed = true;
+            }
+          }
+          if (changed) el.textContent = css;
+        });
 
-      // Fix -webkit-background-clip: text (html2canvas doesn't support it)
-      // Replace gradient text with a solid fallback color derived from the gradient
-      clonedDoc.querySelectorAll('*').forEach(el => {
+        // ── Patch inline style attributes ──
+        clonedDoc.querySelectorAll('[style]').forEach(el => {
+          const htmlEl = el as HTMLElement;
+          let style = htmlEl.getAttribute('style') || '';
+          let changed = false;
+          for (const [fn, rgb] of colorMap) {
+            if (style.includes(fn)) {
+              style = style.split(fn).join(rgb);
+              changed = true;
+            }
+          }
+          if (changed) htmlEl.setAttribute('style', style);
+        });
+      }
+
+      // ── Fix -webkit-background-clip: text ──
+      // html2canvas cannot render background-clip:text — replace with solid colour
+      clonedDoc.querySelectorAll('[style]').forEach(el => {
         const htmlEl = el as HTMLElement;
-        const inlineStyle = htmlEl.getAttribute('style') || '';
-        if (
-          inlineStyle.includes('-webkit-background-clip') ||
-          inlineStyle.includes('background-clip: text')
-        ) {
-          // Extract the first color from the gradient as fallback
-          const gradientMatch = inlineStyle.match(
-            /(?:linear-gradient|radial-gradient)\([^,]*,\s*([#\w]+(?:\s*[#\w]*)*)/
+        const s = htmlEl.getAttribute('style') || '';
+        if (s.includes('-webkit-background-clip') || s.includes('background-clip: text')) {
+          const gradientMatch = s.match(
+            /(?:linear-gradient|radial-gradient)\([^,]*,\s*([#\w]+)/
           );
           const fallback = gradientMatch ? gradientMatch[1].trim() : '#facc15';
-
           htmlEl.style.backgroundImage = 'none';
           htmlEl.style.color = fallback;
           htmlEl.style.setProperty('-webkit-background-clip', 'border-box');
           htmlEl.style.setProperty('-webkit-text-fill-color', fallback);
           htmlEl.style.setProperty('background-clip', 'border-box');
         }
+      });
+
+      // ── Fix Recharts ResponsiveContainer negative-size warning ──
+      // In the clone doc the container may temporarily report -1×-1.
+      // Give .recharts-responsive-container a min-size so it doesn't complain.
+      clonedDoc.querySelectorAll('.recharts-responsive-container').forEach(el => {
+        const htmlEl = el as HTMLElement;
+        const w = htmlEl.style.width;
+        const h = htmlEl.style.height;
+        if (!w || w === '100%') htmlEl.style.minWidth = '300px';
+        if (!h || h === '100%') htmlEl.style.minHeight = '200px';
       });
     },
   });
