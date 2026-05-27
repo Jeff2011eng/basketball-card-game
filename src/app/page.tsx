@@ -30,6 +30,10 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
   const [playCount, setPlayCount] = useState<number>(-1); // -1 = unknown
+  const [isStarting, setIsStarting] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => { setHydrated(true); }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
@@ -55,15 +59,21 @@ export default function Home() {
   const isExhausted = remaining === 0;
 
   const handleStartDraft = () => {
+    if (isStarting) return;
     if (isExhausted) {
       alert('你已用完 3 次游戏机会');
       return;
     }
-    if (nickname) {
-      setPhase('OPENING');
-    } else {
-      setPhase('ENTER_NICKNAME');
-    }
+    setIsStarting(true);
+    // Use requestAnimationFrame to let the loading UI render first
+    requestAnimationFrame(() => {
+      if (nickname) {
+        setPhase('OPENING');
+      } else {
+        setPhase('ENTER_NICKNAME');
+      }
+      setIsStarting(false);
+    });
   };
 
   const handleNicknameSubmit = (nick: string) => {
@@ -148,12 +158,17 @@ export default function Home() {
 
             <button
               onClick={handleStartDraft}
-              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
+              disabled={!hydrated || isStarting}
+              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-wait"
             >
               <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               <div className="flex items-center gap-3">
-                <Play className="w-8 h-8 fill-current" />
-                开始抽卡
+                {!hydrated || isStarting ? (
+                  <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Play className="w-8 h-8 fill-current" />
+                )}
+                {!hydrated ? '加载中...' : isStarting ? '加载中...' : '开始抽卡'}
               </div>
             </button>
 
