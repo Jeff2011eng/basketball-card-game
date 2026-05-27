@@ -130,7 +130,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500/30">
       {phase === 'INTRO' && (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[url('/bg-court.jpg')] bg-cover bg-center">
+        <div
+          className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
+          style={{ backgroundImage: `url(${process.env.NODE_ENV === 'production' ? '/basketball-card-game' : ''}/bg-court.jpg)` }}
+        >
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
           <motion.div
