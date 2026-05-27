@@ -752,7 +752,7 @@
         "REB": 49,
         "CLU": 95
       },
-      "ovr": 85.0,
+      "ovr": 85,
       "badges": [
         {
           "name": "三分神射",
@@ -799,7 +799,7 @@
         "REB": 49,
         "CLU": 85
       },
-      "ovr": 85.0,
+      "ovr": 85,
       "badges": [
         {
           "name": "组织核心",
@@ -1468,7 +1468,7 @@
         "REB": 90,
         "CLU": 78
       },
-      "ovr": 88.0,
+      "ovr": 88,
       "badges": [
         {
           "name": "防守威慑",
@@ -1558,7 +1558,7 @@
         "REB": 99,
         "CLU": 60
       },
-      "ovr": 84.0,
+      "ovr": 84,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -1601,7 +1601,7 @@
         "REB": 92,
         "CLU": 80
       },
-      "ovr": 89.0,
+      "ovr": 89,
       "badges": [
         {
           "name": "防守威慑",
@@ -1695,7 +1695,7 @@
         "REB": 98,
         "CLU": 59
       },
-      "ovr": 85.0,
+      "ovr": 85,
       "badges": [
         {
           "name": "三分神射",
@@ -2015,7 +2015,7 @@
         "REB": 42,
         "CLU": 80
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -2413,7 +2413,7 @@
         "REB": 39,
         "CLU": 82
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -2542,7 +2542,7 @@
         "REB": 53,
         "CLU": 70
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -2831,7 +2831,7 @@
         "REB": 54,
         "CLU": 72
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "防守威慑",
@@ -2874,7 +2874,7 @@
         "REB": 55,
         "CLU": 60
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -2956,7 +2956,7 @@
         "REB": 62,
         "CLU": 56
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3120,7 +3120,7 @@
         "REB": 52,
         "CLU": 78
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3163,7 +3163,7 @@
         "REB": 46,
         "CLU": 79
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3460,7 +3460,7 @@
         "REB": 95,
         "CLU": 57
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3616,7 +3616,7 @@
         "REB": 58,
         "CLU": 54
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3694,7 +3694,7 @@
         "REB": 95,
         "CLU": 58
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3737,7 +3737,7 @@
         "REB": 73,
         "CLU": 60
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -3901,7 +3901,7 @@
         "REB": 99,
         "CLU": 51
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -4065,7 +4065,7 @@
         "REB": 95,
         "CLU": 57
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -4323,88 +4323,6 @@
       "pid": 202330
     },
     {
-      "id": 102,
-      "name_cn": "克里斯·米德尔顿",
-      "name_en": "Khris Middleton",
-      "nickname": "米豆",
-      "team": "雄鹿",
-      "position": "SF/SG",
-      "jersey_number": 22,
-      "height": 201,
-      "weight": 101,
-      "birth_year": 1991,
-      "player_type": "得分机器",
-      "tier": "B",
-      "card_tier": "R/SR",
-      "stats": {
-        "SHO": 96,
-        "SLA": 94,
-        "DEF": 60,
-        "ATH": 81,
-        "PLM": 69,
-        "PHY": 56,
-        "REB": 54,
-        "CLU": 74
-      },
-      "ovr": 78.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "中投之王",
-          "level": "bronze"
-        },
-        {
-          "name": "脚踝终结者",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 203114
-    },
-    {
-      "id": 103,
-      "name_cn": "博扬·波格丹诺维奇",
-      "name_en": "Bojan Bogdanović",
-      "nickname": "博扬",
-      "team": "尼克斯",
-      "position": "SF/SG",
-      "jersey_number": 44,
-      "height": 201,
-      "weight": 100,
-      "birth_year": 1989,
-      "player_type": "得分机器",
-      "tier": "B",
-      "card_tier": "R/SR",
-      "stats": {
-        "SHO": 96,
-        "SLA": 97,
-        "DEF": 65,
-        "ATH": 85,
-        "PLM": 62,
-        "PHY": 54,
-        "REB": 49,
-        "CLU": 71
-      },
-      "ovr": 78.4,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "中投之王",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 202711
-    },
-    {
       "id": 104,
       "name_cn": "拉里·南斯",
       "name_en": "Larry Nance Jr.",
@@ -4428,7 +4346,7 @@
         "REB": 98,
         "CLU": 53
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -4471,7 +4389,7 @@
         "REB": 91,
         "CLU": 54
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -4514,7 +4432,7 @@
         "REB": 95,
         "CLU": 56
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -4674,7 +4592,7 @@
         "REB": 31,
         "CLU": 59
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "组织核心",
@@ -4762,41 +4680,6 @@
       "era": null,
       "is_legend": false,
       "pid": 201937
-    },
-    {
-      "id": 113,
-      "name_cn": "丹尼斯·施罗德",
-      "name_en": "Dennis Schröder",
-      "nickname": "小黑",
-      "team": "篮网",
-      "position": "PG",
-      "jersey_number": 17,
-      "height": 185,
-      "weight": 78,
-      "birth_year": 1993,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 94,
-        "SLA": 69,
-        "DEF": 47,
-        "ATH": 63,
-        "PLM": 78,
-        "PHY": 44,
-        "REB": 32,
-        "CLU": 66
-      },
-      "ovr": 70.6,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 203471
     },
     {
       "id": 114,
@@ -4939,41 +4822,6 @@
       "pid": 202709
     },
     {
-      "id": 118,
-      "name_cn": "卡森·华莱士",
-      "name_en": "Cason Wallace",
-      "nickname": "华莱士",
-      "team": "雷霆",
-      "position": "PG",
-      "jersey_number": 22,
-      "height": 191,
-      "weight": 88,
-      "birth_year": 2003,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 42,
-        "DEF": 74,
-        "ATH": 70,
-        "PLM": 85,
-        "PHY": 48,
-        "REB": 36,
-        "CLU": 49
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1641717
-    },
-    {
       "id": 119,
       "name_cn": "乔丹·克拉克森",
       "name_en": "Jordan Clarkson",
@@ -5106,7 +4954,7 @@
         "REB": 29,
         "CLU": 70
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "火花塞",
@@ -5289,7 +5137,7 @@
         "REB": 46,
         "CLU": 51
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -5406,7 +5254,7 @@
         "REB": 35,
         "CLU": 52
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -5515,7 +5363,7 @@
         "REB": 29,
         "CLU": 69
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -5803,7 +5651,7 @@
         "REB": 44,
         "CLU": 56
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -5877,7 +5725,7 @@
         "REB": 72,
         "CLU": 46
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -5916,7 +5764,7 @@
         "REB": 90,
         "CLU": 39
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -6002,224 +5850,6 @@
       "pid": 202689
     },
     {
-      "id": 147,
-      "name_cn": "TJ·麦康奈尔",
-      "name_en": "TJ McConnell",
-      "nickname": "麦康",
-      "team": "步行者",
-      "position": "PG",
-      "jersey_number": 9,
-      "height": 185,
-      "weight": 86,
-      "birth_year": 1992,
-      "player_type": "组织大师",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 70,
-        "SLA": 58,
-        "DEF": 48,
-        "ATH": 61,
-        "PLM": 99,
-        "PHY": 36,
-        "REB": 26,
-        "CLU": 69
-      },
-      "ovr": 70.5,
-      "badges": [
-        {
-          "name": "组织核心",
-          "level": "silver"
-        },
-        {
-          "name": "花式传球",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 204456
-    },
-    {
-      "id": 148,
-      "name_cn": "雷吉·杰克逊",
-      "name_en": "Reggie Jackson",
-      "nickname": "雷吉",
-      "team": "掘金",
-      "position": "PG",
-      "jersey_number": 7,
-      "height": 188,
-      "weight": 94,
-      "birth_year": 1990,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 86,
-        "SLA": 66,
-        "DEF": 39,
-        "ATH": 65,
-        "PLM": 85,
-        "PHY": 37,
-        "REB": 34,
-        "CLU": 68
-      },
-      "ovr": 70.2,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 202704
-    },
-    {
-      "id": 149,
-      "name_cn": "杰伦·萨格斯",
-      "name_en": "Jalen Suggs",
-      "nickname": "萨格斯",
-      "team": "魔术",
-      "position": "PG",
-      "jersey_number": 4,
-      "height": 196,
-      "weight": 93,
-      "birth_year": 2001,
-      "player_type": "攻防一体",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 72,
-        "SLA": 61,
-        "DEF": 69,
-        "ATH": 69,
-        "PLM": 81,
-        "PHY": 54,
-        "REB": 44,
-        "CLU": 66
-      },
-      "ovr": 70.4,
-      "badges": [
-        {
-          "name": "防守威慑",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630591
-    },
-    {
-      "id": 150,
-      "name_cn": "基利安·海斯",
-      "name_en": "Killian Hayes",
-      "nickname": "海斯",
-      "team": "活塞",
-      "position": "PG",
-      "jersey_number": 7,
-      "height": 196,
-      "weight": 98,
-      "birth_year": 2001,
-      "player_type": "组织大师",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 83,
-        "SLA": 53,
-        "DEF": 44,
-        "ATH": 54,
-        "PLM": 97,
-        "PHY": 46,
-        "REB": 26,
-        "CLU": 64
-      },
-      "ovr": 70.2,
-      "badges": [
-        {
-          "name": "组织核心",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630165
-    },
-    {
-      "id": 151,
-      "name_cn": "马尔科姆·布罗格登",
-      "name_en": "Malcolm Brogdon",
-      "nickname": "总统",
-      "team": "开拓者",
-      "position": "PG/SG",
-      "jersey_number": 0,
-      "height": 193,
-      "weight": 98,
-      "birth_year": 1992,
-      "player_type": "组织大师",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 70,
-        "SLA": 59,
-        "DEF": 47,
-        "ATH": 62,
-        "PLM": 99,
-        "PHY": 46,
-        "REB": 33,
-        "CLU": 71
-      },
-      "ovr": 71.5,
-      "badges": [
-        {
-          "name": "组织核心",
-          "level": "bronze"
-        },
-        {
-          "name": "花式传球",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1627763
-    },
-    {
-      "id": 152,
-      "name_cn": "卡姆·雷迪什",
-      "name_en": "Cam Reddish",
-      "nickname": "鬼哥",
-      "team": "湖人",
-      "position": "SF/SG",
-      "jersey_number": 5,
-      "height": 201,
-      "weight": 98,
-      "birth_year": 1999,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 85,
-        "DEF": 74,
-        "ATH": 83,
-        "PLM": 40,
-        "PHY": 53,
-        "REB": 48,
-        "CLU": 46
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1629629
-    },
-    {
       "id": 153,
       "name_cn": "扎伊尔·史密斯",
       "name_en": "Zhaire Smith",
@@ -6255,711 +5885,6 @@
       "pid": 1629015
     },
     {
-      "id": 154,
-      "name_cn": "戴斯蒙德·贝恩",
-      "name_en": "Desmond Bane",
-      "nickname": "贝恩",
-      "team": "灰熊",
-      "position": "SG",
-      "jersey_number": 22,
-      "height": 196,
-      "weight": 98,
-      "birth_year": 1998,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 89,
-        "SLA": 76,
-        "DEF": 50,
-        "ATH": 66,
-        "PLM": 57,
-        "PHY": 38,
-        "REB": 32,
-        "CLU": 75
-      },
-      "ovr": 70.3,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        },
-        {
-          "name": "中投之王",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630217
-    },
-    {
-      "id": 155,
-      "name_cn": "约什·吉迪",
-      "name_en": "Josh Giddey",
-      "nickname": "吉迪",
-      "team": "雷霆",
-      "position": "PG/SG",
-      "jersey_number": 3,
-      "height": 203,
-      "weight": 93,
-      "birth_year": 2002,
-      "player_type": "组织大师",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 76,
-        "SLA": 59,
-        "DEF": 52,
-        "ATH": 60,
-        "PLM": 99,
-        "PHY": 36,
-        "REB": 24,
-        "CLU": 68
-      },
-      "ovr": 71.8,
-      "badges": [
-        {
-          "name": "组织核心",
-          "level": "bronze"
-        },
-        {
-          "name": "花式传球",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630581
-    },
-    {
-      "id": 156,
-      "name_cn": "格兰特·威廉姆斯",
-      "name_en": "Grant Williams",
-      "nickname": "格威",
-      "team": "黄蜂",
-      "position": "PF",
-      "jersey_number": 2,
-      "height": 198,
-      "weight": 107,
-      "birth_year": 1998,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 67,
-        "SLA": 49,
-        "DEF": 88,
-        "ATH": 54,
-        "PLM": 31,
-        "PHY": 85,
-        "REB": 86,
-        "CLU": 42
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "锁防大师",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1629684
-    },
-    {
-      "id": 157,
-      "name_cn": "杰肖恩·泰特",
-      "name_en": "Jae'Sean Tate",
-      "nickname": "泰特",
-      "team": "火箭",
-      "position": "SF",
-      "jersey_number": 18,
-      "height": 193,
-      "weight": 104,
-      "birth_year": 1995,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 85,
-        "DEF": 82,
-        "ATH": 68,
-        "PLM": 50,
-        "PHY": 50,
-        "REB": 56,
-        "CLU": 54
-      },
-      "ovr": 70.4,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        },
-        {
-          "name": "锁防大师",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630256
-    },
-    {
-      "id": 158,
-      "name_cn": "阿米尔·科菲",
-      "name_en": "Amir Coffey",
-      "nickname": "科菲",
-      "team": "快船",
-      "position": "SG/SF",
-      "jersey_number": 7,
-      "height": 201,
-      "weight": 95,
-      "birth_year": 1997,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 85,
-        "DEF": 73,
-        "ATH": 73,
-        "PLM": 39,
-        "PHY": 52,
-        "REB": 36,
-        "CLU": 53
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "锁防大师",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1629599
-    },
-    {
-      "id": 159,
-      "name_cn": "特伦斯·曼",
-      "name_en": "Terance Mann",
-      "nickname": "曼恩",
-      "team": "快船",
-      "position": "SG/SF",
-      "jersey_number": 14,
-      "height": 196,
-      "weight": 98,
-      "birth_year": 1996,
-      "player_type": "攻防一体",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 75,
-        "SLA": 76,
-        "DEF": 69,
-        "ATH": 81,
-        "PLM": 54,
-        "PHY": 54,
-        "REB": 45,
-        "CLU": 65
-      },
-      "ovr": 70.2,
-      "badges": [
-        {
-          "name": "防守威慑",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1629611
-    },
-    {
-      "id": 160,
-      "name_cn": "诺曼·鲍威尔",
-      "name_en": "Norman Powell",
-      "nickname": "鲍威尔",
-      "team": "快船",
-      "position": "SG/SF",
-      "jersey_number": 24,
-      "height": 193,
-      "weight": 98,
-      "birth_year": 1993,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 95,
-        "SLA": 81,
-        "DEF": 51,
-        "ATH": 65,
-        "PLM": 51,
-        "PHY": 36,
-        "REB": 29,
-        "CLU": 65
-      },
-      "ovr": 70.4,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1626181
-    },
-    {
-      "id": 161,
-      "name_cn": "德文·瓦塞尔",
-      "name_en": "Devin Vassell",
-      "nickname": "瓦塞尔",
-      "team": "马刺",
-      "position": "SG/SF",
-      "jersey_number": 24,
-      "height": 196,
-      "weight": 91,
-      "birth_year": 2000,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 86,
-        "DEF": 81,
-        "ATH": 65,
-        "PLM": 44,
-        "PHY": 54,
-        "REB": 43,
-        "CLU": 50
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630170
-    },
-    {
-      "id": 162,
-      "name_cn": "特雷·墨菲三世",
-      "name_en": "Trey Murphy III",
-      "nickname": "墨菲",
-      "team": "鹈鹕",
-      "position": "SG/SF",
-      "jersey_number": 25,
-      "height": 203,
-      "weight": 93,
-      "birth_year": 2000,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 86,
-        "SLA": 77,
-        "DEF": 81,
-        "ATH": 63,
-        "PLM": 47,
-        "PHY": 51,
-        "REB": 43,
-        "CLU": 60
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630530
-    },
-    {
-      "id": 163,
-      "name_cn": "贾登·斯普林格",
-      "name_en": "Jaden Springer",
-      "nickname": "斯普林格",
-      "team": "凯尔特人",
-      "position": "SG",
-      "jersey_number": 44,
-      "height": 193,
-      "weight": 92,
-      "birth_year": 2002,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 87,
-        "SLA": 86,
-        "DEF": 77,
-        "ATH": 64,
-        "PLM": 41,
-        "PHY": 47,
-        "REB": 42,
-        "CLU": 56
-      },
-      "ovr": 70.2,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "锁防大师",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630531
-    },
-    {
-      "id": 164,
-      "name_cn": "摩西·穆迪",
-      "name_en": "Moses Moody",
-      "nickname": "穆迪",
-      "team": "勇士",
-      "position": "SG/SF",
-      "jersey_number": 4,
-      "height": 196,
-      "weight": 96,
-      "birth_year": 2002,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 86,
-        "DEF": 71,
-        "ATH": 68,
-        "PLM": 43,
-        "PHY": 53,
-        "REB": 39,
-        "CLU": 56
-      },
-      "ovr": 70.2,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630541
-    },
-    {
-      "id": 165,
-      "name_cn": "乔纳森·库明加",
-      "name_en": "Jonathan Kuminga",
-      "nickname": "库明加",
-      "team": "勇士",
-      "position": "SF/PF",
-      "jersey_number": 0,
-      "height": 201,
-      "weight": 102,
-      "birth_year": 2002,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 86,
-        "SLA": 85,
-        "DEF": 56,
-        "ATH": 77,
-        "PLM": 58,
-        "PHY": 43,
-        "REB": 43,
-        "CLU": 68
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        },
-        {
-          "name": "中投之王",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630228
-    },
-    {
-      "id": 166,
-      "name_cn": "戴罗恩·夏普",
-      "name_en": "Day'Ron Sharpe",
-      "nickname": "夏普",
-      "team": "篮网",
-      "position": "C",
-      "jersey_number": 20,
-      "height": 206,
-      "weight": 120,
-      "birth_year": 2001,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 16,
-        "SLA": 51,
-        "DEF": 85,
-        "ATH": 61,
-        "PLM": 30,
-        "PHY": 87,
-        "REB": 86,
-        "CLU": 42
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630549
-    },
-    {
-      "id": 167,
-      "name_cn": "尼克·理查兹",
-      "name_en": "Nick Richards",
-      "nickname": "理查兹",
-      "team": "黄蜂",
-      "position": "C",
-      "jersey_number": 4,
-      "height": 213,
-      "weight": 111,
-      "birth_year": 1997,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 18,
-        "SLA": 51,
-        "DEF": 85,
-        "ATH": 58,
-        "PLM": 31,
-        "PHY": 87,
-        "REB": 86,
-        "CLU": 41
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630208
-    },
-    {
-      "id": 168,
-      "name_cn": "奥涅卡·奥孔古",
-      "name_en": "Onyeka Okongwu",
-      "nickname": "奥孔古",
-      "team": "老鹰",
-      "position": "C",
-      "jersey_number": 17,
-      "height": 206,
-      "weight": 107,
-      "birth_year": 2000,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 23,
-        "SLA": 55,
-        "DEF": 81,
-        "ATH": 61,
-        "PLM": 20,
-        "PHY": 86,
-        "REB": 87,
-        "CLU": 50
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630168
-    },
-    {
-      "id": 169,
-      "name_cn": "以赛亚·斯图尔特",
-      "name_en": "Isaiah Stewart",
-      "nickname": "司徒",
-      "team": "活塞",
-      "position": "PF/C",
-      "jersey_number": 28,
-      "height": 203,
-      "weight": 113,
-      "birth_year": 2001,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 21,
-        "SLA": 51,
-        "DEF": 99,
-        "ATH": 70,
-        "PLM": 24,
-        "PHY": 86,
-        "REB": 86,
-        "CLU": 43
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        },
-        {
-          "name": "护框铁闸",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1630191
-    },
-    {
-      "id": 170,
-      "name_cn": "詹姆斯·约翰逊",
-      "name_en": "James Johnson",
-      "nickname": "詹姆斯",
-      "team": "步行者",
-      "position": "SF/PF",
-      "jersey_number": 16,
-      "height": 201,
-      "weight": 109,
-      "birth_year": 1987,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 86,
-        "SLA": 78,
-        "DEF": 73,
-        "ATH": 73,
-        "PLM": 44,
-        "PHY": 72,
-        "REB": 67,
-        "CLU": 44
-      },
-      "ovr": 70.0,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        },
-        {
-          "name": "护框铁闸",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 201949
-    },
-    {
-      "id": 171,
-      "name_cn": "鲁迪·盖伊",
-      "name_en": "Rudy Gay",
-      "nickname": "盖伊",
-      "team": "爵士",
-      "position": "SF",
-      "jersey_number": 8,
-      "height": 203,
-      "weight": 104,
-      "birth_year": 1986,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 93,
-        "SLA": 85,
-        "DEF": 45,
-        "ATH": 80,
-        "PLM": 60,
-        "PHY": 49,
-        "REB": 42,
-        "CLU": 60
-      },
-      "ovr": 70.3,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        },
-        {
-          "name": "中投之王",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 200752
-    },
-    {
-      "id": 172,
-      "name_cn": "丹尼尔·豪斯",
-      "name_en": "Danuel House",
-      "nickname": "豪斯",
-      "team": "76人",
-      "position": "SF",
-      "jersey_number": 25,
-      "height": 198,
-      "weight": 100,
-      "birth_year": 1993,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 87,
-        "DEF": 79,
-        "ATH": 71,
-        "PLM": 51,
-        "PHY": 59,
-        "REB": 47,
-        "CLU": 44
-      },
-      "ovr": 70.3,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 1628464
-    },
-    {
       "id": 173,
       "name_cn": "CJ·沃特森",
       "name_en": "CJ Watson",
@@ -6983,7 +5908,7 @@
         "REB": 44,
         "CLU": 57
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "关键先生",
@@ -6993,76 +5918,6 @@
       "era": null,
       "is_legend": false,
       "pid": 201228
-    },
-    {
-      "id": 174,
-      "name_cn": "加里·哈里斯",
-      "name_en": "Gary Harris",
-      "nickname": "加里",
-      "team": "魔术",
-      "position": "SG",
-      "jersey_number": 14,
-      "height": 193,
-      "weight": 95,
-      "birth_year": 1994,
-      "player_type": "3D球员",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 85,
-        "SLA": 87,
-        "DEF": 72,
-        "ATH": 63,
-        "PLM": 43,
-        "PHY": 52,
-        "REB": 39,
-        "CLU": 61
-      },
-      "ovr": 70.4,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 203914
-    },
-    {
-      "id": 175,
-      "name_cn": "埃里克·戈登",
-      "name_en": "Eric Gordon",
-      "nickname": "圆脸登",
-      "team": "太阳",
-      "position": "SG",
-      "jersey_number": 23,
-      "height": 191,
-      "weight": 98,
-      "birth_year": 1988,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 98,
-        "SLA": 74,
-        "DEF": 43,
-        "ATH": 64,
-        "PLM": 52,
-        "PHY": 45,
-        "REB": 36,
-        "CLU": 74
-      },
-      "ovr": 71.0,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 201569
     },
     {
       "id": 176,
@@ -7408,7 +6263,7 @@
         "REB": 40,
         "CLU": 48
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "三分神射",
@@ -7443,7 +6298,7 @@
         "REB": 29,
         "CLU": 62
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -7643,7 +6498,7 @@
         "REB": 50,
         "CLU": 46
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -7703,7 +6558,7 @@
         "REB": 16,
         "CLU": 63
       },
-      "ovr": 65.0,
+      "ovr": 65,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -7963,7 +6818,7 @@
         "REB": 33,
         "CLU": 42
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -8298,7 +7153,7 @@
         "REB": 78,
         "CLU": 40
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -8333,7 +7188,7 @@
         "REB": 70,
         "CLU": 31
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "三分神射",
@@ -8428,7 +7283,7 @@
         "REB": 33,
         "CLU": 56
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -8493,7 +7348,7 @@
         "REB": 33,
         "CLU": 59
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
@@ -8523,7 +7378,7 @@
         "REB": 66,
         "CLU": 37
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "三分神射",
@@ -9279,7 +8134,7 @@
         "REB": 67,
         "CLU": 92
       },
-      "ovr": 90.0,
+      "ovr": 90,
       "badges": [
         {
           "name": "三分神射",
@@ -10020,7 +8875,7 @@
         "REB": 99,
         "CLU": 81
       },
-      "ovr": 92.0,
+      "ovr": 92,
       "badges": [
         {
           "name": "隔扣达人",
@@ -10220,7 +9075,7 @@
         "REB": 59,
         "CLU": 92
       },
-      "ovr": 87.0,
+      "ovr": 87,
       "badges": [
         {
           "name": "组织核心",
@@ -10467,7 +9322,7 @@
         "REB": 40,
         "CLU": 99
       },
-      "ovr": 89.0,
+      "ovr": 89,
       "badges": [
         {
           "name": "三分神射",
@@ -10659,7 +9514,7 @@
         "REB": 40,
         "CLU": 97
       },
-      "ovr": 89.0,
+      "ovr": 89,
       "badges": [
         {
           "name": "火花塞",
@@ -10710,7 +9565,7 @@
         "REB": 52,
         "CLU": 95
       },
-      "ovr": 89.0,
+      "ovr": 89,
       "badges": [
         {
           "name": "三分神射",
@@ -11043,7 +9898,7 @@
         "REB": 99,
         "CLU": 62
       },
-      "ovr": 85.0,
+      "ovr": 85,
       "badges": [
         {
           "name": "三分神射",
@@ -12033,7 +10888,7 @@
         "REB": 47,
         "CLU": 86
       },
-      "ovr": 79.0,
+      "ovr": 79,
       "badges": [
         {
           "name": "三分神射",
@@ -12240,7 +11095,7 @@
         "REB": 44,
         "CLU": 79
       },
-      "ovr": 81.0,
+      "ovr": 81,
       "badges": [
         {
           "name": "三分神射",
@@ -12943,7 +11798,7 @@
         "REB": 95,
         "CLU": 64
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -13220,7 +12075,7 @@
         "REB": 99,
         "CLU": 56
       },
-      "ovr": 83.0,
+      "ovr": 83,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -13384,7 +12239,7 @@
         "REB": 36,
         "CLU": 69
       },
-      "ovr": 72.0,
+      "ovr": 72,
       "badges": [
         {
           "name": "组织核心",
@@ -13454,7 +12309,7 @@
         "REB": 47,
         "CLU": 56
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -13641,7 +12496,7 @@
         "REB": 49,
         "CLU": 62
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "组织核心",
@@ -13828,7 +12683,7 @@
         "REB": 43,
         "CLU": 53
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -13941,7 +12796,7 @@
         "REB": 77,
         "CLU": 53
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -14268,7 +13123,7 @@
         "REB": 46,
         "CLU": 72
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -14303,7 +13158,7 @@
         "REB": 75,
         "CLU": 48
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -14342,7 +13197,7 @@
         "REB": 56,
         "CLU": 57
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -14954,7 +13809,7 @@
         "REB": 54,
         "CLU": 64
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -14997,7 +13852,7 @@
         "REB": 49,
         "CLU": 71
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -15040,7 +13895,7 @@
         "REB": 53,
         "CLU": 81
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -15411,7 +14266,7 @@
         "REB": 46,
         "CLU": 59
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -15427,7 +14282,7 @@
       "pid": 1630541
     },
     {
-      "id": 362,
+      "id": 502,
       "name_cn": "纳吉·马绍尔",
       "name_en": "Naji Marshall",
       "nickname": "马绍尔",
@@ -15614,7 +14469,7 @@
         "REB": 34,
         "CLU": 67
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "组织核心",
@@ -15739,41 +14594,6 @@
       "pid": 1629629
     },
     {
-      "id": 388,
-      "name_cn": "詹姆斯·约翰逊",
-      "name_en": "James Johnson",
-      "nickname": "詹姆斯",
-      "team": "步行者",
-      "position": "SF/PF",
-      "jersey_number": 16,
-      "height": 201,
-      "weight": 109,
-      "birth_year": 1987,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "N/R",
-      "stats": {
-        "SHO": 86,
-        "SLA": 72,
-        "DEF": 72,
-        "ATH": 72,
-        "PLM": 43,
-        "PHY": 76,
-        "REB": 71,
-        "CLU": 56
-      },
-      "ovr": 70.3,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        }
-      ],
-      "era": null,
-      "is_legend": false,
-      "pid": 201949
-    },
-    {
       "id": 389,
       "name_cn": "丹尼尔·豪斯",
       "name_en": "Danuel House",
@@ -15844,7 +14664,7 @@
       "pid": 1630531
     },
     {
-      "id": 363,
+      "id": 503,
       "name_cn": "费斯特斯·埃泽利",
       "name_en": "Festus Ezeli",
       "nickname": "埃泽利",
@@ -15867,7 +14687,7 @@
         "REB": 87,
         "CLU": 46
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -15879,7 +14699,7 @@
       "pid": 203105
     },
     {
-      "id": 364,
+      "id": 504,
       "name_cn": "贾勒特·卡尔弗",
       "name_en": "Jarrett Culver",
       "nickname": "卡尔弗",
@@ -15902,7 +14722,7 @@
         "REB": 47,
         "CLU": 63
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "防守威慑",
@@ -15914,7 +14734,7 @@
       "pid": 1629633
     },
     {
-      "id": 365,
+      "id": 505,
       "name_cn": "卢卡·沙马尼奇",
       "name_en": "Luka Šamanić",
       "nickname": "沙马尼奇",
@@ -15937,7 +14757,7 @@
         "REB": 86,
         "CLU": 42
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -15953,7 +14773,7 @@
       "pid": 1629677
     },
     {
-      "id": 366,
+      "id": 506,
       "name_cn": "保罗·里德",
       "name_en": "Paul Reed",
       "nickname": "里德",
@@ -15976,7 +14796,7 @@
         "REB": 86,
         "CLU": 45
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -15988,7 +14808,7 @@
       "pid": 1630194
     },
     {
-      "id": 367,
+      "id": 507,
       "name_cn": "泽维尔·蒂尔曼",
       "name_en": "Xavier Tillman",
       "nickname": "蒂尔曼",
@@ -16011,7 +14831,7 @@
         "REB": 87,
         "CLU": 42
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -16027,7 +14847,7 @@
       "pid": 1630214
     },
     {
-      "id": 368,
+      "id": 508,
       "name_cn": "杜普·里斯",
       "name_en": "Duop Reath",
       "nickname": "里斯",
@@ -16050,7 +14870,7 @@
         "REB": 86,
         "CLU": 46
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -16066,7 +14886,7 @@
       "pid": 1641871
     },
     {
-      "id": 369,
+      "id": 509,
       "name_cn": "乌多卡·阿祖布伊克",
       "name_en": "Udoka Azubuike",
       "nickname": "阿祖",
@@ -16101,7 +14921,7 @@
       "pid": 1628962
     },
     {
-      "id": 370,
+      "id": 510,
       "name_cn": "法昆多·坎帕佐",
       "name_en": "Facundo Campazzo",
       "nickname": "坎帕佐",
@@ -16124,7 +14944,7 @@
         "REB": 28,
         "CLU": 64
       },
-      "ovr": 72.0,
+      "ovr": 72,
       "badges": [
         {
           "name": "组织核心",
@@ -16136,7 +14956,7 @@
       "pid": 1630267
     },
     {
-      "id": 371,
+      "id": 511,
       "name_cn": "劳尔·内托",
       "name_en": "Raul Neto",
       "nickname": "内托",
@@ -16159,7 +14979,7 @@
         "REB": 30,
         "CLU": 62
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "组织核心",
@@ -16175,7 +14995,7 @@
       "pid": 203526
     },
     {
-      "id": 372,
+      "id": 512,
       "name_cn": "弗兰克·杰克逊",
       "name_en": "Frank Jackson",
       "nickname": "杰克逊",
@@ -16198,7 +15018,7 @@
         "REB": 34,
         "CLU": 75
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -16210,7 +15030,7 @@
       "pid": 1628402
     },
     {
-      "id": 373,
+      "id": 513,
       "name_cn": "加里森·马修斯",
       "name_en": "Garrison Mathews",
       "nickname": "马修斯",
@@ -16245,7 +15065,7 @@
       "pid": 1629726
     },
     {
-      "id": 374,
+      "id": 514,
       "name_cn": "达米恩·李",
       "name_en": "Damion Lee",
       "nickname": "李",
@@ -16268,7 +15088,7 @@
         "REB": 42,
         "CLU": 60
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -16284,7 +15104,7 @@
       "pid": 1627814
     },
     {
-      "id": 375,
+      "id": 515,
       "name_cn": "马特·瑞安",
       "name_en": "Matt Ryan",
       "nickname": "瑞安",
@@ -16323,7 +15143,7 @@
       "pid": 1630346
     },
     {
-      "id": 376,
+      "id": 516,
       "name_cn": "贾斯汀·尚帕尼",
       "name_en": "Justin Champagnie",
       "nickname": "尚帕尼",
@@ -16358,7 +15178,7 @@
       "pid": 1630551
     },
     {
-      "id": 377,
+      "id": 517,
       "name_cn": "桑迪·阿尔达马",
       "name_en": "Santi Aldama",
       "nickname": "阿尔达马",
@@ -16381,7 +15201,7 @@
         "REB": 85,
         "CLU": 39
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -16393,7 +15213,7 @@
       "pid": 1630583
     },
     {
-      "id": 378,
+      "id": 518,
       "name_cn": "肯尼思·洛夫顿",
       "name_en": "Kenneth Lofton Jr.",
       "nickname": "小胖",
@@ -16428,7 +15248,7 @@
       "pid": 1631254
     },
     {
-      "id": 379,
+      "id": 519,
       "name_cn": "布兰登·米勒",
       "name_en": "Brandon Miller",
       "nickname": "米勒",
@@ -16498,7 +15318,7 @@
       "pid": 1641716
     },
     {
-      "id": 381,
+      "id": 520,
       "name_cn": "泰勒·亨德里克斯",
       "name_en": "Taylor Hendricks",
       "nickname": "亨德里克斯",
@@ -16521,7 +15341,7 @@
         "REB": 58,
         "CLU": 42
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "三分神射",
@@ -16533,7 +15353,7 @@
       "pid": 1641707
     },
     {
-      "id": 382,
+      "id": 521,
       "name_cn": "乔丹·霍金斯",
       "name_en": "Jordan Hawkins",
       "nickname": "霍金斯",
@@ -16556,14 +15376,14 @@
         "REB": 19,
         "CLU": 60
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
       "pid": 1641722
     },
     {
-      "id": 383,
+      "id": 522,
       "name_cn": "德雷克·莱夫利二世",
       "name_en": "Dereck Lively II",
       "nickname": "莱夫利",
@@ -16628,7 +15448,7 @@
       "pid": 1641717
     },
     {
-      "id": 384,
+      "id": 523,
       "name_cn": "托尼·布拉德利",
       "name_en": "Tony Bradley",
       "nickname": "布拉德利",
@@ -16658,7 +15478,7 @@
       "pid": 1628396
     },
     {
-      "id": 385,
+      "id": 524,
       "name_cn": "卢卡·加尔扎",
       "name_en": "Luka Garza",
       "nickname": "加尔扎",
@@ -16681,7 +15501,7 @@
         "REB": 77,
         "CLU": 34
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [
         {
           "name": "三分神射",
@@ -16693,7 +15513,7 @@
       "pid": 1630568
     },
     {
-      "id": 386,
+      "id": 525,
       "name_cn": "特雷弗·基尔斯",
       "name_en": "Trevor Keels",
       "nickname": "基尔斯",
@@ -16728,7 +15548,7 @@
       "pid": 1631211
     },
     {
-      "id": 387,
+      "id": 526,
       "name_cn": "小温德尔·摩尔",
       "name_en": "Wendell Moore Jr.",
       "nickname": "摩尔",
@@ -16751,14 +15571,14 @@
         "REB": 37,
         "CLU": 41
       },
-      "ovr": 60.0,
+      "ovr": 60,
       "badges": [],
       "era": null,
       "is_legend": false,
       "pid": 1631111
     },
     {
-      "id": 388,
+      "id": 527,
       "name_cn": "杰克·拉拉维亚",
       "name_en": "Jake LaRavia",
       "nickname": "拉拉维亚",
@@ -16793,7 +15613,7 @@
       "pid": 1631222
     },
     {
-      "id": 389,
+      "id": 528,
       "name_cn": "大卫·罗迪",
       "name_en": "David Roddy",
       "nickname": "罗迪",
@@ -16828,7 +15648,7 @@
       "pid": 1631223
     },
     {
-      "id": 390,
+      "id": 529,
       "name_cn": "鲍勃·库西",
       "name_en": "Bob Cousy",
       "nickname": "库西",
@@ -16890,7 +15710,7 @@
         "REB": 85,
         "CLU": 52
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -17089,7 +15909,7 @@
         "REB": 88,
         "CLU": 49
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -17124,7 +15944,7 @@
         "REB": 40,
         "CLU": 61
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -17163,7 +15983,7 @@
         "REB": 82,
         "CLU": 52
       },
-      "ovr": 72.0,
+      "ovr": 72,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -17280,7 +16100,7 @@
         "REB": 34,
         "CLU": 68
       },
-      "ovr": 71.0,
+      "ovr": 71,
       "badges": [
         {
           "name": "组织核心",
@@ -17506,7 +16326,7 @@
         "REB": 42,
         "CLU": 57
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -17580,7 +16400,7 @@
         "REB": 81,
         "CLU": 42
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -17674,7 +16494,7 @@
       "pid": 2592
     },
     {
-      "id": 412,
+      "id": 530,
       "name_cn": "迈克·米勒",
       "name_en": "Mike Miller",
       "nickname": "米勒",
@@ -17697,7 +16517,7 @@
         "REB": 58,
         "CLU": 51
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -17853,7 +16673,7 @@
         "REB": 59,
         "CLU": 66
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -18086,7 +16906,7 @@
         "REB": 35,
         "CLU": 78
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "三分神射",
@@ -18129,7 +16949,7 @@
         "REB": 46,
         "CLU": 72
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "组织核心",
@@ -18460,7 +17280,7 @@
         "REB": 99,
         "CLU": 55
       },
-      "ovr": 78.0,
+      "ovr": 78,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -18847,7 +17667,7 @@
         "REB": 40,
         "CLU": 78
       },
-      "ovr": 84.0,
+      "ovr": 84,
       "badges": [
         {
           "name": "防守威慑",
@@ -18886,7 +17706,7 @@
         "REB": 97,
         "CLU": 61
       },
-      "ovr": 82.0,
+      "ovr": 82,
       "badges": [
         {
           "name": "篮板痴汉",
@@ -19011,7 +17831,7 @@
       "pid": 78350
     },
     {
-      "id": 442,
+      "id": 531,
       "name_cn": "鲍比·丹德里奇",
       "name_en": "Bobby Dandridge",
       "nickname": "丹德里奇",
@@ -19050,7 +17870,7 @@
       "pid": 76300
     },
     {
-      "id": 443,
+      "id": 532,
       "name_cn": "布奇·卡特",
       "name_en": "Butch Carter",
       "nickname": "卡特",
@@ -19085,7 +17905,7 @@
       "pid": 76355
     },
     {
-      "id": 444,
+      "id": 533,
       "name_cn": "约翰·朗",
       "name_en": "John Long",
       "nickname": "朗",
@@ -19473,7 +18293,7 @@
         "REB": 42,
         "CLU": 63
       },
-      "ovr": 70.0,
+      "ovr": 70,
       "badges": [
         {
           "name": "三分神射",
@@ -19559,127 +18379,6 @@
       "pid": 76545
     },
     {
-      "id": 457,
-      "name_cn": "康尼·霍金斯",
-      "name_en": "Connie Hawkins",
-      "nickname": "霍金斯",
-      "team": "太阳",
-      "position": "SF/PF",
-      "jersey_number": 42,
-      "height": 203,
-      "weight": 95,
-      "birth_year": 1942,
-      "player_type": "得分机器",
-      "tier": "B",
-      "card_tier": "SR/SSR",
-      "stats": {
-        "SHO": 99,
-        "SLA": 93,
-        "DEF": 62,
-        "ATH": 79,
-        "PLM": 68,
-        "PHY": 53,
-        "REB": 53,
-        "CLU": 78
-      },
-      "ovr": 78.2,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        },
-        {
-          "name": "中投之王",
-          "level": "silver"
-        }
-      ],
-      "era": "70s",
-      "is_legend": true,
-      "pid": 76972
-    },
-    {
-      "id": 458,
-      "name_cn": "鲍勃·麦卡杜",
-      "name_en": "Bob McAdoo",
-      "nickname": "麦卡杜",
-      "team": "快船",
-      "position": "PF/C",
-      "jersey_number": 11,
-      "height": 206,
-      "weight": 95,
-      "birth_year": 1951,
-      "player_type": "得分机器",
-      "tier": "B",
-      "card_tier": "SR/SSR",
-      "stats": {
-        "SHO": 90,
-        "SLA": 81,
-        "DEF": 99,
-        "ATH": 74,
-        "PLM": 53,
-        "PHY": 74,
-        "REB": 65,
-        "CLU": 69
-      },
-      "ovr": 78.1,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        },
-        {
-          "name": "中投之王",
-          "level": "bronze"
-        },
-        {
-          "name": "脚踝终结者",
-          "level": "silver"
-        }
-      ],
-      "era": "70s",
-      "is_legend": true,
-      "pid": 77498
-    },
-    {
-      "id": 459,
-      "name_cn": "丹·伊塞尔",
-      "name_en": "Dan Issel",
-      "nickname": "伊塞尔",
-      "team": "掘金",
-      "position": "C",
-      "jersey_number": 44,
-      "height": 206,
-      "weight": 107,
-      "birth_year": 1948,
-      "player_type": "内线巨兽",
-      "tier": "B",
-      "card_tier": "SR/SSR",
-      "stats": {
-        "SHO": 42,
-        "SLA": 79,
-        "DEF": 95,
-        "ATH": 68,
-        "PLM": 37,
-        "PHY": 99,
-        "REB": 99,
-        "CLU": 58
-      },
-      "ovr": 84.0,
-      "badges": [
-        {
-          "name": "隔扣达人",
-          "level": "bronze"
-        },
-        {
-          "name": "火锅店长",
-          "level": "silver"
-        }
-      ],
-      "era": "70s",
-      "is_legend": true,
-      "pid": 77097
-    },
-    {
       "id": 460,
       "name_cn": "乔·考德威尔",
       "name_en": "Joe Caldwell",
@@ -19713,111 +18412,6 @@
       "era": "60s",
       "is_legend": true,
       "pid": 76329
-    },
-    {
-      "id": 461,
-      "name_cn": "里克·巴里",
-      "name_en": "Rick Barry",
-      "nickname": "巴里",
-      "team": "勇士",
-      "position": "SF",
-      "jersey_number": 24,
-      "height": 201,
-      "weight": 93,
-      "birth_year": 1944,
-      "player_type": "得分机器",
-      "tier": "C",
-      "card_tier": "R/SR",
-      "stats": {
-        "SHO": 92,
-        "SLA": 88,
-        "DEF": 47,
-        "ATH": 70,
-        "PLM": 62,
-        "PHY": 53,
-        "REB": 43,
-        "CLU": 64
-      },
-      "ovr": 70.1,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "silver"
-        }
-      ],
-      "era": "60s",
-      "is_legend": true,
-      "pid": 600013
-    },
-    {
-      "id": 462,
-      "name_cn": "内特·瑟蒙德",
-      "name_en": "Nate Thurmond",
-      "nickname": "瑟蒙德",
-      "team": "勇士",
-      "position": "C",
-      "jersey_number": 42,
-      "height": 211,
-      "weight": 102,
-      "birth_year": 1941,
-      "player_type": "蓝领",
-      "tier": "C",
-      "card_tier": "R/SR",
-      "stats": {
-        "SHO": 23,
-        "SLA": 49,
-        "DEF": 88,
-        "ATH": 57,
-        "PLM": 23,
-        "PHY": 94,
-        "REB": 82,
-        "CLU": 46
-      },
-      "ovr": 71.2,
-      "badges": [
-        {
-          "name": "篮板痴汉",
-          "level": "bronze"
-        }
-      ],
-      "era": "60s",
-      "is_legend": true,
-      "pid": 600001
-    },
-    {
-      "id": 463,
-      "name_cn": "杰里·卢卡斯",
-      "name_en": "Jerry Lucas",
-      "nickname": "卢卡斯",
-      "team": "尼克斯",
-      "position": "PF/C",
-      "jersey_number": 47,
-      "height": 203,
-      "weight": 104,
-      "birth_year": 1940,
-      "player_type": "空间内线",
-      "tier": "C",
-      "card_tier": "R/SR",
-      "stats": {
-        "SHO": 72,
-        "SLA": 49,
-        "DEF": 88,
-        "ATH": 45,
-        "PLM": 38,
-        "PHY": 88,
-        "REB": 84,
-        "CLU": 52
-      },
-      "ovr": 70.3,
-      "badges": [
-        {
-          "name": "三分神射",
-          "level": "bronze"
-        }
-      ],
-      "era": "60s",
-      "is_legend": true,
-      "pid": 77418
     },
     {
       "id": 496,
@@ -20053,5 +18647,6 @@
       "is_legend": true,
       "pid": 77418
     }
-  ]
+  ],
+  "total_players": 463
 }
