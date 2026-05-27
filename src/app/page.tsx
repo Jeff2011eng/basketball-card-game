@@ -130,7 +130,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500/30">
       {phase === 'INTRO' && (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center">
+        <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-purple-900" />
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
           <motion.div

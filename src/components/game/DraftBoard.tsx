@@ -37,7 +37,7 @@ export default function DraftBoard({ pool, onComplete }: Props) {
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [filter, pool.length]);
 
   const filteredPool = useMemo(() => {
     return pool.filter(p => {
@@ -165,7 +165,6 @@ export default function DraftBoard({ pool, onComplete }: Props) {
             return (
               <motion.div
                 key={player.id}
-                layoutId={`pool-${player.id}`}
                 className="relative flex justify-center"
               >
                 <div
