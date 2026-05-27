@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
@@ -9,7 +9,6 @@ import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { ArrowLeft, Share2 } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
-import QRCode from 'qrcode';
 
 interface Props {
   onBack: () => void;
@@ -29,12 +28,8 @@ const STAT_DISPLAY: Record<string, string> = {
 export default function LineupReview({ onBack }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
   const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
-  const captureRef = useRef<HTMLDivElement>(null);
-  const [qrDataUrl, setQrDataUrl] = useState('');
 
   const nickname = typeof window !== 'undefined' ? localStorage.getItem('nickname') || '' : '';
-  const pageUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : '';
 
   useEffect(() => {
     const playerId = getPlayerId();
@@ -42,14 +37,6 @@ export default function LineupReview({ onBack }: Props) {
       .then(data => { setLineup(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (pageUrl) {
-      QRCode.toDataURL(pageUrl, { width: 120, margin: 1, color: { dark: '#ffffff', light: '#00000000' } })
-        .then(url => setQrDataUrl(url))
-        .catch(() => {});
-    }
-  }, [pageUrl]);
 
   const totalOvr = lineup ? Math.round(Object.values(lineup).reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100 : 0;
   const score = lineup ? calcLineupScore(lineup) : 0;
@@ -68,21 +55,13 @@ export default function LineupReview({ onBack }: Props) {
     return Array.from(new Set(players.flatMap(p => p?.badges?.map((b: {name: string}) => b.name) || [] as string[])));
   }, [players]);
 
-  const handleGenerateImage = async () => {
-    if (!captureRef.current || generating) return;
-    setGenerating(true);
+  const handleShare = async () => {
     try {
-      const { captureElement } = await import('@/lib/screenshot');
-      const dataUrl = await captureElement(captureRef.current);
-      const link = document.createElement('a');
-      link.download = `NBA_Lineup_${nickname || 'lineup'}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (e) {
-      console.error(e);
-      alert('生成图片失败，请截图保存');
+      await navigator.clipboard.writeText(window.location.href);
+      alert('链接已复制，分享给朋友吧！');
+    } catch {
+      alert('复制失败，请手动复制浏览器地址栏链接');
     }
-    setGenerating(false);
   };
 
   const SCALE = 0.5;
@@ -119,9 +98,8 @@ export default function LineupReview({ onBack }: Props) {
           </button>
           {lineup && (
             <button
-              onClick={handleGenerateImage}
-              disabled={generating}
-              className="text-white/50 hover:text-white transition-colors disabled:opacity-50"
+              onClick={handleShare}
+              className="text-white/50 hover:text-white transition-colors"
             >
               <Share2 className="w-6 h-6" />
             </button>
@@ -144,7 +122,7 @@ export default function LineupReview({ onBack }: Props) {
         ) : (
           <>
             {/* 截图区域 */}
-            <div ref={captureRef} className="bg-gray-900 rounded-2xl py-8 px-6">
+            <div className="bg-gray-900 rounded-2xl py-8 px-6">
               <div className="text-center mb-8">
                 <h1
                   className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
@@ -216,18 +194,10 @@ export default function LineupReview({ onBack }: Props) {
                 </div>
               </div>
 
-              {/* 底部 QR 码和水印 */}
-              <div className="flex items-center justify-between mt-8 px-4">
-                <div>
-                  <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
-                  <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
-                </div>
-                {qrDataUrl && (
-                  <div className="flex flex-col items-center">
-                    <img src={qrDataUrl} alt="QR Code" width={80} height={80} className="rounded" />
-                    <p className="text-gray-500 text-[10px] mt-1">扫码参与</p>
-                  </div>
-                )}
+              {/* 底部水印 */}
+              <div className="mt-8 px-4">
+                <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
+                <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
               </div>
             </div>
           </>

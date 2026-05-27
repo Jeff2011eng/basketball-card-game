@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
 import { Trophy, Swords, RotateCcw, Share2 } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import Card from './Card';
-import QRCode from 'qrcode';
 
 interface Props {
   result: BattleResultType;
@@ -17,19 +16,6 @@ interface Props {
 export default function BattleResult({ result, onRestart }: Props) {
   const isWin = result.winner === 'challenger';
   const isDraw = result.winner === 'draw';
-  const [generating, setGenerating] = useState(false);
-  const captureRef = useRef<HTMLDivElement>(null);
-  const [qrDataUrl, setQrDataUrl] = useState('');
-
-  const pageUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : '';
-
-  useEffect(() => {
-    if (pageUrl) {
-      QRCode.toDataURL(pageUrl, { width: 80, margin: 1, color: { dark: '#ffffff', light: '#00000000' } })
-        .then(url => setQrDataUrl(url))
-        .catch(() => {});
-    }
-  }, [pageUrl]);
 
   const radarData = useMemo(() => {
     return result.statComparison.map(s => ({
@@ -45,25 +31,17 @@ export default function BattleResult({ result, onRestart }: Props) {
   const CH = 480 * SCALE;
 
   const handleShare = async () => {
-    if (!captureRef.current || generating) return;
-    setGenerating(true);
     try {
-      const { captureElement } = await import('@/lib/screenshot');
-      const dataUrl = await captureElement(captureRef.current);
-      const link = document.createElement('a');
-      link.download = `NBA_Battle_${result.challengerNickname}_vs_${result.defenderNickname}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (e) {
-      console.error(e);
-      alert('生成图片失败，请截图保存');
+      await navigator.clipboard.writeText(window.location.href);
+      alert('链接已复制，分享给朋友吧！');
+    } catch {
+      alert('复制失败，请手动复制浏览器地址栏链接');
     }
-    setGenerating(false);
   };
 
   return (
     <>
-      <div ref={captureRef} className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
+      <div className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
         {/* 胜负公告 */}
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
@@ -199,18 +177,10 @@ export default function BattleResult({ result, onRestart }: Props) {
           </div>
         </div>
 
-        {/* 底部 QR 码和水印 */}
-        <div className="flex items-center justify-between max-w-xl mx-auto px-4">
-          <div>
-            <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
-            <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
-          </div>
-          {qrDataUrl && (
-            <div className="flex flex-col items-center">
-              <img src={qrDataUrl} alt="QR Code" width={60} height={60} className="rounded" />
-              <p className="text-gray-500 text-[10px] mt-1">扫码参与</p>
-            </div>
-          )}
+        {/* 底部水印 */}
+        <div className="max-w-xl mx-auto px-4">
+          <p className="text-white font-black text-lg">NBA 最佳阵容对战</p>
+          <p className="text-gray-500 text-xs">虎扑JRS · 开包抽卡 · 组建阵容 · 统治赛场</p>
         </div>
       </div>
 
@@ -219,11 +189,10 @@ export default function BattleResult({ result, onRestart }: Props) {
         <div className="max-w-md mx-auto flex flex-col gap-2">
           <button
             onClick={handleShare}
-            disabled={generating}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
           >
             <Share2 className="w-5 h-5" />
-            {generating ? '生成中...' : '分享战绩'}
+            分享战绩
           </button>
           <button
             onClick={onRestart}
