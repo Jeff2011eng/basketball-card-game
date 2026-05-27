@@ -1,21 +1,19 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { getSupabase } from '@/lib/supabase';
-import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
-import { getPlayerId } from '@/lib/player-identity';
-import { uploadLineup, matchmake } from '@/lib/supabase-service';
-import PackOpener from '@/components/game/PackOpener';
-import DraftBoard from '@/components/game/DraftBoard';
-import LineupResult from '@/components/game/LineupResult';
-import Leaderboard from '@/components/game/Leaderboard';
-import NicknameModal from '@/components/game/NicknameModal';
-import BattleResult from '@/components/game/BattleResult';
-import BattleHistory from '@/components/game/BattleHistory';
-import LineupReview from '@/components/game/LineupReview';
 import { Play, Trophy, History, Users } from 'lucide-react';
+
+const NicknameModal = dynamic(() => import('@/components/game/NicknameModal'));
+const PackOpener = dynamic(() => import('@/components/game/PackOpener'));
+const DraftBoard = dynamic(() => import('@/components/game/DraftBoard'));
+const LineupResult = dynamic(() => import('@/components/game/LineupResult'));
+const Leaderboard = dynamic(() => import('@/components/game/Leaderboard'));
+const BattleResult = dynamic(() => import('@/components/game/BattleResult'));
+const BattleHistory = dynamic(() => import('@/components/game/BattleHistory'));
+const LineupReview = dynamic(() => import('@/components/game/LineupReview'));
 
 type GamePhase = 'INTRO' | 'ENTER_NICKNAME' | 'OPENING' | 'DRAFTING' | 'RESULT' | 'BATTLE' | 'LEADERBOARD' | 'BATTLE_HISTORY' | 'LINEUP_REVIEW';
 
@@ -37,9 +35,11 @@ export default function Home() {
 
   useEffect(() => {
     if (!nickname) return;
-    const playerId = getPlayerId();
     const checkCount = async () => {
       try {
+        const { getPlayerId } = await import('@/lib/player-identity');
+        const { getSupabase } = await import('@/lib/supabase');
+        const playerId = getPlayerId();
         const sb = getSupabase();
         const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
         setPlayCount(data?.total_battles ?? 0);
@@ -86,6 +86,8 @@ export default function Home() {
     setLoadingMsg('上传阵容中...');
 
     try {
+      const { getPlayerId } = await import('@/lib/player-identity');
+      const { uploadLineup, matchmake } = await import('@/lib/supabase-service');
       const playerId = getPlayerId();
       const { lineupId: lid } = await uploadLineup(playerId, nickname, finalLineup);
       setLineupId(lid);
@@ -103,11 +105,13 @@ export default function Home() {
   };
 
   const handleBattleAgain = async () => {
-    const playerId = getPlayerId();
     setIsLoading(true);
     setLoadingMsg('寻找新对手...');
 
     try {
+      const { getPlayerId } = await import('@/lib/player-identity');
+      const { matchmake } = await import('@/lib/supabase-service');
+      const playerId = getPlayerId();
       const result = await matchmake(playerId, lineupId);
       setIsLoading(false);
       setBattleData(result);
@@ -136,11 +140,7 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="relative z-10 flex flex-col items-center text-center p-6"
-          >
+          <div className="relative z-10 flex flex-col items-center text-center p-6 animate-[fadeScale_0.5s_ease-out]">
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 leading-none">
               <span className="block">NBA</span>
               <span className="block text-4xl md:text-6xl mt-1">最佳阵容对战</span>
@@ -192,7 +192,7 @@ export default function Home() {
                 </button>
               </div>
             )}
-          </motion.div>
+          </div>
         </div>
       )}
 
@@ -216,11 +216,7 @@ export default function Home() {
           <LineupResult lineup={finalLineup} onUpload={handleUpload} />
           {isLoading && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-4"
-              />
+              <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-4 animate-spin" />
               <h2 className="text-2xl font-black text-blue-400 uppercase tracking-widest">{loadingMsg}</h2>
             </div>
           )}
@@ -235,11 +231,7 @@ export default function Home() {
           />
           {isLoading && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mb-4"
-              />
+              <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mb-4 animate-spin" />
               <h2 className="text-2xl font-black text-purple-400 uppercase tracking-widest">{loadingMsg}</h2>
             </div>
           )}
