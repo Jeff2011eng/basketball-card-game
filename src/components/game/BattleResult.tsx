@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
@@ -17,7 +17,6 @@ interface Props {
 export default function BattleResult({ result, onRestart }: Props) {
   const isWin = result.winner === 'challenger';
   const isDraw = result.winner === 'draw';
-  const captureRef = useRef<HTMLDivElement>(null);
   const [generating, setGenerating] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState('');
 
@@ -45,11 +44,26 @@ export default function BattleResult({ result, onRestart }: Props) {
   const CH = 480 * SCALE;
 
   const handleShare = async () => {
-    if (!captureRef.current || generating) return;
+    if (generating) return;
     setGenerating(true);
     try {
-      const { captureElement } = await import('@/lib/screenshot');
-      const dataUrl = await captureElement(captureRef.current);
+      const { generateBattlePoster } = await import('@/lib/screenshot');
+      const dataUrl = await generateBattlePoster({
+        challengerNickname: result.challengerNickname,
+        defenderNickname: result.defenderNickname,
+        challengerScore: result.challengerScore,
+        defenderScore: result.defenderScore,
+        winner: result.winner as 'challenger' | 'defender' | 'draw',
+        positionMatchups: result.positionMatchups.map(m => ({
+          position: m.position,
+          challenger: m.challenger,
+          defender: m.defender,
+          challengerScore: m.challengerScore,
+          defenderScore: m.defenderScore,
+          winner: m.winner,
+        })),
+        qrDataUrl,
+      });
       const link = document.createElement('a');
       link.download = `NBA_Battle_${result.challengerNickname}_vs_${result.defenderNickname}.png`;
       link.href = dataUrl;
@@ -63,7 +77,7 @@ export default function BattleResult({ result, onRestart }: Props) {
 
   return (
     <>
-      <div ref={captureRef} className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
+      <div className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
         {/* 胜负公告 */}
         <motion.div
           initial={{ scale: 0, opacity: 0 }}

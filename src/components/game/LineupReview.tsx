@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
@@ -30,7 +30,6 @@ export default function LineupReview({ onBack }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const captureRef = useRef<HTMLDivElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState('');
 
   const nickname = typeof window !== 'undefined' ? localStorage.getItem('nickname') || '' : '';
@@ -69,11 +68,16 @@ export default function LineupReview({ onBack }: Props) {
   }, [players]);
 
   const handleGenerateImage = async () => {
-    if (!captureRef.current || generating) return;
+    if (!lineup || generating) return;
     setGenerating(true);
     try {
-      const { captureElement } = await import('@/lib/screenshot');
-      const dataUrl = await captureElement(captureRef.current);
+      const { generateLineupPoster } = await import('@/lib/screenshot');
+      const dataUrl = await generateLineupPoster({
+        nickname,
+        lineup,
+        score,
+        qrDataUrl,
+      });
       const link = document.createElement('a');
       link.download = `NBA_Lineup_${nickname || 'lineup'}.png`;
       link.href = dataUrl;
@@ -144,7 +148,7 @@ export default function LineupReview({ onBack }: Props) {
         ) : (
           <>
             {/* 截图区域 */}
-            <div ref={captureRef} className="bg-gray-900 rounded-2xl py-8 px-6">
+            <div className="bg-gray-900 rounded-2xl py-8 px-6">
               <div className="text-center mb-8">
                 <h1
                   className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
