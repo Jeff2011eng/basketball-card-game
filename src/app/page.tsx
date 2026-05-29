@@ -126,7 +126,7 @@ export default function Home() {
           className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
           style={{ backgroundImage: "url('/bg-court.jpg')" }}
         >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
 
           <div className="relative z-10 flex flex-col items-center text-center p-6 animate-[fadeScale_0.5s_ease-out]">
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 leading-none">
