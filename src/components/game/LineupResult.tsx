@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
-import { getRarity } from '@/lib/game-logic';
+import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy } from 'lucide-react';
@@ -25,20 +25,30 @@ const STAT_DISPLAY: Record<string, string> = {
 };
 
 export default function LineupResult({ lineup, onUpload }: Props) {
-  const players = Object.values(lineup);
+  const players = Object.values(lineup).filter(Boolean);
 
-  const totalOvr = Math.round(players.reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100;
+  const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
+  const score = calcLineupScore(lineup);
+  const bonus = score - baseOvr;
+
+  // Chemistry info
+  const teams = players.map(p => p!.team);
+  const teamCounts: Record<string, number> = {};
+  teams.forEach(t => { teamCounts[t] = (teamCounts[t] || 0) + 1; });
+  const chemTeams = Object.entries(teamCounts).filter(([, count]) => count >= 2);
 
   const avgStats = useMemo(() => {
     return STAT_KEYS.map(key => {
       const sum = players.reduce((s, p) => s + (p ? p.stats[key] : 0), 0);
-      return { subject: STAT_DISPLAY[key], A: Math.round(sum / 5 * 10) / 10, fullMark: 100 };
+      return { subject: STAT_DISPLAY[key], A: Math.round(sum / players.length * 10) / 10, fullMark: 100 };
     });
   }, [players]);
 
   const allBadges = useMemo(() => {
     return Array.from(new Set(players.flatMap(p => p?.badges?.map((b: {name: string}) => b.name) || [] as string[])));
   }, [players]);
+
+  const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
   return (
     <>
@@ -52,9 +62,21 @@ export default function LineupResult({ lineup, onUpload }: Props) {
             你的终极阵容
           </h1>
           <div className="flex items-center justify-center gap-4">
-            <span className="text-gray-400 text-xl font-bold uppercase tracking-widest">阵容评分</span>
+            <span className="text-gray-400 text-xl font-bold uppercase tracking-widest">战力</span>
             <div className="bg-black text-white text-5xl font-black px-6 py-2 rounded-xl border-4 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.5)]">
-              {totalOvr}
+              {score}
+            </div>
+          </div>
+          {/* Score breakdown */}
+          <div className="mt-4 text-sm text-gray-400 space-y-1">
+            <div className="flex items-center justify-center gap-3">
+              <span>基础战力 {baseOvr}</span>
+              {bonus > 0 && (
+                <>
+                  <span className="text-green-400">+{bonus}</span>
+                  <span className="text-green-400">加成</span>
+                </>
+              )}
             </div>
           </div>
         </motion.div>
@@ -111,6 +133,39 @@ export default function LineupResult({ lineup, onUpload }: Props) {
           </div>
 
           <div className="flex flex-col justify-center gap-6">
+            {/* Bonus breakdown */}
+            <div className="bg-gray-900 rounded-xl p-6 border border-gray-700">
+              <h4 className="text-gray-400 font-bold mb-4 uppercase text-sm tracking-wider">加成明细</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 font-bold">基础战力</span>
+                  <span className="text-white font-black">{baseOvr}</span>
+                </div>
+                {chemTeams.length > 0 && chemTeams.map(([team, count]) => (
+                  <div key={team} className="flex items-center justify-between">
+                    <span className="text-gray-300 font-bold">
+                      同队加成 · {team} x{count}
+                    </span>
+                    <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                  </div>
+                ))}
+                {chemTeams.length === 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 font-bold">同队加成 · 无</span>
+                    <span className="text-gray-600 font-black">+0%</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 font-bold">激活徽章</span>
+                  <span className="text-purple-400 font-black">{badgeCount} 个</span>
+                </div>
+                <div className="border-t border-gray-700 pt-3 flex items-center justify-between">
+                  <span className="text-white font-black">最终战力</span>
+                  <span className="text-yellow-400 font-black text-lg">{score}</span>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-gray-900 rounded-xl p-6 border border-gray-700">
               <h4 className="text-gray-400 font-bold mb-4 uppercase text-sm tracking-wider">激活徽章</h4>
               <div className="flex flex-wrap gap-2">
