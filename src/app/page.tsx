@@ -27,6 +27,18 @@ export default function Home() {
   const [nickname, setNickname] = useState<string>('');
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
+  const [playerCount, setPlayerCount] = useState<number>(0);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { getSupabase } = await import('@/lib/supabase');
+        const sb = getSupabase();
+        const { count } = await sb.from('player_stats').select('*', { count: 'exact', head: true }).gt('total_battles', 0);
+        if (count) setPlayerCount(count);
+      } catch { /* ignore */ }
+    })();
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
@@ -135,6 +147,12 @@ export default function Home() {
                 开始抽卡
               </div>
             </button>
+
+            {playerCount > 0 && (
+              <p className="text-sm md:text-base font-bold text-purple-300/80 mt-5">
+                已有 <span className="text-yellow-400">{playerCount}</span> 位虎扑JR组建阵容下场开战，你还不来？
+              </p>
+            )}
 
             {/* Quick access links */}
             {nickname && (
