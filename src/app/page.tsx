@@ -184,6 +184,15 @@ export default function Home() {
                 </button>
               </div>
             )}
+
+            <a
+              href="https://m.hupu.com/bbs-share/639570451.html?share=share&euid=271373509042571&cid=162930228"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/40 hover:text-white/70 text-xs font-bold mt-10 transition-colors"
+            >
+              有建议？来虎扑帖子聊聊，一起把游戏做得更好
+            </a>
           </div>
         </div>
       )}
