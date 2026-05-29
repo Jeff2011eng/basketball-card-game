@@ -189,9 +189,9 @@ export default function Home() {
               href="https://m.hupu.com/bbs-share/639570451.html?share=share&euid=271373509042571&cid=162930228"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/40 hover:text-white/70 text-xs font-bold mt-10 transition-colors"
+              className="mt-10 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-sm font-bold transition-all hover:scale-105 active:scale-95"
             >
-              有建议？来虎扑帖子聊聊，一起把游戏做得更好
+              有建议？来虎扑帖子聊聊，<span className="text-blue-400 hover:text-blue-300 underline">点击此处反馈</span>
             </a>
           </div>
         </div>
