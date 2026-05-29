@@ -1,5 +1,5 @@
 import { getSupabase } from './supabase';
-import { Lineup, LeaderboardEntry, BattleHistoryEntry } from './types';
+import { Lineup, LeaderboardEntry, BattleHistoryEntry, LineupLeaderboardEntry } from './types';
 import { calcLineupScore } from './game-logic';
 import { resolveBattle, BattleResult } from './battle-logic';
 
@@ -69,12 +69,6 @@ export async function matchmake(
   lineupId: string,
 ): Promise<BattleResult> {
   const sb = getSupabase();
-
-  // Check play count limit (3 times)
-  const { data: statsCheck } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
-  if (statsCheck && statsCheck.total_battles >= 3) {
-    throw new Error('你已用完 3 次游戏机会');
-  }
 
   // Fetch challenger lineup
   const { data: challenger } = await sb.from('lineups').select('*').eq('id', lineupId).single();
@@ -187,4 +181,18 @@ export async function fetchMyLineup(playerId: string): Promise<Lineup | null> {
 
   if (error || !data) return null;
   return { PG: data.pg_data, SG: data.sg_data, SF: data.sf_data, PF: data.pf_data, C: data.c_data };
+}
+
+export async function fetchLineupLeaderboard(): Promise<LineupLeaderboardEntry[]> {
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('lineups')
+    .select('id, player_id, nickname, score, avg_stats, pg_data, sg_data, sf_data, pf_data, c_data')
+    .eq('is_active', true)
+    .gt('score', 0)
+    .order('score', { ascending: false })
+    .limit(50);
+
+  if (error) throw new Error(error.message);
+  return data || [];
 }

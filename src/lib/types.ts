@@ -181,3 +181,16 @@ export interface LeaderboardEntry {
   best_score: number;
   win_rate: number;
 }
+
+export interface LineupLeaderboardEntry {
+  id: string;
+  player_id: string;
+  nickname: string;
+  score: number;
+  avg_stats: Record<string, number>;
+  pg_data: any;
+  sg_data: any;
+  sf_data: any;
+  pf_data: any;
+  c_data: any;
+}

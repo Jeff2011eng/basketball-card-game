@@ -27,38 +27,13 @@ export default function Home() {
   const [nickname, setNickname] = useState<string>('');
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
-  const [playCount, setPlayCount] = useState<number>(-1); // -1 = unknown
 
   useEffect(() => {
     const saved = localStorage.getItem('nickname');
     if (saved) setNickname(saved);
   }, []);
 
-  useEffect(() => {
-    if (!nickname) return;
-    const checkCount = async () => {
-      try {
-        const { getPlayerId } = await import('@/lib/player-identity');
-        const { getSupabase } = await import('@/lib/supabase');
-        const playerId = getPlayerId();
-        const sb = getSupabase();
-        const { data } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
-        setPlayCount(data?.total_battles ?? 0);
-      } catch {
-        // ignore
-      }
-    };
-    checkCount();
-  }, [nickname, phase]);
-
-  const remaining = playCount === -1 ? -1 : 3 - playCount;
-  const isExhausted = remaining === 0;
-
   const handleStartDraft = () => {
-    if (isExhausted) {
-      alert('你已用完 3 次游戏机会');
-      return;
-    }
     if (nickname) {
       setPhase('OPENING');
     } else {
@@ -160,12 +135,6 @@ export default function Home() {
                 开始抽卡
               </div>
             </button>
-
-            {nickname && remaining >= 0 && (
-              <p className="text-gray-400 text-sm font-bold mt-4">
-                剩余次数：{remaining}/3
-              </p>
-            )}
 
             {/* Quick access links */}
             {nickname && (
