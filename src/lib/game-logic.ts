@@ -76,5 +76,5 @@ export function calcLineupScore(lineup: Lineup): number {
     else if (count >= 2) chemBonus += 5;
   });
   
-  return Math.round(baseOvr * (1 + chemBonus / 100) * 100) / 100;
+  return parseFloat((baseOvr * (1 + chemBonus / 100)).toFixed(2));
 }

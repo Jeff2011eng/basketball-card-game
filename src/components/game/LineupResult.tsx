@@ -29,7 +29,7 @@ export default function LineupResult({ lineup, onUpload }: Props) {
 
   const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
   const score = calcLineupScore(lineup);
-  const bonus = score - baseOvr;
+  const bonus = parseFloat((score - baseOvr).toFixed(2));
 
   // Chemistry info
   const teams = players.map(p => p!.team);

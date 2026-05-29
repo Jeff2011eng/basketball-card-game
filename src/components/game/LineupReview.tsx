@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Lineup, STAT_LABELS } from '@/lib/types';
+import { Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
@@ -17,12 +17,7 @@ interface Props {
 const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
 
 const STAT_DISPLAY: Record<string, string> = {
-  SHO: '投射',
-  SLA: '突破',
-  DEF: '防守',
-  ATH: '运动',
-  PLM: '组织',
-  PHY: '对抗',
+  SHO: '投射', SLA: '突破', DEF: '防守', ATH: '运动', PLM: '组织', PHY: '对抗',
 };
 
 export default function LineupReview({ onBack }: Props) {
@@ -38,22 +33,30 @@ export default function LineupReview({ onBack }: Props) {
       .catch(() => setLoading(false));
   }, []);
 
-  const totalOvr = lineup ? Math.round(Object.values(lineup).reduce((sum, p) => sum + (p?.ovr || 0), 0) / 5 * 100) / 100 : 0;
-  const score = lineup ? calcLineupScore(lineup) : 0;
-
   const players = lineup ? Object.values(lineup).filter(Boolean) : [];
+  const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
+  const score = lineup ? calcLineupScore(lineup) : 0;
+  const bonus = parseFloat((score - baseOvr).toFixed(2));
+
+  // Chemistry info
+  const teams = players.map(p => p!.team);
+  const teamCounts: Record<string, number> = {};
+  teams.forEach(t => { teamCounts[t] = (teamCounts[t] || 0) + 1; });
+  const chemTeams = Object.entries(teamCounts).filter(([, count]) => count >= 2);
 
   const avgStats = useMemo(() => {
     if (players.length === 0) return [];
     return STAT_KEYS.map(key => {
       const sum = players.reduce((s, p) => s + (p ? p.stats[key] : 0), 0);
-      return { subject: STAT_DISPLAY[key], A: Math.round(sum / 5 * 10) / 10, fullMark: 100 };
+      return { subject: STAT_DISPLAY[key], A: Math.round(sum / players.length * 10) / 10, fullMark: 100 };
     });
   }, [players]);
 
   const allBadges = useMemo(() => {
     return Array.from(new Set(players.flatMap(p => p?.badges?.map((b: {name: string}) => b.name) || [] as string[])));
   }, [players]);
+
+  const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
   const handleShare = async () => {
     try {
@@ -97,10 +100,7 @@ export default function LineupReview({ onBack }: Props) {
             <ArrowLeft className="w-6 h-6" />
           </button>
           {lineup && (
-            <button
-              onClick={handleShare}
-              className="text-white/50 hover:text-white transition-colors"
-            >
+            <button onClick={handleShare} className="text-white/50 hover:text-white transition-colors">
               <Share2 className="w-6 h-6" />
             </button>
           )}
@@ -120,82 +120,110 @@ export default function LineupReview({ onBack }: Props) {
             <p className="text-gray-600 text-sm mt-2">开始抽卡组建你的阵容吧！</p>
           </div>
         ) : (
-          <>
-            {/* 截图区域 */}
-            <div className="bg-gray-900 rounded-2xl py-8 px-6">
-              <div className="text-center mb-8">
-                <h1
-                  className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
-                  style={{
-                    backgroundImage: 'linear-gradient(to right, #facc15, #f97316, #ef4444)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  我的阵容
-                </h1>
-                {nickname && (
-                  <p className="text-gray-400 font-bold text-lg mb-2">🏀 {nickname}</p>
-                )}
-                <div className="flex items-center justify-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">战力</span>
-                    <div className="bg-black text-white text-3xl font-black px-4 py-1 rounded-xl" style={{ border: '4px solid #a855f7' }}>
-                      {score}
+          <div className="bg-gray-900 rounded-2xl py-8 px-6">
+            <div className="text-center mb-8">
+              <h1
+                className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, #facc15, #f97316, #ef4444)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                我的阵容
+              </h1>
+              {nickname && <p className="text-gray-400 font-bold text-lg mb-2">🏀 {nickname}</p>}
+              <div className="flex items-center justify-center gap-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">战力</span>
+                  <div className="bg-black text-white text-3xl font-black px-4 py-1 rounded-xl" style={{ border: '4px solid #a855f7' }}>
+                    {score}
+                  </div>
+                </div>
+              </div>
+              {/* Score breakdown */}
+              <div className="mt-3 text-sm text-gray-400">
+                基础 {baseOvr}
+                {bonus > 0 && <span className="text-green-400 ml-2">+{bonus} 加成</span>}
+              </div>
+            </div>
+
+            {/* 球星卡钻石排列 */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex justify-center gap-4">
+                {renderCard('PF', 0)}
+                {renderCard('SF', 0.05)}
+              </div>
+              <div className="flex justify-center gap-4">
+                {renderCard('C', 0.1)}
+              </div>
+              <div className="flex justify-center gap-4">
+                {renderCard('PG', 0.15)}
+                {renderCard('SG', 0.2)}
+              </div>
+            </div>
+
+            {/* Bonus + Radar + Badges */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              <div className="flex flex-col items-center">
+                <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">阵容属性</h3>
+                <div className="w-full h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={avgStats}>
+                      <PolarGrid stroke="#374151" />
+                      <PolarAngleAxis dataKey="subject" tick={{ fill: '#9CA3AF', fontSize: 12, fontWeight: 'bold' }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                      <Radar name="属性" dataKey="A" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.5} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-center gap-4">
+                <div className="bg-gray-800 rounded-xl p-5 border border-gray-700">
+                  <h4 className="text-gray-400 font-bold mb-3 uppercase text-sm tracking-wider">加成明细</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 font-bold">基础战力</span>
+                      <span className="text-white font-black">{baseOvr}</span>
+                    </div>
+                    {chemTeams.length > 0 ? chemTeams.map(([team, count]) => (
+                      <div key={team} className="flex items-center justify-between">
+                        <span className="text-gray-300 font-bold">同队加成 · {team} x{count}</span>
+                        <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                      </div>
+                    )) : (
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-500 font-bold">同队加成 · 无</span>
+                        <span className="text-gray-600 font-black">+0%</span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 font-bold">激活徽章</span>
+                      <span className="text-purple-400 font-black">{badgeCount} 个</span>
+                    </div>
+                    <div className="border-t border-gray-700 pt-2 flex items-center justify-between">
+                      <span className="text-white font-black">最终战力</span>
+                      <span className="text-yellow-400 font-black text-lg">{score}</span>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* 球星卡钻石排列 */}
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex justify-center gap-4">
-                  {renderCard('PF', 0)}
-                  {renderCard('SF', 0.05)}
-                </div>
-                <div className="flex justify-center gap-4">
-                  {renderCard('C', 0.1)}
-                </div>
-                <div className="flex justify-center gap-4">
-                  {renderCard('PG', 0.15)}
-                  {renderCard('SG', 0.2)}
-                </div>
-              </div>
-
-              {/* 雷达图 + 徽章 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                <div className="flex flex-col items-center">
-                  <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">阵容属性</h3>
-                  <div className="w-full h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={avgStats}>
-                        <PolarGrid stroke="#374151" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#9CA3AF', fontSize: 12, fontWeight: 'bold' }} />
-                        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                        <Radar name="属性" dataKey="A" stroke="#3B82F6" strokeWidth={3} fill="#3B82F6" fillOpacity={0.5} />
-                      </RadarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                <div className="flex flex-col justify-center">
-                  <h3 className="text-lg font-black text-white mb-4 uppercase tracking-wider">激活徽章</h3>
+                <div className="bg-gray-800 rounded-xl p-5 border border-gray-700">
+                  <h4 className="text-gray-400 font-bold mb-3 uppercase text-sm tracking-wider">激活徽章</h4>
                   <div className="flex flex-wrap gap-2">
                     {allBadges.slice(0, 8).map(b => (
                       <span key={b} className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: 'rgba(30,58,138,0.5)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.5)' }}>
                         {b}
                       </span>
                     ))}
-                    {allBadges.length === 0 && (
-                      <span className="text-gray-600 text-sm">暂无徽章</span>
-                    )}
+                    {allBadges.length === 0 && <span className="text-gray-600 text-sm">暂无徽章</span>}
                   </div>
                 </div>
               </div>
-
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

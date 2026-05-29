@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LeaderboardEntry, LineupLeaderboardEntry, Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
+import { calcLineupScore } from '@/lib/game-logic';
 import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank } from '@/lib/supabase-service';
 import { Trophy, Medal, Crown, History, RotateCcw, X, Star } from 'lucide-react';
 import Card from './Card';
@@ -162,6 +163,16 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
     };
 
     const players = Object.values(lineup).filter(Boolean);
+    const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
+    const recalcScore = calcLineupScore(lineup);
+    const bonus = parseFloat((recalcScore - baseOvr).toFixed(2));
+
+    const teams = players.map(p => p!.team);
+    const teamCounts: Record<string, number> = {};
+    teams.forEach(t => { teamCounts[t] = (teamCounts[t] || 0) + 1; });
+    const chemTeams = Object.entries(teamCounts).filter(([, count]) => count >= 2);
+
+    const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
     const radarData = STAT_KEYS.map(key => ({
       subject: STAT_DISPLAY[key],
@@ -215,8 +226,11 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             <div className="flex items-center justify-center gap-2 mt-2">
               <Star className="w-5 h-5 text-purple-400" />
               <span className="bg-black text-white text-2xl font-black px-4 py-1 rounded-xl" style={{ border: '3px solid #a855f7' }}>
-                {selectedLineup.score}
+                {recalcScore}
               </span>
+            </div>
+            <div className="mt-2 text-xs text-gray-400">
+              基础 {baseOvr}{bonus > 0 && <span className="text-green-400 ml-1">+{bonus} 加成</span>}
             </div>
           </div>
 
@@ -248,15 +262,41 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="flex flex-col justify-center">
-              <h3 className="text-sm font-black text-white mb-3 uppercase tracking-wider">激活徽章</h3>
-              <div className="flex flex-wrap gap-1.5">
-                {allBadges.slice(0, 8).map(b => (
-                  <span key={b} className="px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: 'rgba(30,58,138,0.5)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.5)' }}>
-                    {b}
-                  </span>
-                ))}
-                {allBadges.length === 0 && <span className="text-gray-600 text-xs">暂无徽章</span>}
+            <div className="flex flex-col justify-center gap-3">
+              <div className="bg-gray-900 rounded-xl p-4 border border-gray-700">
+                <h4 className="text-gray-400 font-bold mb-2 uppercase text-xs tracking-wider">加成明细</h4>
+                <div className="space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-300 font-bold">基础战力</span>
+                    <span className="text-white font-black">{baseOvr}</span>
+                  </div>
+                  {chemTeams.length > 0 ? chemTeams.map(([team, count]) => (
+                    <div key={team} className="flex items-center justify-between">
+                      <span className="text-gray-300 font-bold">同队 · {team} x{count}</span>
+                      <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                    </div>
+                  )) : (
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 font-bold">同队加成 · 无</span>
+                      <span className="text-gray-600 font-black">+0%</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-300 font-bold">徽章</span>
+                    <span className="text-purple-400 font-black">{badgeCount} 个</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-900 rounded-xl p-4 border border-gray-700">
+                <h4 className="text-gray-400 font-bold mb-2 uppercase text-xs tracking-wider">激活徽章</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {allBadges.slice(0, 8).map(b => (
+                    <span key={b} className="px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: 'rgba(30,58,138,0.5)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.5)' }}>
+                      {b}
+                    </span>
+                  ))}
+                  {allBadges.length === 0 && <span className="text-gray-600 text-xs">暂无徽章</span>}
+                </div>
               </div>
             </div>
           </div>
