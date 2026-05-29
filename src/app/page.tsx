@@ -121,7 +121,7 @@ export default function Home() {
               <span className="block">NBA</span>
               <span className="block text-4xl md:text-6xl mt-1">最佳阵容对战</span>
             </h1>
-            <p className="text-xl md:text-2xl font-bold text-gray-300 uppercase tracking-widest mb-12">
+            <p className="text-base md:text-2xl font-bold text-gray-300 uppercase tracking-wide md:tracking-widest mb-12 whitespace-nowrap">
               开包抽卡 &bull; 组建阵容 &bull; 统治赛场
             </p>
 
@@ -138,26 +138,26 @@ export default function Home() {
 
             {/* Quick access links */}
             {nickname && (
-              <div className="flex flex-wrap justify-center gap-3 mt-8">
+              <div className="flex justify-center gap-2 mt-8">
                 <button
                   onClick={() => setPhase('LEADERBOARD')}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
-                  <Trophy className="w-4 h-4 text-yellow-400" />
+                  <Trophy className="w-3.5 h-3.5 text-yellow-400" />
                   排行榜
                 </button>
                 <button
                   onClick={() => setPhase('BATTLE_HISTORY')}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
-                  <History className="w-4 h-4 text-blue-400" />
+                  <History className="w-3.5 h-3.5 text-blue-400" />
                   战绩
                 </button>
                 <button
                   onClick={() => setPhase('LINEUP_REVIEW')}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
-                  <Users className="w-4 h-4 text-green-400" />
+                  <Users className="w-3.5 h-3.5 text-green-400" />
                   我的阵容
                 </button>
               </div>
