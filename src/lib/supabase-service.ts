@@ -196,3 +196,38 @@ export async function fetchLineupLeaderboard(): Promise<LineupLeaderboardEntry[]
   if (error) throw new Error(error.message);
   return data || [];
 }
+
+export async function fetchMyRecordRank(playerId: string): Promise<{ entry: LeaderboardEntry; rank: number } | null> {
+  const sb = getSupabase();
+  const { data: myStats } = await sb.from('player_stats').select('*').eq('player_id', playerId).maybeSingle();
+  if (!myStats || myStats.total_battles === 0) return null;
+
+  const { count: higher } = await sb
+    .from('player_stats').select('*', { count: 'exact', head: true })
+    .gt('total_battles', 0).gt('wins', myStats.wins);
+  const { count: tieHigher } = await sb
+    .from('player_stats').select('*', { count: 'exact', head: true })
+    .gt('total_battles', 0).eq('wins', myStats.wins).gt('best_score', myStats.best_score);
+
+  const entry: LeaderboardEntry = {
+    ...myStats,
+    win_rate: Math.round(myStats.wins / myStats.total_battles * 1000) / 10,
+  };
+  return { entry, rank: (higher || 0) + (tieHigher || 0) + 1 };
+}
+
+export async function fetchMyLineupRank(playerId: string): Promise<{ entry: LineupLeaderboardEntry; rank: number } | null> {
+  const sb = getSupabase();
+  const { data: myLineup } = await sb
+    .from('lineups')
+    .select('id, player_id, nickname, score, avg_stats, pg_data, sg_data, sf_data, pf_data, c_data')
+    .eq('player_id', playerId).eq('is_active', true)
+    .order('created_at', { ascending: false }).limit(1).maybeSingle();
+  if (!myLineup) return null;
+
+  const { count } = await sb
+    .from('lineups').select('*', { count: 'exact', head: true })
+    .eq('is_active', true).gt('score', myLineup.score);
+
+  return { entry: myLineup, rank: (count || 0) + 1 };
+}

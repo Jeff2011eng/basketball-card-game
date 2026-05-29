@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LeaderboardEntry, LineupLeaderboardEntry, Lineup, STAT_LABELS } from '@/lib/types';
+import { LeaderboardEntry, LineupLeaderboardEntry, Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
-import { fetchLeaderboard, fetchLineupLeaderboard } from '@/lib/supabase-service';
+import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank } from '@/lib/supabase-service';
 import { Trophy, Medal, Crown, History, RotateCcw, X, Star } from 'lucide-react';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
@@ -33,11 +33,19 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
   const [lineupLoading, setLineupLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedLineup, setSelectedLineup] = useState<LineupLeaderboardEntry | null>(null);
+  const [myRecord, setMyRecord] = useState<{ entry: LeaderboardEntry; rank: number } | null>(null);
+  const [myLineup, setMyLineup] = useState<{ entry: LineupLeaderboardEntry; rank: number } | null>(null);
   const playerId = getPlayerId();
 
   useEffect(() => {
     fetchLeaderboard()
-      .then(data => { setBoard(data); setLoading(false); })
+      .then(data => {
+        setBoard(data);
+        setLoading(false);
+        if (!data.some(e => e.player_id === playerId)) {
+          fetchMyRecordRank(playerId).then(r => r && setMyRecord(r));
+        }
+      })
       .catch(err => { setError(err.message); setLoading(false); });
   }, []);
 
@@ -45,7 +53,13 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
     if (activeTab === 'lineup' && lineupBoard.length === 0 && !lineupLoading) {
       setLineupLoading(true);
       fetchLineupLeaderboard()
-        .then(data => { setLineupBoard(data); setLineupLoading(false); })
+        .then(data => {
+          setLineupBoard(data);
+          setLineupLoading(false);
+          if (!data.some(e => e.player_id === playerId)) {
+            fetchMyLineupRank(playerId).then(r => r && setMyLineup(r));
+          }
+        })
         .catch(() => setLineupLoading(false));
     }
   }, [activeTab]);
@@ -115,11 +129,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
     const nameClass = isUser ? 'text-blue-400' : 'text-gray-200';
 
     return (
-      <motion.div
-        key={entry.id}
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: rank * 0.05 }}
+      <div
         onClick={() => setSelectedLineup(entry)}
         className={`${rowClass} cursor-pointer hover:bg-gray-700/30 transition-colors`}
       >
@@ -136,7 +146,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -256,133 +266,150 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 px-4 flex flex-col items-center">
-      <div className="text-center mb-6">
-        <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-3" />
-        <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
-          全球排行榜
-        </h1>
+    <>
+      <div className="min-h-screen bg-gray-900 py-8 px-4 pb-24 flex flex-col items-center">
+        <div className="text-center mb-6">
+          <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-3" />
+          <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
+            全球排行榜
+          </h1>
+        </div>
+
+        {/* Tab bar */}
+        <div className="flex bg-gray-800 rounded-xl p-1 mb-6 w-full max-w-sm">
+          <button
+            onClick={() => setActiveTab('record')}
+            className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
+              activeTab === 'record'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            战绩排行
+          </button>
+          <button
+            onClick={() => setActiveTab('lineup')}
+            className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
+              activeTab === 'lineup'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            最佳阵容
+          </button>
+        </div>
+
+        {/* Record tab */}
+        {activeTab === 'record' && (
+          loading ? (
+            <div className="flex justify-center py-20">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+              />
+            </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <p className="text-red-400 font-bold text-lg">{error}</p>
+            </div>
+          ) : board.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 font-bold text-lg">暂无对战记录</p>
+              <p className="text-gray-600 text-sm mt-2">成为第一个对战的人！</p>
+            </div>
+          ) : (
+            <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
+              <div className="hidden md:grid grid-cols-12 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
+                <div className="col-span-1 text-center">#</div>
+                <div className="col-span-3">经理人</div>
+                <div className="col-span-2 text-center">胜 / 负</div>
+                <div className="col-span-2 text-center">胜率</div>
+                <div className="col-span-2 text-center">最高分</div>
+                <div className="col-span-2 text-center">场次</div>
+              </div>
+              <div className="flex flex-col">
+                {board.map((entry, i) => {
+                  const rank = i + 1;
+                  const isUser = entry.player_id === playerId;
+                  return (
+                    <motion.div
+                      key={entry.player_id}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      {renderRecordEntry(entry, rank, isUser)}
+                    </motion.div>
+                  );
+                })}
+                {myRecord && (
+                  <>
+                    <div className="p-2 text-center text-gray-500 text-xs font-bold">· · ·</div>
+                    {renderRecordEntry(myRecord.entry, myRecord.rank, true)}
+                  </>
+                )}
+              </div>
+            </div>
+          )
+        )}
+
+        {/* Lineup tab */}
+        {activeTab === 'lineup' && (
+          lineupLoading ? (
+            <div className="flex justify-center py-20">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+              />
+            </div>
+          ) : lineupBoard.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 font-bold text-lg">暂无阵容数据</p>
+              <p className="text-gray-600 text-sm mt-2">开始抽卡组建你的阵容吧！</p>
+            </div>
+          ) : (
+            <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
+              <div className="flex flex-col">
+                {lineupBoard.map((entry, i) => {
+                  const rank = i + 1;
+                  const isUser = entry.player_id === playerId;
+                  return (
+                    <motion.div
+                      key={entry.id}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      {renderLineupEntry(entry, rank, isUser)}
+                    </motion.div>
+                  );
+                })}
+                {myLineup && (
+                  <>
+                    <div className="p-2 text-center text-gray-500 text-xs font-bold">· · ·</div>
+                    {renderLineupEntry(myLineup.entry, myLineup.rank, true)}
+                  </>
+                )}
+              </div>
+            </div>
+          )
+        )}
       </div>
 
-      {/* Tab bar */}
-      <div className="flex bg-gray-800 rounded-xl p-1 mb-6 w-full max-w-sm">
-        <button
-          onClick={() => setActiveTab('record')}
-          className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
-            activeTab === 'record'
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-              : 'text-gray-400 hover:text-white'
-          }`}
-        >
-          战绩排行
-        </button>
-        <button
-          onClick={() => setActiveTab('lineup')}
-          className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
-            activeTab === 'lineup'
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-              : 'text-gray-400 hover:text-white'
-          }`}
-        >
-          最佳阵容
-        </button>
-      </div>
-
-      {/* Record tab */}
-      {activeTab === 'record' && (
-        loading ? (
-          <div className="flex justify-center py-20">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-              className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
-            />
-          </div>
-        ) : error ? (
-          <div className="text-center py-20">
-            <p className="text-red-400 font-bold text-lg">{error}</p>
-          </div>
-        ) : board.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 font-bold text-lg">暂无对战记录</p>
-            <p className="text-gray-600 text-sm mt-2">成为第一个对战的人！</p>
-          </div>
-        ) : (
-          <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl mb-6">
-            <div className="hidden md:grid grid-cols-12 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
-              <div className="col-span-1 text-center">#</div>
-              <div className="col-span-3">经理人</div>
-              <div className="col-span-2 text-center">胜 / 负</div>
-              <div className="col-span-2 text-center">胜率</div>
-              <div className="col-span-2 text-center">最高分</div>
-              <div className="col-span-2 text-center">场次</div>
-            </div>
-            <div className="flex flex-col">
-              {board.map((entry, i) => {
-                const rank = i + 1;
-                const isUser = entry.player_id === playerId;
-                return (
-                  <motion.div
-                    key={entry.player_id}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    {renderRecordEntry(entry, rank, isUser)}
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        )
-      )}
-
-      {/* Lineup tab */}
-      {activeTab === 'lineup' && (
-        lineupLoading ? (
-          <div className="flex justify-center py-20">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-              className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
-            />
-          </div>
-        ) : lineupBoard.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 font-bold text-lg">暂无阵容数据</p>
-            <p className="text-gray-600 text-sm mt-2">开始抽卡组建你的阵容吧！</p>
-          </div>
-        ) : (
-          <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl mb-6">
-            <div className="hidden md:grid grid-cols-8 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
-              <div className="col-span-1 text-center">#</div>
-              <div className="col-span-3">经理人</div>
-              <div className="col-span-2 text-center">战力</div>
-              <div className="col-span-2 text-center">操作</div>
-            </div>
-            <div className="flex flex-col">
-              {lineupBoard.map((entry, i) => {
-                const rank = i + 1;
-                const isUser = entry.player_id === playerId;
-                return renderLineupEntry(entry, rank, isUser);
-              })}
-            </div>
-          </div>
-        )
-      )}
-
-      {/* Bottom buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+      {/* Fixed bottom buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm p-4 z-30 flex justify-center gap-3">
         <button
           onClick={onHistory}
-          className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="flex-1 max-w-[200px] bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           <History className="w-4 h-4" />
           对战记录
         </button>
         <button
           onClick={onRestart}
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+          className="flex-1 max-w-[200px] bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
         >
           <RotateCcw className="w-4 h-4" />
           重新抽卡
@@ -393,6 +420,6 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
       <AnimatePresence>
         {selectedLineup && renderLineupModal()}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
