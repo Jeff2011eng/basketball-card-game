@@ -88,7 +88,11 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: 'instant' });
     } catch (err: any) {
       setIsLoading(false);
-      alert(err.message || '出错了，请重试');
+      if (err.message === '该昵称已被使用') {
+        setPhase('ENTER_NICKNAME');
+      } else {
+        alert(err.message || '出错了，请重试');
+      }
     }
   };
 

@@ -33,10 +33,14 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
       const playerId = getPlayerId();
       const sb = getSupabase();
 
-      // Check play count
-      const { data: stats } = await sb.from('player_stats').select('total_battles').eq('player_id', playerId).maybeSingle();
-      if (stats && stats.total_battles >= 3) {
-        setError('你已用完 3 次游戏机会');
+      const { data: existing } = await sb
+        .from('players_identity')
+        .select('id')
+        .eq('nickname', trimmed)
+        .maybeSingle();
+
+      if (existing && existing.id !== playerId) {
+        setError('该昵称已被使用，请换一个');
         setChecking(false);
         return;
       }
@@ -56,12 +60,9 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl w-full max-w-md mx-4"
       >
-        <h2 className="text-2xl font-black text-white uppercase tracking-wider text-center mb-2">
-          输入虎扑Jrs的用户昵称
+        <h2 className="text-2xl font-black text-white uppercase tracking-wider text-center mb-6">
+          输入你的昵称
         </h2>
-        <p className="text-gray-400 text-sm text-center mb-6">
-          每个用户仅有 3 次游戏机会
-        </p>
 
         <input
           type="text"
@@ -90,7 +91,7 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
             disabled={checking}
             className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/20 disabled:opacity-50"
           >
-            {checking ? '验证中...' : '开始抽卡!'}
+            {checking ? '验证中...' : '确认'}
           </button>
         </div>
       </motion.div>
