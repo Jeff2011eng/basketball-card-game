@@ -58,12 +58,19 @@ export default function LineupReview({ onBack }: Props) {
 
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
+  const [toast, setToast] = useState('');
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(''), 2000);
+  };
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert('链接已复制，分享给朋友吧！');
+      showToast('链接已复制，分享给朋友吧！');
     } catch {
-      alert('复制失败，请手动复制浏览器地址栏链接');
+      showToast('复制失败，请手动复制浏览器地址栏链接');
     }
   };
 
@@ -93,7 +100,13 @@ export default function LineupReview({ onBack }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 px-4">
+    <>
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg z-[100] border border-gray-600 animate-[fadeScale_0.3s_ease-out]">
+          {toast}
+        </div>
+      )}
+      <div className="min-h-screen bg-gray-900 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
@@ -227,5 +240,6 @@ export default function LineupReview({ onBack }: Props) {
         )}
       </div>
     </div>
+    </>
   );
 }

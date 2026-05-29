@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
@@ -30,17 +30,29 @@ export default function BattleResult({ result, onRestart }: Props) {
   const CW = 320 * SCALE;
   const CH = 480 * SCALE;
 
+  const [toast, setToast] = useState('');
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(''), 2000);
+  };
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert('链接已复制，分享给朋友吧！');
+      showToast('链接已复制，分享给朋友吧！');
     } catch {
-      alert('复制失败，请手动复制浏览器地址栏链接');
+      showToast('复制失败，请手动复制浏览器地址栏链接');
     }
   };
 
   return (
     <>
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg z-[100] border border-gray-600 animate-[fadeScale_0.3s_ease-out]">
+          {toast}
+        </div>
+      )}
       <div className="min-h-screen bg-gray-900 py-8 pb-32 px-4">
         {/* 胜负公告 */}
         <motion.div
