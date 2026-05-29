@@ -6,7 +6,7 @@ import { LeaderboardEntry, LineupLeaderboardEntry, Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
 import { calcLineupScore } from '@/lib/game-logic';
 import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank } from '@/lib/supabase-service';
-import { Trophy, Medal, Crown, History, RotateCcw, X, Star } from 'lucide-react';
+import { Trophy, Medal, Crown, History, RotateCcw, X, Star, Eye } from 'lucide-react';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
@@ -27,7 +27,7 @@ const STAT_DISPLAY: Record<string, string> = {
 };
 
 export default function Leaderboard({ onRestart, onHistory }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>('record');
+  const [activeTab, setActiveTab] = useState<Tab>('lineup');
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
   const [lineupBoard, setLineupBoard] = useState<LineupLeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -132,7 +132,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
     return (
       <div
         onClick={() => setSelectedLineup(entry)}
-        className={`${rowClass} cursor-pointer hover:bg-gray-700/30 transition-colors`}
+        className={`${rowClass} cursor-pointer hover:bg-white/5 active:bg-white/10 transition-all group`}
       >
         <div className="p-3 md:p-4 border-b last:border-0">
           <div className="flex items-center justify-between">
@@ -144,6 +144,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-purple-400" />
               <span className={`font-black text-lg ${rank === 1 ? 'text-yellow-400' : 'text-white'}`}>{entry.score}</span>
+              <Eye className="w-4 h-4 text-gray-500 group-hover:text-purple-400 transition-colors" />
             </div>
           </div>
         </div>
@@ -410,6 +411,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
               <p className="text-gray-600 text-sm mt-2">开始抽卡组建你的阵容吧！</p>
             </div>
           ) : (
+            <>
             <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
               <div className="flex flex-col">
                 {lineupBoard.map((entry, i) => {
@@ -434,6 +436,8 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                 )}
               </div>
             </div>
+            <p className="text-gray-500 text-xs mt-3 text-center">点击任意玩家查看阵容详情</p>
+            </>
           )
         )}
       </div>
