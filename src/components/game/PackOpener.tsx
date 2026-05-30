@@ -73,6 +73,7 @@ export default function PackOpener({ onComplete }: Props) {
   }, []);
 
   const handleSkipAll = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     onComplete(allCards);
   }, [allCards, onComplete]);
 
@@ -201,9 +202,9 @@ export default function PackOpener({ onComplete }: Props) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1 }}
           onClick={handleSkipAll}
-          className="bg-white/10 hover:bg-white/20 text-white/60 font-bold text-sm px-6 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+          className="bg-white/20 hover:bg-white/30 text-white/80 font-bold text-sm px-6 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
         >
-          解锁全部轮数 →
+          解锁全部卡片 →
         </motion.button>
       </div>
       </>
