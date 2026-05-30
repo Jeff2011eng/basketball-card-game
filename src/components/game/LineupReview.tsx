@@ -66,7 +66,7 @@ export default function LineupReview({ onBack }: Props) {
     setTimeout(() => setToast(''), 2000);
   };
 
-  const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
+  const shareText = `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！`;
   const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
 
   const handleShareClick = () => {

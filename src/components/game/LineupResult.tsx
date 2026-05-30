@@ -61,7 +61,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
 
   const handleConfirmScreenshot = async () => {
     setShowScreenshotConfirm(false);
-    const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
+    const shareText = `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！`;
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
