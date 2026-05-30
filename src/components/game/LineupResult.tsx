@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
-import { Trophy } from 'lucide-react';
+import { Trophy, MessageSquarePlus } from 'lucide-react';
 
 interface Props {
   lineup: Lineup;
@@ -23,6 +23,8 @@ const STAT_DISPLAY: Record<string, string> = {
   PLM: '组织',
   PHY: '对抗',
 };
+
+const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
 
 export default function LineupResult({ lineup, onUpload }: Props) {
   const players = Object.values(lineup).filter(Boolean);
@@ -50,9 +52,47 @@ export default function LineupResult({ lineup, onUpload }: Props) {
 
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
+  const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
+
+  const handleShareClick = () => {
+    setShowScreenshotConfirm(true);
+  };
+
+  const handleConfirmScreenshot = async () => {
+    setShowScreenshotConfirm(false);
+    const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
+    try {
+      await navigator.clipboard.writeText(shareText);
+    } catch {}
+    window.location.href = HUPU_POST_URL;
+  };
+
   return (
     <>
-      <div className="min-h-screen bg-gray-900 py-12 pb-28 px-6 flex flex-col items-center">
+      {showScreenshotConfirm && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-gray-600 text-center">
+            <div className="text-4xl mb-3">📸</div>
+            <h3 className="text-xl font-black text-white mb-2">先截图再发帖</h3>
+            <p className="text-gray-400 text-sm mb-6">请先截图保存你的阵容，发帖时可以附上截图噢！</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleConfirmScreenshot}
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                已截图，去发帖
+              </button>
+              <button
+                onClick={() => setShowScreenshotConfirm(false)}
+                className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="min-h-screen bg-gray-900 py-12 pb-36 px-6 flex flex-col items-center">
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -180,13 +220,25 @@ export default function LineupResult({ lineup, onUpload }: Props) {
         </div>
       </div>
 
-      <button
-        onClick={onUpload}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black text-xl px-10 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-orange-500/30 z-30 whitespace-nowrap flex items-center gap-3"
-      >
-        <Trophy className="w-6 h-6" />
-        上传并开始对战 (PK)
-      </button>
+      {/* 底部操作栏 */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4 z-30">
+        <div className="max-w-md mx-auto flex flex-col gap-2">
+          <button
+            onClick={onUpload}
+            className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2"
+          >
+            <Trophy className="w-5 h-5" />
+            上传并开始对战 (PK)
+          </button>
+          <button
+            onClick={handleShareClick}
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+          >
+            <MessageSquarePlus className="w-5 h-5" />
+            与JRs炫耀一下我的阵容
+          </button>
+        </div>
+      </div>
     </>
   );
 }
