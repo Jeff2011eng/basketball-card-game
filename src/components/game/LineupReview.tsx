@@ -7,7 +7,7 @@ import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
-import { ArrowLeft, Share2 } from 'lucide-react';
+import { ArrowLeft, MessageSquarePlus } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 interface Props {
@@ -66,12 +66,11 @@ export default function LineupReview({ onBack }: Props) {
   };
 
   const handleShare = async () => {
+    const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      showToast('链接已复制，分享给朋友吧！');
-    } catch {
-      showToast('复制失败，请手动复制浏览器地址栏链接');
-    }
+      await navigator.clipboard.writeText(shareText);
+    } catch {}
+    window.location.href = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
   };
 
   const SCALE = 0.5;
@@ -114,7 +113,7 @@ export default function LineupReview({ onBack }: Props) {
           </button>
           {lineup && (
             <button onClick={handleShare} className="text-white/50 hover:text-white transition-colors">
-              <Share2 className="w-6 h-6" />
+              <MessageSquarePlus className="w-6 h-6" />
             </button>
           )}
         </div>

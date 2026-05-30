@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
-import { Trophy, Swords, RotateCcw, Share2 } from 'lucide-react';
+import { Trophy, Swords, RotateCcw, MessageSquarePlus } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import Card from './Card';
 
@@ -38,12 +38,16 @@ export default function BattleResult({ result, onRestart }: Props) {
   };
 
   const handleShare = async () => {
+    const resultText = isWin ? '胜利' : isDraw ? '平局' : '惜败';
+    const shareText = `#NBA梦幻1阵# 我在NBA最佳阵容对战中${resultText}了！我方 ${result.challengerScore} vs ${result.defenderScore} 对方。快来抽卡组队挑战我！👉 ${window.location.href}`;
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      showToast('链接已复制，分享给朋友吧！');
-    } catch {
-      showToast('复制失败，请手动复制浏览器地址栏链接');
-    }
+      await navigator.clipboard.writeText(shareText);
+    } catch {}
+    window.location.href = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
+  };
+
+  const handleViewTopic = () => {
+    window.location.href = 'huputiyu://bbs/topicTag?tagId=37312';
   };
 
   return (
@@ -198,8 +202,14 @@ export default function BattleResult({ result, onRestart }: Props) {
             onClick={handleShare}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
           >
-            <Share2 className="w-5 h-5" />
-            分享战绩
+            <MessageSquarePlus className="w-5 h-5" />
+            去虎扑发帖
+          </button>
+          <button
+            onClick={handleViewTopic}
+            className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          >
+            看看其他JRs的对战结果
           </button>
           <button
             onClick={onRestart}
