@@ -201,9 +201,9 @@ export default function PackOpener({ onComplete }: Props) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1 }}
           onClick={handleSkipAll}
-          className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black text-base px-6 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-orange-500/30 whitespace-nowrap"
+          className="bg-white/10 hover:bg-white/20 text-white/60 font-bold text-sm px-6 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
         >
-          解锁全部轮数
+          解锁全部轮数 →
         </motion.button>
       </div>
       </>
