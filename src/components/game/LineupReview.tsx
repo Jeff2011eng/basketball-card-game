@@ -121,7 +121,7 @@ export default function LineupReview({ onBack }: Props) {
             <div className="flex flex-col gap-2">
               <button
                 onClick={handleConfirmScreenshot}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 已截图，去发帖
               </button>
@@ -276,7 +276,7 @@ export default function LineupReview({ onBack }: Props) {
           <div className="max-w-md mx-auto flex flex-col gap-2">
             <button
               onClick={handleShareClick}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
             >
               <MessageSquarePlus className="w-5 h-5" />
               与JRs比一比

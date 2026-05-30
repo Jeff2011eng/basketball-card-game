@@ -175,7 +175,7 @@ export default function Home() {
               {nickname && (
                 <button
                   onClick={() => setPhase('LINEUP_REVIEW')}
-                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(34,197,94,0.4)] mt-3"
+                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3"
                 >
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                   <div className="flex items-center justify-center gap-3">
