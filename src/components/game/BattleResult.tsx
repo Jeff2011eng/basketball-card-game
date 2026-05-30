@@ -237,7 +237,7 @@ export default function BattleResult({ result, onRestart }: Props) {
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
           >
             <MessageSquarePlus className="w-5 h-5" />
-            去虎扑发帖
+            找JRs评评理
           </button>
           <div className="flex gap-2">
             <button
