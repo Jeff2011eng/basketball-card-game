@@ -148,14 +148,14 @@ export default function Home() {
               开包抽卡 &bull; 组建阵容 &bull; 统治赛场
             </p>
 
-            <div className="flex flex-col items-center w-full max-w-xs">
+            <div className="flex flex-col items-center w-full max-w-[260px]">
               <button
                 onClick={handleStartDraft}
-                className="group relative w-full px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
+                className="group relative w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-lg uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(59,130,246,0.5)]"
               >
                 <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <div className="flex items-center justify-center gap-3">
-                  <Play className="w-8 h-8 fill-current" />
+                <div className="flex items-center justify-center gap-2">
+                  <Play className="w-5 h-5 fill-current" />
                   开始抽卡
                 </div>
               </button>
@@ -163,11 +163,11 @@ export default function Home() {
               {nickname && (
                 <button
                   onClick={() => setPhase('LINEUP_REVIEW')}
-                  className="group relative w-full px-6 py-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-lg overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
+                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(34,197,94,0.4)] mt-3"
                 >
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                   <div className="flex items-center justify-center gap-3">
-                    <Share2 className="w-8 h-8" />
+                    <Share2 className="w-5 h-5" />
                     去虎扑分享我的阵容
                   </div>
                 </button>
