@@ -156,7 +156,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                       style={{
                         width: size, height: size,
                         borderRadius: '50%',
-                        background: `radial-gradient(circle, ${color}88 0%, ${color}44 30%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${color}cc 0%, ${color}88 25%, ${color}33 50%, transparent 70%)`,
                         animation: `fireworkBurst 1.8s ease-out ${delay}s both`,
                       }}
                     />
@@ -165,7 +165,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                       const dist = size * 0.35 + Math.random() * size * 0.45;
                       const dx = Math.cos(angle * Math.PI / 180) * dist;
                       const dy = Math.sin(angle * Math.PI / 180) * dist;
-                      const sparkSize = 3 + Math.random() * 5;
+                      const sparkSize = 4 + Math.random() * 6;
                       return (
                         <div
                           key={j}
@@ -176,7 +176,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                             left: size / 2, top: size / 2,
                             transform: `translate(${dx}px, ${dy}px)`,
                             animation: `sparkle 1.2s ease-out ${delay + 0.2}s both`,
-                            boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
+                            boxShadow: `0 0 10px ${color}, 0 0 20px ${color}, 0 0 40px ${color}`,
                           }}
                         />
                       );
@@ -186,12 +186,12 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
               })}
               {/* Center notification */}
               <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="bg-black/80 backdrop-blur-md border-2 border-yellow-400/60 rounded-3xl px-10 py-8 text-center shadow-2xl shadow-yellow-500/20">
-                  <div className="text-5xl mb-3">👑</div>
+                <div className="bg-black/70 backdrop-blur-sm rounded-2xl px-8 py-5 text-center">
+                  <div className="text-3xl mb-2">👑</div>
                   <h3
-                    className="text-3xl font-black uppercase tracking-wider mb-2"
+                    className="text-xl font-black tracking-wider mb-1"
                     style={{
-                      backgroundImage: 'linear-gradient(to right, #fbbf24, #f59e0b, #fbbf24)',
+                      backgroundImage: 'linear-gradient(to right, #fbbf24, #f59e0b)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
@@ -199,7 +199,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                   >
                     神的加成已激活
                   </h3>
-                  <p className="text-yellow-200/80 text-sm font-bold">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
+                  <p className="text-white/60 text-xs font-bold">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
                 </div>
               </div>
             </div>
