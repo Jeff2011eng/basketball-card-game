@@ -45,3 +45,8 @@ html, body {
   70% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+@keyframes godGlow {
+  0%, 100% { color: #fbbf24; text-shadow: 0 0 8px rgba(251,191,36,0.6); }
+  50% { color: #fde68a; text-shadow: 0 0 16px rgba(253,230,138,0.8), 0 0 32px rgba(251,191,36,0.4); }
+}

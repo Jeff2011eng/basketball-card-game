@@ -284,8 +284,8 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                   )}
                   {getLegendBonuses(lineup).map(lb => (
                     <div key={lb.name} className="flex items-center justify-between">
-                      <span className="text-amber-400 font-bold">{lb.name}</span>
-                      <span className="text-amber-300 font-black">+{lb.bonus}%</span>
+                      <span className={`font-bold ${lb.name === '神的加成' ? '' : 'text-amber-400'}`} style={lb.name === '神的加成' ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.name}</span>
+                      <span className={`font-black ${lb.name === '神的加成' ? '' : 'text-amber-300'}`} style={lb.name === '神的加成' ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>+{lb.bonus}%</span>
                     </div>
                   ))}
                   <div className="flex items-center justify-between">
