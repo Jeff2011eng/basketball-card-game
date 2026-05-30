@@ -231,7 +231,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                     <span className="text-gray-300 font-bold">
                       同队加成 · {team} x{count}
                     </span>
-                    <span className="text-green-400 font-black">+{count >= 5 ? '12' : count >= 4 ? '10' : count >= 3 ? '8' : '5'}%</span>
+                    <span className="text-green-400 font-black">+{count >= 5 ? '10' : count >= 4 ? '7' : count >= 3 ? '4' : '2'}%</span>
                   </div>
                 ))}
                 {chemTeams.length === 0 && (

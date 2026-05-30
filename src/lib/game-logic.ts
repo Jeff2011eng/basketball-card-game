@@ -102,10 +102,10 @@ export function calcLineupScore(lineup: Lineup): number {
   const teamCounts: Record<string, number> = {};
   teams.forEach(t => { teamCounts[t] = (teamCounts[t] || 0) + 1; });
   Object.values(teamCounts).forEach(count => {
-    if (count >= 5) chemBonus += 12;
-    else if (count >= 4) chemBonus += 10;
-    else if (count >= 3) chemBonus += 8;
-    else if (count >= 2) chemBonus += 5;
+    if (count >= 5) chemBonus += 10;
+    else if (count >= 4) chemBonus += 7;
+    else if (count >= 3) chemBonus += 4;
+    else if (count >= 2) chemBonus += 2;
   });
 
   // 传奇球员加成
