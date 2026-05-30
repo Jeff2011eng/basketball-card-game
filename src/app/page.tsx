@@ -172,18 +172,16 @@ export default function Home() {
                 </div>
               </button>
 
-              {nickname && (
-                <button
-                  onClick={() => setPhase('LINEUP_REVIEW')}
-                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3"
-                >
-                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                  <div className="flex items-center justify-center gap-3">
-                    <Share2 className="w-5 h-5" />
-                    与JRs分享我的阵容
-                  </div>
-                </button>
-              )}
+              <button
+                onClick={() => setPhase('LINEUP_REVIEW')}
+                className="group relative w-full px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3"
+              >
+                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                <div className="flex items-center justify-center gap-3">
+                  <Share2 className="w-5 h-5" />
+                  查看JRs分享的最佳阵容
+                </div>
+              </button>
             </div>
 
             {playerCount > 0 && (
@@ -193,33 +191,31 @@ export default function Home() {
             )}
 
             {/* Quick access links */}
-            {nickname && (
-              <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center gap-2 mt-4">
+              <button
+                onClick={() => setPhase('LEADERBOARD')}
+                className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
+              >
+                <Trophy className="w-3.5 h-3.5 text-yellow-400" />
+                虎扑JRs排行榜
+              </button>
+              <button
+                onClick={() => setPhase('BATTLE_HISTORY')}
+                className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
+              >
+                <History className="w-3.5 h-3.5 text-blue-400" />
+                我的战绩
+              </button>
+              {nickname && !nicknameChanged && (
                 <button
-                  onClick={() => setPhase('LEADERBOARD')}
+                  onClick={() => setPhase('ENTER_NICKNAME')}
                   className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
-                  <Trophy className="w-3.5 h-3.5 text-yellow-400" />
-                  虎扑JRs排行榜
+                  <Pencil className="w-3.5 h-3.5 text-gray-400" />
+                  改昵称(仅一次)
                 </button>
-                <button
-                  onClick={() => setPhase('BATTLE_HISTORY')}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
-                >
-                  <History className="w-3.5 h-3.5 text-blue-400" />
-                  我的战绩
-                </button>
-                {!nicknameChanged && (
-                  <button
-                    onClick={() => setPhase('ENTER_NICKNAME')}
-                    className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
-                  >
-                    <Pencil className="w-3.5 h-3.5 text-gray-400" />
-                    改昵称(仅一次)
-                  </button>
-                )}
-              </div>
-            )}
+              )}
+            </div>
 
             <a
               href="huputiyu://bbs/topic/639570451"
