@@ -284,8 +284,8 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                   )}
                   {getLegendBonuses(lineup).map(lb => (
                     <div key={lb.name} className="flex items-center justify-between">
-                      <span className={`font-bold ${lb.isGod ? '' : 'text-amber-400'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.name}</span>
-                      <span className={`font-black ${lb.isGod ? '' : 'text-amber-300'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>+{lb.bonus}%</span>
+                      <span className={`font-bold ${lb.isGod ? '' : 'text-amber-400/60'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.name}</span>
+                      <span className={`font-black ${lb.isGod ? '' : 'text-amber-300/60'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>+{lb.bonus}%</span>
                     </div>
                   ))}
                   <div className="flex items-center justify-between">

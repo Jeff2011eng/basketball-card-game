@@ -58,7 +58,7 @@ export function getRarity(player: Player): Rarity {
 
 // 传奇球员加成配置
 export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
-  227: { name: '神的加成', bonus: 6 },       // Michael Jordan
+  227: { name: '篮球之神的加成', bonus: 6 },       // Michael Jordan
   244: { name: '大鲨鱼加成', bonus: 4 },      // Shaquille O'Neal
   1:   { name: '历史级神射手加成', bonus: 3 }, // Stephen Curry
   8:   { name: '乐邦加成', bonus: 4 },        // LeBron James
