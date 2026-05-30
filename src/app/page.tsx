@@ -141,29 +141,31 @@ export default function Home() {
               开包抽卡 &bull; 组建阵容 &bull; 统治赛场
             </p>
 
-            <button
-              onClick={handleStartDraft}
-              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
-            >
-              <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-              <div className="flex items-center gap-3">
-                <Play className="w-8 h-8 fill-current" />
-                开始抽卡
-              </div>
-            </button>
-
-            {nickname && (
+            <div className="flex flex-col items-center w-full max-w-xs">
               <button
-                onClick={() => setPhase('LINEUP_REVIEW')}
-                className="group relative px-10 py-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-lg whitespace-nowrap overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
+                onClick={handleStartDraft}
+                className="group relative w-full px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(59,130,246,0.6)]"
               >
                 <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <div className="flex items-center gap-3">
-                  <Share2 className="w-8 h-8" />
-                  去虎扑分享我的阵容
+                <div className="flex items-center justify-center gap-3">
+                  <Play className="w-8 h-8 fill-current" />
+                  开始抽卡
                 </div>
               </button>
-            )}
+
+              {nickname && (
+                <button
+                  onClick={() => setPhase('LINEUP_REVIEW')}
+                  className="group relative w-full px-6 py-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-lg overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
+                >
+                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                  <div className="flex items-center justify-center gap-3">
+                    <Share2 className="w-8 h-8" />
+                    去虎扑分享我的阵容
+                  </div>
+                </button>
+              )}
+            </div>
 
             {playerCount > 0 && (
               <p className="text-sm md:text-base font-bold text-purple-300/80 mt-5">
