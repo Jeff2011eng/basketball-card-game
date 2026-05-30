@@ -16,7 +16,7 @@ export default function HupuPrompt({ show, onClose }: Props) {
         <p className="text-gray-400 text-sm mb-6">在虎扑APP中体验完整功能</p>
         <div className="flex flex-col gap-2">
           <a
-            href="https://www.hupu.com/app"
+            href="https://games.mobileapi.hupu.com/landing?clt=&r=kqappshare_news&os=android&schema=huputiyu%3A%2F%2Fwebview%2Fopenencodeurl%3FshowMoreBtn%3D1%26url%3Dhttps%253A%252F%252Factivity-static.hupu.com%252Fcolorbox-activities%252Factivity-260522-ubslrpvx%252Findex.html&fallback_url=https%3A%2F%2Factivity-static.hupu.com%2F&is_open_schema=0&biz_code=&auto_install="
             target="_blank"
             className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] block text-center"
           >
