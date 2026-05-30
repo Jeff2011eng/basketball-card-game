@@ -141,14 +141,14 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
           </div>
           {/* Score breakdown */}
           {isGodLineup && (
-            <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 4s ease-out 2s forwards' }}>
+            <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 3s ease-out 4s forwards' }}>
               {/* Firework bursts */}
               {[...Array(20)].map((_, i) => {
                 const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#f97316', '#eab308', '#fcd34d', '#ffffff'];
                 const color = colors[i % colors.length];
                 const left = Math.random() * 100;
                 const top = Math.random() * 100;
-                const delay = Math.random() * 2;
+                const delay = Math.random() * 3;
                 const size = 150 + Math.random() * 250;
                 return (
                   <div key={i} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${left}%`, top: `${top}%` }}>
@@ -157,7 +157,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                         width: size, height: size,
                         borderRadius: '50%',
                         background: `radial-gradient(circle, ${color}cc 0%, ${color}88 25%, ${color}33 50%, transparent 70%)`,
-                        animation: `fireworkBurst 1.8s ease-out ${delay}s both`,
+                        animation: `fireworkBurst 3s ease-out ${delay}s both`,
                       }}
                     />
                     {[...Array(12)].map((_, j) => {
@@ -175,7 +175,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                             background: color,
                             left: size / 2, top: size / 2,
                             transform: `translate(${dx}px, ${dy}px)`,
-                            animation: `sparkle 1.2s ease-out ${delay + 0.2}s both`,
+                            animation: `sparkle 2.5s ease-out ${delay + 0.3}s both`,
                             boxShadow: `0 0 10px ${color}, 0 0 20px ${color}, 0 0 40px ${color}`,
                           }}
                         />
@@ -189,7 +189,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                 <div className="bg-black/70 backdrop-blur-sm rounded-2xl px-8 py-5 text-center">
                   <div className="text-3xl mb-2">👑</div>
                   <h3
-                    className="text-xl font-black tracking-wider mb-1"
+                    className="text-base font-black tracking-wider mb-1"
                     style={{
                       backgroundImage: 'linear-gradient(to right, #fbbf24, #f59e0b)',
                       WebkitBackgroundClip: 'text',
