@@ -189,7 +189,7 @@ export default function LineupReview({ onBack }: Props) {
               </div>
               {/* Score breakdown */}
               <div className="mt-3 text-sm text-gray-400">
-                基础 {baseOvr}
+                基础 {baseOvr.toFixed(2)}
                 {bonus > 0 && <span className="text-green-400 ml-2">+{bonus} 加成</span>}
               </div>
             </div>
@@ -231,7 +231,7 @@ export default function LineupReview({ onBack }: Props) {
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-300 font-bold">基础战力</span>
-                      <span className="text-white font-black">{baseOvr}</span>
+                      <span className="text-white font-black">{baseOvr.toFixed(2)}</span>
                     </div>
                     {chemTeams.length > 0 ? chemTeams.map(([team, count]) => (
                       <div key={team} className="flex items-center justify-between">
