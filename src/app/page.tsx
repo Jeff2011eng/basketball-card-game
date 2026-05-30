@@ -168,7 +168,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                   <div className="flex items-center justify-center gap-3">
                     <Share2 className="w-5 h-5" />
-                    去虎扑分享我的阵容
+                    与JRs分享我的阵容
                   </div>
                 </button>
               )}
