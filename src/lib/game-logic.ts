@@ -66,6 +66,8 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   7:   { name: '死神加成', bonus: 2 },        // Kevin Durant
   243: { name: '天勾加成', bonus: 3 },        // Kareem Abdul-Jabbar
   237: { name: '石佛加成', bonus: 3 },        // Tim Duncan
+  221: { name: '魔术师加成', bonus: 4 },      // Magic Johnson
+  245: { name: '梦幻脚步加成', bonus: 3 },    // Hakeem Olajuwon
 };
 
 // 获取阵容中的传奇加成列表
