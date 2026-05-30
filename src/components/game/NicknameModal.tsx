@@ -60,7 +60,7 @@ export default function NicknameModal({ onSubmit, onCancel }: Props) {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl w-full max-w-md mx-4"
       >
-        <h2 className="text-2xl font-black text-white uppercase tracking-wider text-center mb-6">
+        <h2 className="text-lg font-black text-white text-center mb-6">
           虎扑JRs，请输入用户昵称
         </h2>
 
