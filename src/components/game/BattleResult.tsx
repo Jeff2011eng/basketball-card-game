@@ -31,19 +31,30 @@ export default function BattleResult({ result, onRestart }: Props) {
   const CH = 480 * SCALE;
 
   const [toast, setToast] = useState('');
+  const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
 
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(''), 2000);
   };
 
-  const handleShare = async () => {
+  const shareText = (() => {
     const resultText = isWin ? '胜利' : isDraw ? '平局' : '惜败';
-    const shareText = `#NBA梦幻1阵# 我在NBA最佳阵容对战中${resultText}了！我方 ${result.challengerScore} vs ${result.defenderScore} 对方。快来抽卡组队挑战我！👉 ${window.location.href}`;
+    return `#NBA梦幻1阵# 我在NBA最佳阵容对战中${resultText}了！我方 ${result.challengerScore} vs ${result.defenderScore} 对方。快来抽卡组队挑战我！👉 ${window.location.href}`;
+  })();
+
+  const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
+
+  const handleShareClick = () => {
+    setShowScreenshotConfirm(true);
+  };
+
+  const handleConfirmScreenshot = async () => {
+    setShowScreenshotConfirm(false);
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
-    window.location.href = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
+    window.location.href = HUPU_POST_URL;
   };
 
   const handleViewTopic = () => {
@@ -52,6 +63,29 @@ export default function BattleResult({ result, onRestart }: Props) {
 
   return (
     <>
+      {showScreenshotConfirm && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-gray-600 text-center">
+            <div className="text-4xl mb-3">📸</div>
+            <h3 className="text-xl font-black text-white mb-2">先截图再发帖</h3>
+            <p className="text-gray-400 text-sm mb-6">请先截图保存你的战绩，发帖时可以附上截图噢！</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleConfirmScreenshot}
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                已截图，去发帖
+              </button>
+              <button
+                onClick={() => setShowScreenshotConfirm(false)}
+                className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg z-[100] border border-gray-600 animate-[fadeScale_0.3s_ease-out]">
           {toast}
@@ -199,7 +233,7 @@ export default function BattleResult({ result, onRestart }: Props) {
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4 z-30">
         <div className="max-w-md mx-auto flex flex-col gap-2">
           <button
-            onClick={handleShare}
+            onClick={handleShareClick}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
           >
             <MessageSquarePlus className="w-5 h-5" />

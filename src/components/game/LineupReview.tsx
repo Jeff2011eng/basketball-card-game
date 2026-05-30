@@ -7,7 +7,7 @@ import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
-import { ArrowLeft, MessageSquarePlus } from 'lucide-react';
+import { ArrowLeft, MessageSquarePlus, RotateCcw } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 interface Props {
@@ -59,18 +59,30 @@ export default function LineupReview({ onBack }: Props) {
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
   const [toast, setToast] = useState('');
+  const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
 
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(''), 2000);
   };
 
-  const handleShare = async () => {
-    const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
+  const shareText = `#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！👉 ${window.location.href}`;
+  const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
+
+  const handleShareClick = () => {
+    setShowScreenshotConfirm(true);
+  };
+
+  const handleConfirmScreenshot = async () => {
+    setShowScreenshotConfirm(false);
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
-    window.location.href = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
+    window.location.href = HUPU_POST_URL;
+  };
+
+  const handleViewTopic = () => {
+    window.location.href = 'huputiyu://bbs/topicTag?tagId=37312';
   };
 
   const SCALE = 0.5;
@@ -100,22 +112,40 @@ export default function LineupReview({ onBack }: Props) {
 
   return (
     <>
+      {showScreenshotConfirm && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-gray-600 text-center">
+            <div className="text-4xl mb-3">📸</div>
+            <h3 className="text-xl font-black text-white mb-2">先截图再发帖</h3>
+            <p className="text-gray-400 text-sm mb-6">请先截图保存你的阵容，发帖时可以附上截图噢！</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleConfirmScreenshot}
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                已截图，去发帖
+              </button>
+              <button
+                onClick={() => setShowScreenshotConfirm(false)}
+                className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg z-[100] border border-gray-600 animate-[fadeScale_0.3s_ease-out]">
           {toast}
         </div>
       )}
-      <div className="min-h-screen bg-gray-900 py-8 px-4">
+      <div className="min-h-screen bg-gray-900 py-8 pb-36 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          {lineup && (
-            <button onClick={handleShare} className="text-white/50 hover:text-white transition-colors">
-              <MessageSquarePlus className="w-6 h-6" />
-            </button>
-          )}
         </div>
 
         {loading ? (
@@ -239,6 +269,36 @@ export default function LineupReview({ onBack }: Props) {
         )}
       </div>
     </div>
+
+      {/* 底部操作栏 */}
+      {lineup && (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4 z-30">
+          <div className="max-w-md mx-auto flex flex-col gap-2">
+            <button
+              onClick={handleShareClick}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+            >
+              <MessageSquarePlus className="w-5 h-5" />
+              去虎扑发帖
+            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleViewTopic}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors text-sm"
+              >
+                看看其他JRs的阵容
+              </button>
+              <button
+                onClick={onBack}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
+              >
+                <RotateCcw className="w-4 h-4" />
+                重新抽卡
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

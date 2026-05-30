@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
-import { Play, Trophy, History, Users } from 'lucide-react';
+import { Play, Trophy, History, Users, Share2 } from 'lucide-react';
 
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
@@ -151,6 +151,19 @@ export default function Home() {
                 开始抽卡
               </div>
             </button>
+
+            {nickname && (
+              <button
+                onClick={() => setPhase('LINEUP_REVIEW')}
+                className="group relative px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-base uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
+              >
+                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                <div className="flex items-center gap-2">
+                  <Share2 className="w-5 h-5" />
+                  去虎扑分享我的阵容
+                </div>
+              </button>
+            )}
 
             {playerCount > 0 && (
               <p className="text-sm md:text-base font-bold text-purple-300/80 mt-5">
