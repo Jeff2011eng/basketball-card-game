@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
-import { Play, Trophy, History, Share2 } from 'lucide-react';
+import { Play, Trophy, History, Share2, Pencil } from 'lucide-react';
 
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
@@ -28,6 +28,13 @@ export default function Home() {
   const [battleData, setBattleData] = useState<BattleResultType | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('');
   const [playerCount, setPlayerCount] = useState<number>(0);
+  const [nicknameChanged, setNicknameChanged] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('nickname_changed') === '1') {
+      setNicknameChanged(true);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -54,8 +61,13 @@ export default function Home() {
   };
 
   const handleNicknameSubmit = (nick: string) => {
+    const isChange = !!nickname;
     setNickname(nick);
     localStorage.setItem('nickname', nick);
+    if (isChange) {
+      setNicknameChanged(true);
+      localStorage.setItem('nickname_changed', '1');
+    }
     // If lineup already built (came back from failed upload), return to RESULT
     if (Object.values(finalLineup).some(Boolean)) {
       setPhase('RESULT');
@@ -149,8 +161,6 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col items-center w-full max-w-[260px]">
-
-            <div className="flex flex-col items-center w-full max-w-[260px]">
               <button
                 onClick={handleStartDraft}
                 className="group relative w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-black text-lg uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(59,130,246,0.5)]"
@@ -199,6 +209,15 @@ export default function Home() {
                   <History className="w-3.5 h-3.5 text-blue-400" />
                   我的战绩
                 </button>
+                {!nicknameChanged && (
+                  <button
+                    onClick={() => setPhase('ENTER_NICKNAME')}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
+                  >
+                    <Pencil className="w-3.5 h-3.5 text-gray-400" />
+                    改昵称
+                  </button>
+                )}
               </div>
             )}
 
