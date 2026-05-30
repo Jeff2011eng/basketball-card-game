@@ -72,6 +72,10 @@ export default function PackOpener({ onComplete }: Props) {
     setIsFlipped(false);
   }, []);
 
+  const handleSkipAll = useCallback(() => {
+    onComplete(allCards);
+  }, [allCards, onComplete]);
+
   const handleCardInteraction = useCallback(() => {
     if (showRoundIntro) return;
     if (!isFlipped) {
@@ -182,15 +186,26 @@ export default function PackOpener({ onComplete }: Props) {
 
       </div>
 
-      <motion.button
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        onClick={handleNextRound}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black text-xl px-10 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-purple-500/30 z-30 whitespace-nowrap"
-      >
-        下一轮 →
-      </motion.button>
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30">
+        <motion.button
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          onClick={handleNextRound}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black text-base px-6 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-purple-500/30 whitespace-nowrap"
+        >
+          下一轮 →
+        </motion.button>
+        <motion.button
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 1 }}
+          onClick={handleSkipAll}
+          className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black text-base px-6 py-4 rounded-xl uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-orange-500/30 whitespace-nowrap"
+        >
+          解锁全部轮数
+        </motion.button>
+      </div>
       </>
     );
   }
