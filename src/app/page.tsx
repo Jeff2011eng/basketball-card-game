@@ -223,9 +223,9 @@ export default function Home() {
 
             <a
               href="huputiyu://bbs/topic/639570451"
-              className="mt-6 text-white/30 hover:text-white/50 text-[10px] font-bold transition-colors"
+              className="mt-6 text-white/40 hover:text-white/60 text-[11px] font-bold transition-colors"
             >
-              有建议？来虎扑帖子聊聊
+              有建议？来虎扑帖子聊聊，<span className="text-blue-400/60 hover:text-blue-300 underline">点击此处反馈</span>
             </a>
           </div>
         </div>
