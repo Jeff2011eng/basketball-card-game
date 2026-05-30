@@ -202,7 +202,7 @@ export default function Home() {
 
             {playerCount > 0 && (
               <p className="text-sm md:text-base font-bold text-purple-300/80 mt-5">
-                已有 <span className="text-yellow-400">{playerCount}</span> 位虎扑JRs组建阵容下场开战，你还不来？
+                已有 <span className="text-yellow-400">{playerCount}</span> 位虎扑JRs组建阵容开战，你还不来？
               </p>
             )}
 
