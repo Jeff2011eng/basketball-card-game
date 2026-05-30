@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
 import { Trophy, Swords, RotateCcw, MessageSquarePlus } from 'lucide-react';
+import { getPostTopicUrl, getViewTopicUrl } from '@/lib/hupu-links';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import Card from './Card';
 
@@ -43,7 +44,7 @@ export default function BattleResult({ result, onRestart }: Props) {
     return `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我在NBA最佳阵容对战中${resultText}了！我方 ${result.challengerScore} vs ${result.defenderScore} 对方。快来抽卡组队挑战我！`;
   })();
 
-  const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=湿乎乎的话题&topicId=177';
+  const HUPU_POST_URL = getPostTopicUrl();
 
   const handleShareClick = () => {
     setShowScreenshotConfirm(true);
@@ -58,7 +59,7 @@ export default function BattleResult({ result, onRestart }: Props) {
   };
 
   const handleViewTopic = () => {
-    window.location.href = 'huputiyu://bbs/topicTag?tagId=37312';
+    window.location.href = getViewTopicUrl();
   };
 
   return (

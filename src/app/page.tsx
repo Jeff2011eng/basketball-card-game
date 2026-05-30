@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { Play, Trophy, History, Share2, Pencil } from 'lucide-react';
+import { getViewTopicUrl, getFeedbackUrl } from '@/lib/hupu-links';
 
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
@@ -185,7 +186,7 @@ export default function Home() {
                 </button>
               ) : (
                 <a
-                  href="huputiyu://bbs/topicTag?tagId=37312"
+                  href={getViewTopicUrl()}
                   className="group relative w-full block px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3 text-center"
                 >
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -199,7 +200,7 @@ export default function Home() {
 
             {playerCount > 0 && (
               <p className="text-sm md:text-base font-bold text-purple-300/80 mt-5">
-                已有 <span className="text-yellow-400">{playerCount}</span> 位虎扑JRs组建阵容下场开战，你还不来？
+                已有 <span className="text-yellow-400">{playerCount}</span> 位虎扑JRs组建阵容开战，你还不来？
               </p>
             )}
 
@@ -231,7 +232,7 @@ export default function Home() {
             </div>
 
             <a
-              href="huputiyu://bbs/topic/639570451"
+              href={getFeedbackUrl()}
               className="mt-6 text-white/40 hover:text-white/60 text-[11px] font-bold transition-colors"
             >
               有建议？来虎扑帖子聊聊，<span className="text-blue-400/60 hover:text-blue-300 underline">点击此处反馈</span>
