@@ -172,16 +172,29 @@ export default function Home() {
                 </div>
               </button>
 
-              <a
-                href="huputiyu://bbs/topicTag?tagId=37312"
-                className="group relative w-full block px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3 text-center"
-              >
-                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <span className="relative flex items-center justify-center gap-3">
-                  <Share2 className="w-5 h-5" />
-                  查看JRs分享的最佳阵容
-                </span>
-              </a>
+              {nickname ? (
+                <button
+                  onClick={() => setPhase('LINEUP_REVIEW')}
+                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3"
+                >
+                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                  <div className="flex items-center justify-center gap-3">
+                    <Share2 className="w-5 h-5" />
+                    与JRs分享我的阵容
+                  </div>
+                </button>
+              ) : (
+                <a
+                  href="huputiyu://bbs/topicTag?tagId=37312"
+                  className="group relative w-full block px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3 text-center"
+                >
+                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                  <span className="relative flex items-center justify-center gap-3">
+                    <Share2 className="w-5 h-5" />
+                    查看JRs分享的最佳阵容
+                  </span>
+                </a>
+              )}
             </div>
 
             {playerCount > 0 && (
