@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
-import { Play, Trophy, History, Users, Share2 } from 'lucide-react';
+import { Play, Trophy, History, Share2 } from 'lucide-react';
 
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
@@ -155,11 +155,11 @@ export default function Home() {
             {nickname && (
               <button
                 onClick={() => setPhase('LINEUP_REVIEW')}
-                className="group relative px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-base uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
+                className="group relative px-10 py-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-black text-2xl uppercase tracking-wider overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4"
               >
                 <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <div className="flex items-center gap-2">
-                  <Share2 className="w-5 h-5" />
+                <div className="flex items-center gap-3">
+                  <Share2 className="w-8 h-8" />
                   去虎扑分享我的阵容
                 </div>
               </button>
@@ -179,29 +179,20 @@ export default function Home() {
                   className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
                   <Trophy className="w-3.5 h-3.5 text-yellow-400" />
-                  排行榜
+                  虎扑JRs排行榜
                 </button>
                 <button
                   onClick={() => setPhase('BATTLE_HISTORY')}
                   className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                 >
                   <History className="w-3.5 h-3.5 text-blue-400" />
-                  战绩
-                </button>
-                <button
-                  onClick={() => setPhase('LINEUP_REVIEW')}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
-                >
-                  <Users className="w-3.5 h-3.5 text-green-400" />
-                  我的阵容
+                  我的战绩
                 </button>
               </div>
             )}
 
             <a
-              href="https://m.hupu.com/bbs-share/639570451.html?share=share&euid=271373509042571&cid=162930228"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="huputiyu://bbs/topic/639570451"
               className="mt-10 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-sm font-bold transition-all hover:scale-105 active:scale-95"
             >
               有建议？来虎扑帖子聊聊，<span className="text-blue-400 hover:text-blue-300 underline">点击此处反馈</span>
