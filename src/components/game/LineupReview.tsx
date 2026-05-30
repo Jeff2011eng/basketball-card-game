@@ -34,8 +34,8 @@ export default function LineupReview({ onBack }: Props) {
   }, []);
 
   const players = lineup ? Object.values(lineup).filter(Boolean) : [];
-  const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
-  const score = lineup ? calcLineupScore(lineup) : 0;
+  const baseOvr = parseFloat(players.reduce((sum, p) => sum + (p!.ovr || 0), 0).toFixed(2));
+  const score = lineup ? parseFloat(calcLineupScore(lineup).toFixed(2)) : 0;
   const bonus = parseFloat((score - baseOvr).toFixed(2));
 
   // Chemistry info
