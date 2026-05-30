@@ -141,32 +141,57 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
           </div>
           {/* Score breakdown */}
           {isGodLineup && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-              className="mt-6 relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 via-amber-400/30 to-yellow-500/20 rounded-2xl blur-xl animate-pulse" />
-              <div className="relative bg-gradient-to-r from-yellow-900/50 via-amber-800/50 to-yellow-900/50 border-2 border-yellow-400/60 rounded-2xl p-4 overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9InJnYmEoMjU1LDIxNSwwLDAuMDUpIi8+PC9zdmc+')] opacity-50" />
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
-                  className="absolute -top-8 -right-8 w-24 h-24 text-yellow-400/20"
-                >
-                  <svg viewBox="0 0 100 100" fill="currentColor"><polygon points="50,5 63,38 98,38 70,59 80,95 50,73 20,95 30,59 2,38 37,38" /></svg>
-                </motion.div>
-                <div className="relative text-center">
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-                    className="text-4xl mb-2"
-                  >
-                    👑
-                  </motion.div>
+            <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 4s ease-out 2s forwards' }}>
+              {/* Firework bursts */}
+              {[...Array(12)].map((_, i) => {
+                const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#f97316', '#eab308', '#fcd34d'];
+                const color = colors[i % colors.length];
+                const left = 15 + Math.random() * 70;
+                const top = 10 + Math.random() * 50;
+                const delay = Math.random() * 1.5;
+                const size = 80 + Math.random() * 120;
+                return (
+                  <div key={i} className="absolute" style={{ left: `${left}%`, top: `${top}%` }}>
+                    <div
+                      style={{
+                        width: size, height: size,
+                        borderRadius: '50%',
+                        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+                        animation: `fireworkBurst 1.5s ease-out ${delay}s both`,
+                        filter: 'blur(2px)',
+                      }}
+                    />
+                    {/* Sparkles around burst */}
+                    {[...Array(8)].map((_, j) => {
+                      const angle = (j / 8) * 360;
+                      const dist = size * 0.4 + Math.random() * size * 0.3;
+                      const dx = Math.cos(angle * Math.PI / 180) * dist;
+                      const dy = Math.sin(angle * Math.PI / 180) * dist;
+                      return (
+                        <div
+                          key={j}
+                          className="absolute rounded-full"
+                          style={{
+                            width: 4 + Math.random() * 4,
+                            height: 4 + Math.random() * 4,
+                            background: color,
+                            left: size / 2, top: size / 2,
+                            transform: `translate(${dx}px, ${dy}px)`,
+                            animation: `sparkle 1s ease-out ${delay + 0.3}s both`,
+                            boxShadow: `0 0 6px ${color}`,
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })}
+              {/* Center notification */}
+              <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-black/80 backdrop-blur-md border-2 border-yellow-400/60 rounded-3xl px-10 py-8 text-center shadow-2xl shadow-yellow-500/20">
+                  <div className="text-5xl mb-3">👑</div>
                   <h3
-                    className="text-2xl font-black uppercase tracking-wider"
+                    className="text-3xl font-black uppercase tracking-wider mb-2"
                     style={{
                       backgroundImage: 'linear-gradient(to right, #fbbf24, #f59e0b, #fbbf24)',
                       WebkitBackgroundClip: 'text',
@@ -176,10 +201,10 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                   >
                     神的加成已激活
                   </h3>
-                  <p className="text-yellow-200/70 text-sm font-bold mt-1">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
+                  <p className="text-yellow-200/80 text-sm font-bold">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
           <div className="mt-3 text-sm text-gray-400">
             基础 {baseOvr.toFixed(2)}

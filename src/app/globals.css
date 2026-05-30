@@ -22,3 +22,26 @@ html, body {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
+
+@keyframes fireworkLaunch {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-60vh) scale(0.5); opacity: 0; }
+}
+
+@keyframes fireworkBurst {
+  0% { transform: scale(0); opacity: 1; }
+  50% { opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes sparkle {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fadeOutUp {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+}
