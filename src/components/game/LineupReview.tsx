@@ -143,9 +143,9 @@ export default function LineupReview({ onBack }: Props) {
           {toast}
         </div>
       )}
-      <div className="min-h-screen bg-gray-900 py-8 pb-36 px-4">
+      <div className="min-h-screen bg-gray-900 pt-2 pb-36 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-2">
           <button onClick={onBack} className="text-white/50 hover:text-white transition-colors">
             <ArrowLeft className="w-6 h-6" />
           </button>
@@ -165,20 +165,9 @@ export default function LineupReview({ onBack }: Props) {
             <p className="text-gray-600 text-sm mt-2">开始抽卡组建你的阵容吧！</p>
           </div>
         ) : (
-          <div className="bg-gray-900 rounded-2xl py-8 px-6">
-            <div className="text-center mb-8">
-              <h1
-                className="text-4xl md:text-5xl font-black mb-2 uppercase tracking-tighter"
-                style={{
-                  backgroundImage: 'linear-gradient(to right, #facc15, #f97316, #ef4444)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                我的阵容
-              </h1>
-              {nickname && <p className="text-gray-400 font-bold text-lg mb-2">🏀 {nickname}</p>}
+          <div className="bg-gray-900 rounded-2xl px-6">
+            <div className="text-center mb-6">
+              {nickname && <p className="text-gray-400 font-bold text-base mb-2">🏀 {nickname}</p>}
               <div className="flex items-center justify-center gap-6">
                 <div className="flex items-center gap-2">
                   <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">战力</span>
@@ -186,11 +175,6 @@ export default function LineupReview({ onBack }: Props) {
                     {score}
                   </div>
                 </div>
-              </div>
-              {/* Score breakdown */}
-              <div className="mt-3 text-sm text-gray-400">
-                基础 {baseOvr.toFixed(2)}
-                {bonus > 0 && <span className="text-green-400 ml-2">+{bonus} 加成</span>}
               </div>
             </div>
 
