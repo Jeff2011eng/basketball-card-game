@@ -56,7 +56,14 @@ export default function Home() {
   const handleNicknameSubmit = (nick: string) => {
     setNickname(nick);
     localStorage.setItem('nickname', nick);
-    setPhase('OPENING');
+    // If lineup already built (came back from failed upload), return to RESULT
+    if (Object.values(finalLineup).some(Boolean)) {
+      setPhase('RESULT');
+      // Auto-retry upload with new nickname
+      setTimeout(() => handleUpload(), 100);
+    } else {
+      setPhase('OPENING');
+    }
   };
 
   const handleOpeningComplete = useCallback((revealedCards: PackCard[]) => {
