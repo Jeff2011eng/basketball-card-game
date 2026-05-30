@@ -215,7 +215,7 @@ export default function Home() {
                     className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
                   >
                     <Pencil className="w-3.5 h-3.5 text-gray-400" />
-                    改昵称
+                    改昵称(仅一次)
                   </button>
                 )}
               </div>
