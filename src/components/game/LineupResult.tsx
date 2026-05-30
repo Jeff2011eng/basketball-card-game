@@ -143,42 +143,40 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
           {isGodLineup && (
             <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 4s ease-out 2s forwards' }}>
               {/* Firework bursts */}
-              {[...Array(12)].map((_, i) => {
-                const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#f97316', '#eab308', '#fcd34d'];
+              {[...Array(20)].map((_, i) => {
+                const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#f97316', '#eab308', '#fcd34d', '#ffffff'];
                 const color = colors[i % colors.length];
-                const left = 15 + Math.random() * 70;
-                const top = 10 + Math.random() * 50;
-                const delay = Math.random() * 1.5;
-                const size = 80 + Math.random() * 120;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 2;
+                const size = 150 + Math.random() * 250;
                 return (
-                  <div key={i} className="absolute" style={{ left: `${left}%`, top: `${top}%` }}>
+                  <div key={i} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${left}%`, top: `${top}%` }}>
                     <div
                       style={{
                         width: size, height: size,
                         borderRadius: '50%',
-                        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-                        animation: `fireworkBurst 1.5s ease-out ${delay}s both`,
-                        filter: 'blur(2px)',
+                        background: `radial-gradient(circle, ${color}88 0%, ${color}44 30%, transparent 70%)`,
+                        animation: `fireworkBurst 1.8s ease-out ${delay}s both`,
                       }}
                     />
-                    {/* Sparkles around burst */}
-                    {[...Array(8)].map((_, j) => {
-                      const angle = (j / 8) * 360;
-                      const dist = size * 0.4 + Math.random() * size * 0.3;
+                    {[...Array(12)].map((_, j) => {
+                      const angle = (j / 12) * 360 + Math.random() * 20;
+                      const dist = size * 0.35 + Math.random() * size * 0.45;
                       const dx = Math.cos(angle * Math.PI / 180) * dist;
                       const dy = Math.sin(angle * Math.PI / 180) * dist;
+                      const sparkSize = 3 + Math.random() * 5;
                       return (
                         <div
                           key={j}
                           className="absolute rounded-full"
                           style={{
-                            width: 4 + Math.random() * 4,
-                            height: 4 + Math.random() * 4,
+                            width: sparkSize, height: sparkSize,
                             background: color,
                             left: size / 2, top: size / 2,
                             transform: `translate(${dx}px, ${dy}px)`,
-                            animation: `sparkle 1s ease-out ${delay + 0.3}s both`,
-                            boxShadow: `0 0 6px ${color}`,
+                            animation: `sparkle 1.2s ease-out ${delay + 0.2}s both`,
+                            boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
                           }}
                         />
                       );
