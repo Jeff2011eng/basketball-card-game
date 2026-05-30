@@ -76,7 +76,7 @@ export async function matchmake(
 
   // Find opponent with progressive score window
   let defender: any = null;
-  for (const window of [15, 30, 100, 500]) {
+  for (const window of [100, 200, 500]) {
     const { data } = await sb
       .from('lineups')
       .select('*')
