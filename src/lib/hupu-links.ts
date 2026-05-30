@@ -5,7 +5,7 @@ export function openHupuLink(url: string, onFail: () => void) {
     if (!document.hidden) {
       onFail();
     }
-  }, 2000);
+  }, 1000);
 
   const handleVisibility = () => {
     if (document.hidden) {
