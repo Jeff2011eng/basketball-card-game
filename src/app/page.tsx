@@ -137,16 +137,18 @@ export default function Home() {
           className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
           style={{ backgroundImage: "url('/bg-court.jpg')" }}
         >
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
           <div className="relative z-10 flex flex-col items-center text-center p-6 animate-[fadeScale_0.5s_ease-out]">
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 uppercase tracking-tighter mb-4 leading-none">
               <span className="block">NBA</span>
               <span className="block text-4xl md:text-6xl mt-1">最佳阵容对战</span>
             </h1>
-            <p className="text-base md:text-2xl font-bold text-gray-300 uppercase tracking-wide md:tracking-widest mb-12 whitespace-nowrap">
+            <p className="text-base md:text-2xl font-bold text-gray-300 uppercase tracking-wide md:tracking-widest mb-8 whitespace-nowrap">
               开包抽卡 &bull; 组建阵容 &bull; 统治赛场
             </p>
+
+            <div className="flex flex-col items-center w-full max-w-[260px]">
 
             <div className="flex flex-col items-center w-full max-w-[260px]">
               <button
@@ -182,7 +184,7 @@ export default function Home() {
 
             {/* Quick access links */}
             {nickname && (
-              <div className="flex justify-center gap-2 mt-8">
+              <div className="flex justify-center gap-2 mt-4">
                 <button
                   onClick={() => setPhase('LEADERBOARD')}
                   className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xs whitespace-nowrap transition-colors"
@@ -202,9 +204,9 @@ export default function Home() {
 
             <a
               href="huputiyu://bbs/topic/639570451"
-              className="mt-10 px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-sm font-bold transition-all hover:scale-105 active:scale-95"
+              className="mt-6 text-white/30 hover:text-white/50 text-[10px] font-bold transition-colors"
             >
-              有建议？来虎扑帖子聊聊，<span className="text-blue-400 hover:text-blue-300 underline">点击此处反馈</span>
+              有建议？来虎扑帖子聊聊
             </a>
           </div>
         </div>
