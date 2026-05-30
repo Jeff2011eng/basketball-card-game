@@ -80,7 +80,7 @@ export default function BattleResult({ result, onRestart }: Props) {
                 onClick={() => setShowScreenshotConfirm(false)}
                 className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
               >
-                取消
+                未截图，现在去
               </button>
             </div>
           </div>
