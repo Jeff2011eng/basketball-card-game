@@ -70,17 +70,17 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   245: { name: '梦幻脚步加成', bonus: 3 },    // Hakeem Olajuwon
 };
 
-// 获取阵容中的传奇加成列表
-export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number; playerName: string }[] {
+// 获取阵容中的传奇加成列表（按加成值从大到小排列）
+export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number; playerName: string; isGod: boolean }[] {
   const players = Object.values(lineup).filter(Boolean) as Player[];
-  const bonuses: { name: string; bonus: number; playerName: string }[] = [];
+  const bonuses: { name: string; bonus: number; playerName: string; isGod: boolean }[] = [];
   players.forEach(p => {
     const legend = LEGEND_BONUSES[p.id];
     if (legend) {
-      bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn });
+      bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn, isGod: p.id === 227 });
     }
   });
-  return bonuses;
+  return bonuses.sort((a, b) => b.bonus - a.bonus);
 }
 
 // 判断阵容是否包含乔丹
