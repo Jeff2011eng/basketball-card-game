@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LeaderboardEntry, LineupLeaderboardEntry, Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
-import { calcLineupScore } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses } from '@/lib/game-logic';
 import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank } from '@/lib/supabase-service';
 import { Trophy, Medal, Crown, History, RotateCcw, X, Star, Eye } from 'lucide-react';
 import Card from './Card';
@@ -231,7 +231,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
               </span>
             </div>
             <div className="mt-2 text-xs text-gray-400">
-              基础 {baseOvr}{bonus > 0 && <span className="text-green-400 ml-1">+{bonus} 加成</span>}
+              基础 {baseOvr.toFixed(2)}{bonus > 0 && <span className="text-green-400 ml-1">+{bonus} 加成</span>}
             </div>
           </div>
 
@@ -269,12 +269,12 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                 <div className="space-y-1.5 text-xs">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-300 font-bold">基础战力</span>
-                    <span className="text-white font-black">{baseOvr}</span>
+                    <span className="text-white font-black">{baseOvr.toFixed(2)}</span>
                   </div>
                   {chemTeams.length > 0 ? chemTeams.map(([team, count]) => (
                     <div key={team} className="flex items-center justify-between">
                       <span className="text-gray-300 font-bold">同队 · {team} x{count}</span>
-                      <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                      <span className="text-green-400 font-black">+{count >= 5 ? '10' : count >= 4 ? '7' : count >= 3 ? '4' : '2'}%</span>
                     </div>
                   )) : (
                     <div className="flex items-center justify-between">
@@ -282,6 +282,12 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                       <span className="text-gray-600 font-black">+0%</span>
                     </div>
                   )}
+                  {getLegendBonuses(lineup).map(lb => (
+                    <div key={lb.name} className="flex items-center justify-between">
+                      <span className="text-amber-400 font-bold">{lb.name}</span>
+                      <span className="text-amber-300 font-black">+{lb.bonus}%</span>
+                    </div>
+                  ))}
                   <div className="flex items-center justify-between">
                     <span className="text-gray-300 font-bold">徽章</span>
                     <span className="text-purple-400 font-black">{badgeCount} 个</span>
