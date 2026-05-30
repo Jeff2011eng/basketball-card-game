@@ -6,6 +6,8 @@ import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { STAT_LABELS } from '@/lib/types';
 import { Trophy, Swords, RotateCcw, MessageSquarePlus } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { openHupuLink } from '@/lib/hupu-links';
+import HupuPrompt from '@/components/common/HupuPrompt';
 import Card from './Card';
 
 interface Props {
@@ -32,6 +34,7 @@ export default function BattleResult({ result, onRestart }: Props) {
 
   const [toast, setToast] = useState('');
   const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
+  const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -54,11 +57,11 @@ export default function BattleResult({ result, onRestart }: Props) {
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
-    window.location.href = HUPU_POST_URL;
+    openHupuLink(HUPU_POST_URL, () => setShowHupuPrompt(true));
   };
 
   const handleViewTopic = () => {
-    window.location.href = 'huputiyu://bbs/topicTag?tagId=37312';
+    openHupuLink('huputiyu://bbs/topicTag?tagId=37312', () => setShowHupuPrompt(true));
   };
 
   return (
@@ -256,6 +259,8 @@ export default function BattleResult({ result, onRestart }: Props) {
           </div>
         </div>
       </div>
+
+      <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
     </>
   );
 }

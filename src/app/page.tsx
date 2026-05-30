@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { Play, Trophy, History, Share2, Pencil } from 'lucide-react';
+import { openHupuLink } from '@/lib/hupu-links';
+import HupuPrompt from '@/components/common/HupuPrompt';
 
 import PackOpener from '@/components/game/PackOpener';
 import DraftBoard from '@/components/game/DraftBoard';
@@ -29,6 +31,7 @@ export default function Home() {
   const [loadingMsg, setLoadingMsg] = useState('');
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [nicknameChanged, setNicknameChanged] = useState(false);
+  const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('nickname_changed') === '1') {
@@ -184,16 +187,16 @@ export default function Home() {
                   </div>
                 </button>
               ) : (
-                <a
-                  href="huputiyu://bbs/topicTag?tagId=37312"
-                  className="group relative w-full block px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3 text-center"
+                <button
+                  onClick={() => openHupuLink('huputiyu://bbs/topicTag?tagId=37312', () => setShowHupuPrompt(true))}
+                  className="group relative w-full px-4 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.4)] mt-3"
                 >
                   <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                  <span className="relative flex items-center justify-center gap-3">
+                  <div className="flex items-center justify-center gap-3">
                     <Share2 className="w-5 h-5" />
                     查看JRs分享的最佳阵容
-                  </span>
-                </a>
+                  </div>
+                </button>
               )}
             </div>
 
@@ -230,15 +233,17 @@ export default function Home() {
               )}
             </div>
 
-            <a
-              href="huputiyu://bbs/topic/639570451"
+            <button
+              onClick={() => openHupuLink('huputiyu://bbs/topic/639570451', () => setShowHupuPrompt(true))}
               className="mt-6 text-white/40 hover:text-white/60 text-[11px] font-bold transition-colors"
             >
               有建议？来虎扑帖子聊聊，<span className="text-blue-400/60 hover:text-blue-300 underline">点击此处反馈</span>
-            </a>
+            </button>
           </div>
         </div>
       )}
+
+      <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
 
       {phase === 'ENTER_NICKNAME' && (
         <NicknameModal

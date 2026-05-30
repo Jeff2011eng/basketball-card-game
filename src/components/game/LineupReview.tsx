@@ -9,6 +9,8 @@ import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { ArrowLeft, MessageSquarePlus, RotateCcw } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { openHupuLink } from '@/lib/hupu-links';
+import HupuPrompt from '@/components/common/HupuPrompt';
 
 interface Props {
   onBack: () => void;
@@ -60,6 +62,7 @@ export default function LineupReview({ onBack }: Props) {
 
   const [toast, setToast] = useState('');
   const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
+  const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -78,11 +81,11 @@ export default function LineupReview({ onBack }: Props) {
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
-    window.location.href = HUPU_POST_URL;
+    openHupuLink(HUPU_POST_URL, () => setShowHupuPrompt(true));
   };
 
   const handleViewTopic = () => {
-    window.location.href = 'huputiyu://bbs/topicTag?tagId=37312';
+    openHupuLink('huputiyu://bbs/topicTag?tagId=37312', () => setShowHupuPrompt(true));
   };
 
   const SCALE = 0.5;
@@ -299,6 +302,8 @@ export default function LineupReview({ onBack }: Props) {
           </div>
         </div>
       )}
+
+      <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
     </>
   );
 }

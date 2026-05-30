@@ -7,6 +7,8 @@ import { calcLineupScore } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy, MessageSquarePlus } from 'lucide-react';
+import { openHupuLink } from '@/lib/hupu-links';
+import HupuPrompt from '@/components/common/HupuPrompt';
 
 interface Props {
   lineup: Lineup;
@@ -54,6 +56,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
   const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
+  const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
   const handleShareClick = () => {
     setShowScreenshotConfirm(true);
@@ -65,7 +68,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
-    window.location.href = HUPU_POST_URL;
+    openHupuLink(HUPU_POST_URL, () => setShowHupuPrompt(true));
   };
 
   const SCALE = 0.5;
@@ -246,6 +249,8 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
           </div>
         </div>
       </div>
+
+      <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
     </>
   );
 }
