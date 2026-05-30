@@ -227,7 +227,7 @@ export default function Home() {
 
       {phase === 'RESULT' && (
         <div className="relative">
-          <LineupResult lineup={finalLineup} onUpload={handleUpload} />
+          <LineupResult lineup={finalLineup} onUpload={handleUpload} onRestart={handleRestart} />
           {isLoading && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
               <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-4 animate-spin" />

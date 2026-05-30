@@ -11,6 +11,7 @@ import { Trophy, MessageSquarePlus } from 'lucide-react';
 interface Props {
   lineup: Lineup;
   onUpload: () => void;
+  onRestart: () => void;
 }
 
 const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
@@ -26,7 +27,7 @@ const STAT_DISPLAY: Record<string, string> = {
 
 const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=步行街&topicId=34';
 
-export default function LineupResult({ lineup, onUpload }: Props) {
+export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const players = Object.values(lineup).filter(Boolean);
 
   const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
@@ -230,13 +231,20 @@ export default function LineupResult({ lineup, onUpload }: Props) {
             <Trophy className="w-5 h-5" />
             上传并开始对战 (PK)
           </button>
-          <button
-            onClick={handleShareClick}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
-          >
-            <MessageSquarePlus className="w-5 h-5" />
-            与JRs炫耀一下我的阵容
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleShareClick}
+              className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors text-sm"
+            >
+              与JRs炫耀阵容
+            </button>
+            <button
+              onClick={onRestart}
+              className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
+            >
+              重新抽卡
+            </button>
+          </div>
         </div>
       </div>
     </>
