@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
-import { calcLineupScore } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses, hasJordan } from '@/lib/game-logic';
 import Card from './Card';
 import { ArrowLeft, MessageSquarePlus, RotateCcw } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
@@ -236,7 +236,7 @@ export default function LineupReview({ onBack }: Props) {
                     {chemTeams.length > 0 ? chemTeams.map(([team, count]) => (
                       <div key={team} className="flex items-center justify-between">
                         <span className="text-gray-300 font-bold">同队加成 · {team} x{count}</span>
-                        <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                        <span className="text-green-400 font-black">+{count >= 5 ? '12' : count >= 4 ? '10' : count >= 3 ? '8' : '5'}%</span>
                       </div>
                     )) : (
                       <div className="flex items-center justify-between">
@@ -244,6 +244,12 @@ export default function LineupReview({ onBack }: Props) {
                         <span className="text-gray-600 font-black">+0%</span>
                       </div>
                     )}
+                    {getLegendBonuses(lineup).map(lb => (
+                      <div key={lb.name} className="flex items-center justify-between">
+                        <span className="text-amber-400 font-bold">{lb.name}</span>
+                        <span className="text-amber-300 font-black">+{lb.bonus}%</span>
+                      </div>
+                    ))}
                     <div className="flex items-center justify-between">
                       <span className="text-gray-300 font-bold">激活徽章</span>
                       <span className="text-purple-400 font-black">{badgeCount} 个</span>

@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
-import { calcLineupScore } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses, hasJordan, LEGEND_BONUSES } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy, MessageSquarePlus } from 'lucide-react';
@@ -35,6 +35,8 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const baseOvr = players.reduce((sum, p) => sum + (p!.ovr || 0), 0);
   const score = calcLineupScore(lineup);
   const bonus = parseFloat((score - baseOvr).toFixed(2));
+  const legendBonusList = getLegendBonuses(lineup);
+  const isGodLineup = hasJordan(lineup);
 
   // Chemistry info
   const teams = players.map(p => p!.team);
@@ -138,6 +140,47 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
             </div>
           </div>
           {/* Score breakdown */}
+          {isGodLineup && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="mt-6 relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 via-amber-400/30 to-yellow-500/20 rounded-2xl blur-xl animate-pulse" />
+              <div className="relative bg-gradient-to-r from-yellow-900/50 via-amber-800/50 to-yellow-900/50 border-2 border-yellow-400/60 rounded-2xl p-4 overflow-hidden">
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9InJnYmEoMjU1LDIxNSwwLDAuMDUpIi8+PC9zdmc+')] opacity-50" />
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
+                  className="absolute -top-8 -right-8 w-24 h-24 text-yellow-400/20"
+                >
+                  <svg viewBox="0 0 100 100" fill="currentColor"><polygon points="50,5 63,38 98,38 70,59 80,95 50,73 20,95 30,59 2,38 37,38" /></svg>
+                </motion.div>
+                <div className="relative text-center">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                    className="text-4xl mb-2"
+                  >
+                    👑
+                  </motion.div>
+                  <h3
+                    className="text-2xl font-black uppercase tracking-wider"
+                    style={{
+                      backgroundImage: 'linear-gradient(to right, #fbbf24, #f59e0b, #fbbf24)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >
+                    神的加成已激活
+                  </h3>
+                  <p className="text-yellow-200/70 text-sm font-bold mt-1">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
           <div className="mt-3 text-sm text-gray-400">
             基础 {baseOvr}
             {bonus > 0 && <span className="text-green-400 ml-2">+{bonus} 加成</span>}
@@ -188,7 +231,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                     <span className="text-gray-300 font-bold">
                       同队加成 · {team} x{count}
                     </span>
-                    <span className="text-green-400 font-black">+{count >= 3 ? '8' : '5'}%</span>
+                    <span className="text-green-400 font-black">+{count >= 5 ? '12' : count >= 4 ? '10' : count >= 3 ? '8' : '5'}%</span>
                   </div>
                 ))}
                 {chemTeams.length === 0 && (
@@ -197,6 +240,12 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                     <span className="text-gray-600 font-black">+0%</span>
                   </div>
                 )}
+                {legendBonusList.map(lb => (
+                  <div key={lb.name} className="flex items-center justify-between">
+                    <span className="text-amber-400 font-bold">{lb.name}</span>
+                    <span className="text-amber-300 font-black">+{lb.bonus}%</span>
+                  </div>
+                ))}
                 <div className="flex items-center justify-between">
                   <span className="text-gray-300 font-bold">激活徽章</span>
                   <span className="text-purple-400 font-black">{badgeCount} 个</span>
