@@ -284,7 +284,7 @@ export default function LineupReview({ onBack }: Props) {
             <div className="flex gap-2">
               <button
                 onClick={handleViewTopic}
-                className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors text-sm"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-sm"
               >
                 看看其他JRs的阵容
               </button>
