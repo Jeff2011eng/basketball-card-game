@@ -33,6 +33,7 @@ export default function Home() {
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [nicknameChanged, setNicknameChanged] = useState(false);
   const [showHupuPrompt, setShowHupuPrompt] = useState(false);
+  const [showReward, setShowReward] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('nickname_changed') === '1') {
@@ -240,27 +241,37 @@ export default function Home() {
               有建议？来虎扑帖子聊聊，<span className="text-blue-400/60 hover:text-blue-300 underline">点击此处反馈</span>
             </button>
 
-            <div className="mt-6 flex flex-col items-center">
-              <p className="text-white/30 text-[11px] font-bold mb-2">觉得好玩？请开发者喝杯咖啡 ☕</p>
-              <img
-                src={rewardImg.src}
-                alt="打赏"
-                className="w-28 h-28 rounded-lg opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
-                onClick={() => {
-                  const modal = document.createElement('div');
-                  modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4';
-                  modal.onclick = () => modal.remove();
-                  modal.innerHTML = `<div class="text-center"><img src="${rewardImg.src}" class="w-64 h-64 rounded-xl shadow-2xl" /><p class="text-white/60 text-sm mt-3 font-bold">长按识别二维码打赏</p><p class="text-white/40 text-xs mt-1">点击任意区域关闭</p></div>`;
-                  document.body.appendChild(modal);
-                }}
-              />
-              <p className="text-white/20 text-[10px] mt-1">你的支持是持续更新的动力</p>
-            </div>
+            <button
+              onClick={() => setShowReward(true)}
+              className="mt-4 flex items-center gap-1.5 text-white/25 hover:text-yellow-400/70 text-[11px] font-bold transition-colors"
+            >
+              <span>☕</span>
+              <span>打赏开发者</span>
+            </button>
           </div>
         </div>
       )}
 
       <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
+
+      {showReward && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+          onClick={() => setShowReward(false)}
+        >
+          <div className="text-center" onClick={e => e.stopPropagation()}>
+            <img src={rewardImg.src} className="w-56 h-56 rounded-xl shadow-2xl mx-auto" />
+            <p className="text-white/70 text-sm mt-4 font-bold">觉得好玩？请开发者喝杯咖啡 ☕</p>
+            <p className="text-white/40 text-xs mt-1">你的支持是持续更新的动力</p>
+            <button
+              onClick={() => setShowReward(false)}
+              className="mt-4 text-white/30 hover:text-white/60 text-xs font-bold transition-colors"
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      )}
 
       {phase === 'ENTER_NICKNAME' && (
         <NicknameModal
