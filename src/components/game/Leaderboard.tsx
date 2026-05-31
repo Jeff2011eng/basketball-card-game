@@ -357,7 +357,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             onClick={() => setActiveTab('winrate')}
             className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
               activeTab === 'winrate'
-                ? 'bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
