@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Lineup, PackCard } from '@/lib/types';
 import { BattleResult as BattleResultType } from '@/lib/battle-logic';
 import { Play, Trophy, History, Share2, Pencil } from 'lucide-react';
+import rewardImg from '../../public/reward.jpg';
 import { openHupuLink } from '@/lib/hupu-links';
 import HupuPrompt from '@/components/common/HupuPrompt';
 
@@ -242,14 +243,14 @@ export default function Home() {
             <div className="mt-6 flex flex-col items-center">
               <p className="text-white/30 text-[11px] font-bold mb-2">觉得好玩？请开发者喝杯咖啡 ☕</p>
               <img
-                src="/reward.jpg"
+                src={rewardImg.src}
                 alt="打赏"
                 className="w-28 h-28 rounded-lg opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
                 onClick={() => {
                   const modal = document.createElement('div');
                   modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4';
                   modal.onclick = () => modal.remove();
-                  modal.innerHTML = '<div class="text-center"><img src="/reward.jpg" class="w-64 h-64 rounded-xl shadow-2xl" /><p class="text-white/60 text-sm mt-3 font-bold">长按识别二维码打赏</p><p class="text-white/40 text-xs mt-1">点击任意区域关闭</p></div>';
+                  modal.innerHTML = `<div class="text-center"><img src="${rewardImg.src}" class="w-64 h-64 rounded-xl shadow-2xl" /><p class="text-white/60 text-sm mt-3 font-bold">长按识别二维码打赏</p><p class="text-white/40 text-xs mt-1">点击任意区域关闭</p></div>`;
                   document.body.appendChild(modal);
                 }}
               />
