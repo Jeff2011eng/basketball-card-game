@@ -450,8 +450,8 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
 
       {/* Sticky my rank bar */}
       {activeTab === 'record' && myRecord && !board.some(e => e.player_id === playerId) && (
-        <div className="fixed bottom-16 left-0 right-0 z-20 px-4">
-          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-xl border border-blue-500/50 p-3 shadow-lg">
+        <div className="fixed bottom-[68px] left-0 right-0 z-20 px-4">
+          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-t-xl border border-b-0 border-blue-500/50 p-3 shadow-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-blue-400 font-black text-sm">#{myRecord.rank}</span>
@@ -469,8 +469,8 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
         </div>
       )}
       {activeTab === 'lineup' && myLineup && !lineupBoard.some(e => e.player_id === playerId) && (
-        <div className="fixed bottom-16 left-0 right-0 z-20 px-4">
-          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-xl border border-purple-500/50 p-3 shadow-lg flex items-center justify-between cursor-pointer" onClick={() => setSelectedLineup(myLineup.entry)}>
+        <div className="fixed bottom-[68px] left-0 right-0 z-20 px-4">
+          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-t-xl border border-b-0 border-purple-500/50 p-3 shadow-lg flex items-center justify-between cursor-pointer" onClick={() => setSelectedLineup(myLineup.entry)}>
             <div className="flex items-center gap-2">
               <span className="text-purple-400 font-black text-sm">#{myLineup.rank}</span>
               <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
