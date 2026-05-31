@@ -246,7 +246,7 @@ export default function Home() {
               className="mt-4 flex items-center gap-1.5 text-white/40 hover:text-yellow-400 text-xs font-bold transition-colors"
             >
               <span>☕</span>
-              <span>打赏开发者</span>
+              <span>JR好活，当赏！</span>
             </button>
           </div>
         </div>
