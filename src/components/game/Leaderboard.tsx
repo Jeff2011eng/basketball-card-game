@@ -448,6 +448,42 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
         )}
       </div>
 
+      {/* Sticky my rank bar */}
+      {activeTab === 'record' && myRecord && !board.some(e => e.player_id === playerId) && (
+        <div className="fixed bottom-16 left-0 right-0 z-20 px-4">
+          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-xl border border-blue-500/50 p-3 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-blue-400 font-black text-sm">#{myRecord.rank}</span>
+                <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
+                <span className="text-blue-400 font-black">{myRecord.entry.nickname}</span>
+              </div>
+              <div className="flex items-center gap-3 text-xs">
+                <span className="text-green-400 font-bold">{myRecord.entry.wins}胜</span>
+                <span className="text-red-400 font-bold">{myRecord.entry.losses}负</span>
+                <span className={`font-black ${myRecord.entry.win_rate >= 60 ? 'text-green-400' : 'text-yellow-400'}`}>{myRecord.entry.win_rate}%</span>
+                <span className="text-white font-black text-base">{myRecord.entry.best_score}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeTab === 'lineup' && myLineup && !lineupBoard.some(e => e.player_id === playerId) && (
+        <div className="fixed bottom-16 left-0 right-0 z-20 px-4">
+          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-xl border border-purple-500/50 p-3 shadow-lg flex items-center justify-between cursor-pointer" onClick={() => setSelectedLineup(myLineup.entry)}>
+            <div className="flex items-center gap-2">
+              <span className="text-purple-400 font-black text-sm">#{myLineup.rank}</span>
+              <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
+              <span className="text-purple-400 font-black">{myLineup.entry.nickname}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-purple-400" />
+              <span className="text-white font-black text-base">{myLineup.entry.score}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Fixed bottom buttons */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm p-4 z-30 flex justify-center gap-3">
         <button
