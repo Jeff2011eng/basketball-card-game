@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
-import { calcLineupScore, getLegendBonuses, hasJordan, hasYaoMing, hasJordanAndShaq, LEGEND_BONUSES } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses, hasJordan, hasYaoMing, hasJordanAndShaq, getActiveCombos, COMBO_BONUSES, LEGEND_BONUSES } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy, MessageSquarePlus } from 'lucide-react';
@@ -39,6 +39,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const isGodLineup = hasJordan(lineup);
   const isYaoMingLineup = hasYaoMing(lineup);
   const isJordanAndShaq = hasJordanAndShaq(lineup);
+  const activeCombos = getActiveCombos(lineup);
 
   // Chemistry info
   const teams = players.map(p => p!.team);
@@ -115,7 +116,6 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
           {/* Score breakdown */}
           {isGodLineup && (
             <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 3s ease-out 4s forwards' }}>
-              {/* Firework bursts */}
               {[...Array(20)].map((_, i) => {
                 const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#f97316', '#eab308', '#fcd34d', '#ffffff'];
                 const color = colors[i % colors.length];
@@ -157,7 +157,6 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                   </div>
                 );
               })}
-              {/* Center notification */}
               <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="bg-black/70 backdrop-blur-sm rounded-2xl px-8 py-5 text-center">
                   <div className="text-3xl mb-2">👑</div>
@@ -176,28 +175,79 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                   {isJordanAndShaq && (
                     <p className="text-amber-400/80 text-xs font-bold mt-1">有乔有鲨，天下无敌 · 战力 +5%</p>
                   )}
+                  {isYaoMingLineup && (
+                    <p className="text-blue-400/80 text-xs font-bold mt-1">小巨人加成已激活 · 战力 +2%</p>
+                  )}
+                  {activeCombos.filter(c => c.type === 'combo').map(c => (
+                    <p key={c.name} className="text-emerald-400/80 text-xs font-bold mt-1">{c.name}已激活 · 战力 +{c.bonus}%</p>
+                  ))}
                 </div>
               </div>
             </div>
           )}
-          {isYaoMingLineup && !isGodLineup && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
-              style={{ animation: 'fadeOutUp 2s ease-out 3s forwards' }}
-            >
-              <div className="bg-black/60 backdrop-blur-sm rounded-xl px-6 py-4 text-center">
-                <div className="text-2xl mb-1">🐼</div>
-                <h3
-                  className="text-sm font-black tracking-wider mb-0.5"
-                  style={{ animation: 'yaoMingPulse 2s ease-in-out infinite' }}
-                >
-                  小巨人加成已激活
-                </h3>
-                <p className="text-white/50 text-xs font-bold">姚明降临阵容 · 战力 +2%</p>
+          {/* Non-Jordan firework effects: Yao Ming and combos */}
+          {!isGodLineup && (isYaoMingLineup || activeCombos.length > 0) && (
+            <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: 'fadeOutUp 3s ease-out 4s forwards' }}>
+              {[...Array(8)].map((_, i) => {
+                const colors = isYaoMingLineup
+                  ? ['#60a5fa', '#3b82f6', '#93c5fd', '#a78bfa', '#c4b5fd']
+                  : ['#34d399', '#10b981', '#6ee7b7', '#a78bfa', '#fbbf24'];
+                const color = colors[i % colors.length];
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 2.5;
+                const size = 100 + Math.random() * 180;
+                return (
+                  <div key={i} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${left}%`, top: `${top}%` }}>
+                    <div
+                      style={{
+                        width: size, height: size,
+                        borderRadius: '50%',
+                        background: `radial-gradient(circle, ${color}99 0%, ${color}66 25%, ${color}22 50%, transparent 70%)`,
+                        animation: `fireworkBurst 2.5s ease-out ${delay}s both`,
+                      }}
+                    />
+                    {[...Array(8)].map((_, j) => {
+                      const angle = (j / 8) * 360 + Math.random() * 30;
+                      const dist = size * 0.3 + Math.random() * size * 0.35;
+                      const dx = Math.cos(angle * Math.PI / 180) * dist;
+                      const dy = Math.sin(angle * Math.PI / 180) * dist;
+                      const sparkSize = 3 + Math.random() * 4;
+                      return (
+                        <div
+                          key={j}
+                          className="absolute rounded-full"
+                          style={{
+                            width: sparkSize, height: sparkSize,
+                            background: color,
+                            left: size / 2, top: size / 2,
+                            transform: `translate(${dx}px, ${dy}px)`,
+                            animation: `sparkle 2s ease-out ${delay + 0.2}s both`,
+                            boxShadow: `0 0 6px ${color}, 0 0 12px ${color}`,
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })}
+              <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-black/70 backdrop-blur-sm rounded-2xl px-8 py-5 text-center">
+                  {isYaoMingLineup && (
+                    <>
+                      <div className="text-2xl mb-1">🐼</div>
+                      <h3 className="text-sm font-black tracking-wider mb-0.5" style={{ animation: 'yaoMingPulse 2s ease-in-out infinite' }}>
+                        小巨人加成已激活
+                      </h3>
+                      <p className="text-white/60 text-xs font-bold">姚明降临阵容 · 战力 +2%</p>
+                    </>
+                  )}
+                  {activeCombos.filter(c => c.type === 'combo').map(c => (
+                    <p key={c.name} className="text-emerald-400/80 text-xs font-bold mt-1">🔥 {c.name}已激活 · 战力 +{c.bonus}%</p>
+                  ))}
+                </div>
               </div>
-            </motion.div>
+            </div>
           )}
           <div className="mt-3 text-sm text-gray-400">
             基础 {baseOvr.toFixed(2)}

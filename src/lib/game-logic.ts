@@ -72,6 +72,15 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   233: { name: '大鸟加成', bonus: 3 },            // Larry Bird
 };
 
+// 组合加成配置
+export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; type: 'dream' | 'combo' }[] = [
+  { name: '有乔有鲨的加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
+  { name: 'OK组合', bonus: 3, playerIds: [228, 244], type: 'combo' },                  // Kobe + Shaq
+  { name: '老流氓组合', bonus: 5, playerIds: [227, 234, 242], type: 'combo' },          // Jordan + Pippen + Rodman
+  { name: '海啸组合', bonus: 3, playerIds: [1, 7], type: 'combo' },                    // Curry + Durant
+  { name: 'GDP组合', bonus: 5, playerIds: [237, 254, 264], type: 'combo' },             // Duncan + Parker + Ginobili
+];
+
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
 export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number; playerName: string; isGod: boolean }[] {
   const players = Object.values(lineup).filter(Boolean) as Player[];
@@ -82,11 +91,13 @@ export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number;
       bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn, isGod: p.id === 227 });
     }
   });
-  // 有乔有鲨组合加成
+  // 组合加成
   const ids = new Set(players.map(p => p.id));
-  if (ids.has(227) && ids.has(244)) {
-    bonuses.push({ name: '有乔有鲨的加成', bonus: 5, playerName: '乔丹+奥尼尔', isGod: false });
-  }
+  COMBO_BONUSES.forEach(combo => {
+    if (combo.playerIds.every(id => ids.has(id))) {
+      bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: false });
+    }
+  });
   return bonuses.sort((a, b) => b.bonus - a.bonus);
 }
 
@@ -107,6 +118,13 @@ export function hasJordanAndShaq(lineup: Lineup): boolean {
   const players = Object.values(lineup).filter(Boolean) as Player[];
   const ids = new Set(players.map(p => p.id));
   return ids.has(227) && ids.has(244);
+}
+
+// 获取阵容中激活的组合加成
+export function getActiveCombos(lineup: Lineup): typeof COMBO_BONUSES[number][] {
+  const players = Object.values(lineup).filter(Boolean) as Player[];
+  const ids = new Set(players.map(p => p.id));
+  return COMBO_BONUSES.filter(combo => combo.playerIds.every(id => ids.has(id)));
 }
 
 // 阵容总评分
@@ -135,11 +153,13 @@ export function calcLineupScore(lineup: Lineup): number {
     if (legend) legendBonus += legend.bonus;
   });
 
-  // 有乔有鲨组合加成
+  // 组合加成（含梦幻加成）
   const ids = new Set(players.map(p => p.id));
-  if (ids.has(227) && ids.has(244)) {
-    legendBonus += 5;
-  }
+  COMBO_BONUSES.forEach(combo => {
+    if (combo.playerIds.every(id => ids.has(id))) {
+      legendBonus += combo.bonus;
+    }
+  });
 
   return parseFloat((baseOvr * (1 + (chemBonus + legendBonus) / 100)).toFixed(2));
 }
