@@ -69,6 +69,7 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   221: { name: '魔术师加成', bonus: 4 },      // Magic Johnson
   245: { name: '梦幻脚步加成', bonus: 3 },    // Hakeem Olajuwon
   251: { name: '小巨人加成', bonus: 2 },        // Yao Ming
+  233: { name: '大鸟加成', bonus: 3 },            // Larry Bird
 };
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
