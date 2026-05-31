@@ -253,8 +253,10 @@ export async function fetchWinRateLeaderboard(): Promise<LeaderboardEntry[]> {
 
 export async function fetchTotalLineupCount(): Promise<{ players: number; lineups: number }> {
   const sb = getSupabase();
-  const lineupRes = await sb.from('lineups').select('*', { count: 'exact', head: true }).gt('score', 0);
-  const playerRes = await sb.from('players_identity').select('*', { count: 'exact', head: true });
+  const [lineupRes, playerRes] = await Promise.all([
+    sb.from('lineups').select('*', { count: 'exact', head: true }).gt('score', 0),
+    sb.from('player_stats').select('*', { count: 'exact', head: true }).gt('total_battles', 0),
+  ]);
   return { players: playerRes.count || 0, lineups: lineupRes.count || 0 };
 }
 
