@@ -251,13 +251,11 @@ export async function fetchWinRateLeaderboard(): Promise<LeaderboardEntry[]> {
   return entries;
 }
 
-export async function fetchTotalLineupCount(): Promise<number> {
+export async function fetchTotalLineupCount(): Promise<{ players: number; lineups: number }> {
   const sb = getSupabase();
-  const { count } = await sb
-    .from('lineups')
-    .select('*', { count: 'exact', head: true })
-    .gt('score', 0);
-  return count || 0;
+  const lineupRes = await sb.from('lineups').select('*', { count: 'exact', head: true }).gt('score', 0);
+  const playerRes = await sb.from('players_identity').select('*', { count: 'exact', head: true });
+  return { players: playerRes.count || 0, lineups: lineupRes.count || 0 };
 }
 
 export async function fetchMyWinRateRank(playerId: string): Promise<{ entry: LeaderboardEntry; rank: number } | null> {

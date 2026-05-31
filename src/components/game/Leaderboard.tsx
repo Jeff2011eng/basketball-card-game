@@ -39,7 +39,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
   const [myRecord, setMyRecord] = useState<{ entry: LeaderboardEntry; rank: number } | null>(null);
   const [myWinRate, setMyWinRate] = useState<{ entry: LeaderboardEntry; rank: number } | null>(null);
   const [myLineup, setMyLineup] = useState<{ entry: LineupLeaderboardEntry; rank: number } | null>(null);
-  const [totalLineups, setTotalLineups] = useState(0);
+  const [totalLineups, setTotalLineups] = useState({ players: 0, lineups: 0 });
   const playerId = getPlayerId();
 
   useEffect(() => {
@@ -501,9 +501,9 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             </div>
           ) : (
             <>
-            {totalLineups > 0 && (
+            {totalLineups.lineups > 0 && (
               <p className="text-gray-400 text-sm font-bold mb-4 text-center">
-                已有<span className="text-yellow-400 font-black mx-1">{lineupBoard.length + (myLineup && !lineupBoard.some(e => e.player_id === playerId) ? 1 : 0)}</span>JRs，生成<span className="text-purple-400 font-black mx-1">{totalLineups}</span>套对战阵容
+                已有<span className="text-yellow-400 font-black mx-1">{totalLineups.players}</span>JRs，生成<span className="text-purple-400 font-black mx-1">{totalLineups.lineups}</span>套对战阵容
               </p>
             )}
             <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
