@@ -18646,7 +18646,52 @@
       "era": "70s",
       "is_legend": true,
       "pid": 77418
+    },
+    {
+      "id": 534,
+      "name_cn": "卡梅隆·安东尼",
+      "name_en": "Carmelo Anthony",
+      "nickname": "甜瓜",
+      "team": "掘金",
+      "position": "SF/PF",
+      "jersey_number": 15,
+      "height": "2.03米/6尺8",
+      "weight": "107公斤/235磅",
+      "birth_year": 1984,
+      "player_type": "legend",
+      "tier": 1,
+      "card_tier": "SSR/UR",
+      "stats": {
+        "SHO": 84,
+        "SLA": 90,
+        "DEF": 58,
+        "ATH": 80,
+        "PLM": 72,
+        "PHY": 86
+      },
+      "ovr": 90.5,
+      "badges": [
+        {
+          "name": "中距离大师",
+          "level": 3
+        },
+        {
+          "name": "三威胁",
+          "level": 3
+        },
+        {
+          "name": "关键先生",
+          "level": 2
+        },
+        {
+          "name": "单打王",
+          "level": 3
+        }
+      ],
+      "era": "2000s",
+      "is_legend": true,
+      "pid": 2546
     }
   ],
-  "total_players": 463
+  "total_players": 464
 }
