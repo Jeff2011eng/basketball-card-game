@@ -260,7 +260,7 @@ export default function Home() {
           onClick={() => setShowReward(false)}
         >
           <div className="text-center" onClick={e => e.stopPropagation()}>
-            <img src={rewardImg.src} className="max-w-[240px] max-h-[240px] rounded-xl shadow-2xl mx-auto" />
+            <img src={rewardImg.src} className="max-w-[320px] max-h-[320px] rounded-xl shadow-2xl mx-auto" />
             <p className="text-white/70 text-sm mt-4 font-bold">你的鼓励是我更新的动力 💪</p>
             <p className="text-white/40 text-xs mt-1">感谢每一位支持的JR</p>
             <button
