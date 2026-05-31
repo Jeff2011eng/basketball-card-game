@@ -61,7 +61,6 @@ export default function LineupReview({ onBack }: Props) {
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
   const [toast, setToast] = useState('');
-  const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
   const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
   const showToast = (msg: string) => {
@@ -72,12 +71,7 @@ export default function LineupReview({ onBack }: Props) {
   const shareText = `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！`;
   const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=湿乎乎的话题&topicId=177';
 
-  const handleShareClick = () => {
-    setShowScreenshotConfirm(true);
-  };
-
-  const handleConfirmScreenshot = async () => {
-    setShowScreenshotConfirm(false);
+  const handleShareClick = async () => {
     try {
       await navigator.clipboard.writeText(shareText);
     } catch {}
@@ -115,29 +109,6 @@ export default function LineupReview({ onBack }: Props) {
 
   return (
     <>
-      {showScreenshotConfirm && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-gray-600 text-center">
-            <div className="text-4xl mb-3">📸</div>
-            <h3 className="text-xl font-black text-white mb-2">先截图再发帖</h3>
-            <p className="text-gray-400 text-sm mb-6">请先截图保存你的阵容，发帖时可以附上截图噢！</p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleConfirmScreenshot}
-                className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                已截图，去发帖
-              </button>
-              <button
-                onClick={() => setShowScreenshotConfirm(false)}
-                className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
-              >
-                未截图，现在去
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg z-[100] border border-gray-600 animate-[fadeScale_0.3s_ease-out]">
           {toast}
@@ -272,7 +243,7 @@ export default function LineupReview({ onBack }: Props) {
               className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
             >
               <MessageSquarePlus className="w-5 h-5" />
-              与JRs比一比
+              截图与JRs比一比
             </button>
             <div className="flex gap-2">
               <button

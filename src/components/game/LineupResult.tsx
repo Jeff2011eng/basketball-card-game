@@ -58,15 +58,9 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
 
   const badgeCount = players.reduce((sum, p) => sum + (p?.badges?.length || 0), 0);
 
-  const [showScreenshotConfirm, setShowScreenshotConfirm] = useState(false);
   const [showHupuPrompt, setShowHupuPrompt] = useState(false);
 
-  const handleShareClick = () => {
-    setShowScreenshotConfirm(true);
-  };
-
-  const handleConfirmScreenshot = async () => {
-    setShowScreenshotConfirm(false);
+  const handleShareClick = async () => {
     const shareText = `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！`;
     try {
       await navigator.clipboard.writeText(shareText);
@@ -97,29 +91,6 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
 
   return (
     <>
-      {showScreenshotConfirm && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-gray-600 text-center">
-            <div className="text-4xl mb-3">📸</div>
-            <h3 className="text-xl font-black text-white mb-2">先截图再发帖</h3>
-            <p className="text-gray-400 text-sm mb-6">请先截图保存你的阵容，发帖时可以附上截图噢！</p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleConfirmScreenshot}
-                className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                已截图，去发帖
-              </button>
-              <button
-                onClick={() => setShowScreenshotConfirm(false)}
-                className="w-full bg-white/10 hover:bg-white/20 text-white/70 font-bold py-3 rounded-xl transition-colors"
-              >
-                未截图，现在去
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       <div className="min-h-screen bg-gray-900 py-8 pb-36 px-4">
         <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
@@ -330,7 +301,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
               onClick={handleShareClick}
               className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-colors text-sm"
             >
-              与JRs炫耀阵容
+              截图与JRs炫耀阵容
             </button>
             <button
               onClick={onRestart}
