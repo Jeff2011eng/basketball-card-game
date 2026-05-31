@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
-import { calcLineupScore, getLegendBonuses, hasJordan, LEGEND_BONUSES } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses, hasJordan, hasYaoMing, LEGEND_BONUSES } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy, MessageSquarePlus } from 'lucide-react';
@@ -37,6 +37,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const bonus = parseFloat((score - baseOvr).toFixed(2));
   const legendBonusList = getLegendBonuses(lineup);
   const isGodLineup = hasJordan(lineup);
+  const isYaoMingLineup = hasYaoMing(lineup);
 
   // Chemistry info
   const teams = players.map(p => p!.team);
@@ -203,6 +204,25 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                 </div>
               </div>
             </div>
+          )}
+          {isYaoMingLineup && !isGodLineup && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
+              style={{ animation: 'fadeOutUp 2s ease-out 3s forwards' }}
+            >
+              <div className="bg-black/60 backdrop-blur-sm rounded-xl px-6 py-4 text-center">
+                <div className="text-2xl mb-1">🐼</div>
+                <h3
+                  className="text-sm font-black tracking-wider mb-0.5"
+                  style={{ animation: 'yaoMingPulse 2s ease-in-out infinite' }}
+                >
+                  小巨人加成已激活
+                </h3>
+                <p className="text-white/50 text-xs font-bold">姚明降临阵容 · 战力 +2%</p>
+              </div>
+            </motion.div>
           )}
           <div className="mt-3 text-sm text-gray-400">
             基础 {baseOvr.toFixed(2)}

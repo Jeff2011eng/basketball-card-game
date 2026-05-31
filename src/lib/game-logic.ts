@@ -68,6 +68,7 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   237: { name: '石佛加成', bonus: 3 },        // Tim Duncan
   221: { name: '魔术师加成', bonus: 4 },      // Magic Johnson
   245: { name: '梦幻脚步加成', bonus: 3 },    // Hakeem Olajuwon
+  251: { name: '小巨人加成', bonus: 2 },        // Yao Ming
 };
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
@@ -81,6 +82,12 @@ export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number;
     }
   });
   return bonuses.sort((a, b) => b.bonus - a.bonus);
+}
+
+// 判断阵容是否包含姚明
+export function hasYaoMing(lineup: Lineup): boolean {
+  const players = Object.values(lineup).filter(Boolean) as Player[];
+  return players.some(p => p.id === 251);
 }
 
 // 判断阵容是否包含乔丹
