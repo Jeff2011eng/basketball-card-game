@@ -175,11 +175,12 @@ export async function fetchMyLineup(playerId: string): Promise<Lineup | null> {
     .select('pg_data, sg_data, sf_data, pf_data, c_data')
     .eq('player_id', playerId)
     .eq('is_active', true)
+    .not('pg_data', 'is', null)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  if (error || !data) return null;
+  if (error || !data || !data.pg_data) return null;
   return { PG: data.pg_data, SG: data.sg_data, SF: data.sf_data, PF: data.pf_data, C: data.c_data };
 }
 
