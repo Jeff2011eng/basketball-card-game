@@ -285,7 +285,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
                   {getLegendBonuses(lineup).map(lb => (
                     <div key={lb.name} className="flex items-center justify-between">
                       <span className={`font-bold ${lb.isGod ? '' : lb.excluded ? 'text-gray-600 line-through' : 'text-amber-400/60'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.name}</span>
-                      <span className={`font-black ${lb.isGod ? '' : lb.excluded ? 'text-gray-600' : 'text-amber-300/60'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.excluded ? '不享有' : `+${lb.bonus}%`}</span>
+                      <span className={`font-black ${lb.isGod ? '' : lb.excluded ? 'text-gray-600' : 'text-amber-300/60'}`} style={lb.isGod ? { animation: 'godGlow 2s ease-in-out infinite' } : undefined}>{lb.excluded ? `+${lb.bonus}%（与有乔有鲨加成互斥）` : `+${lb.bonus}%`}</span>
                     </div>
                   ))}
                   <div className="flex items-center justify-between">
