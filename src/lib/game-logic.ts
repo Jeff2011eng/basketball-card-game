@@ -58,7 +58,7 @@ export function getRarity(player: Player): Rarity {
 
 // 传奇球员加成配置
 export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
-  227: { name: '篮球之神的加成', bonus: 6 },       // Michael Jordan
+  227: { name: '篮球之神加成', bonus: 6 },       // Michael Jordan
   244: { name: '大鲨鱼加成', bonus: 4 },      // Shaquille O'Neal
   1:   { name: '历史级神射手加成', bonus: 3 }, // Stephen Curry
   8:   { name: '乐邦加成', bonus: 4 },        // LeBron James
@@ -74,7 +74,7 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
 
 // 组合加成配置
 export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; type: 'dream' | 'combo' }[] = [
-  { name: '有乔有鲨的加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
+  { name: '有乔有鲨加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
   { name: 'OK组合', bonus: 3, playerIds: [228, 244], type: 'combo' },                  // Kobe + Shaq
   { name: '老流氓组合', bonus: 5, playerIds: [227, 234, 242], type: 'combo' },          // Jordan + Pippen + Rodman
   { name: '海啸组合', bonus: 5, playerIds: [1, 7, 266], type: 'combo' },                // Curry + Durant + Klay
@@ -104,7 +104,7 @@ export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number;
   const ids = new Set(players.map(p => p.id));
   COMBO_BONUSES.forEach(combo => {
     if (combo.playerIds.every(id => ids.has(id))) {
-      bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: false });
+      bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: combo.type === 'dream' });
     }
   });
   return bonuses.sort((a, b) => b.bonus - a.bonus);
