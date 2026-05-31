@@ -243,10 +243,10 @@ export default function Home() {
 
             <button
               onClick={() => setShowReward(true)}
-              className="mt-4 flex items-center gap-1.5 text-white/25 hover:text-yellow-400/70 text-[11px] font-bold transition-colors"
+              className="mt-4 flex items-center gap-1.5 text-white/40 hover:text-yellow-400 text-xs font-bold transition-colors"
             >
               <span>☕</span>
-              <span>打赏开发者</span>
+              <span>请JRs喝罐红牛</span>
             </button>
           </div>
         </div>
@@ -260,9 +260,9 @@ export default function Home() {
           onClick={() => setShowReward(false)}
         >
           <div className="text-center" onClick={e => e.stopPropagation()}>
-            <img src={rewardImg.src} className="w-56 h-56 rounded-xl shadow-2xl mx-auto" />
-            <p className="text-white/70 text-sm mt-4 font-bold">觉得好玩？请开发者喝杯咖啡 ☕</p>
-            <p className="text-white/40 text-xs mt-1">你的支持是持续更新的动力</p>
+            <img src={rewardImg.src} className="max-w-[240px] max-h-[240px] rounded-xl shadow-2xl mx-auto" />
+            <p className="text-white/70 text-sm mt-4 font-bold">来罐红牛，继续给Jrs肝功能 ☕</p>
+            <p className="text-white/40 text-xs mt-1">你懂的，懂的都懂</p>
             <button
               onClick={() => setShowReward(false)}
               className="mt-4 text-white/30 hover:text-white/60 text-xs font-bold transition-colors"
