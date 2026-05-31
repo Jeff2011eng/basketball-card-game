@@ -4,7 +4,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
-import { fetchMyLineup } from '@/lib/supabase-service';
+import { fetchMyLineup, uploadLineup, matchmake } from '@/lib/supabase-service';
 import { calcLineupScore, getLegendBonuses, hasJordan } from '@/lib/game-logic';
 import Card from './Card';
 import { ArrowLeft, MessageSquarePlus, RotateCcw, Trophy } from 'lucide-react';
@@ -14,7 +14,7 @@ import HupuPrompt from '@/components/common/HupuPrompt';
 
 interface Props {
   onBack: () => void;
-  onBattle: () => void;
+  onBattleResult: (result: any) => void;
 }
 
 const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
@@ -23,7 +23,7 @@ const STAT_DISPLAY: Record<string, string> = {
   SHO: '投射', SLA: '突破', DEF: '防守', ATH: '运动', PLM: '组织', PHY: '对抗',
 };
 
-export default function LineupReview({ onBack, onBattle }: Props) {
+export default function LineupReview({ onBack, onBattleResult }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -63,6 +63,25 @@ export default function LineupReview({ onBack, onBattle }: Props) {
 
   const [toast, setToast] = useState('');
   const [showHupuPrompt, setShowHupuPrompt] = useState(false);
+  const [battling, setBattling] = useState(false);
+  const [battleMsg, setBattleMsg] = useState('');
+
+  const handleBattle = async () => {
+    if (!lineup) return;
+    setBattling(true);
+    setBattleMsg('上传阵容中...');
+    try {
+      const playerId = getPlayerId();
+      const { lineupId } = await uploadLineup(playerId, nickname, lineup);
+      setBattleMsg('匹配对手中...');
+      const result = await matchmake(playerId, lineupId);
+      setBattling(false);
+      onBattleResult(result);
+    } catch (err: any) {
+      setBattling(false);
+      showToast(err.message || '出错了，请重试');
+    }
+  };
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -248,8 +267,9 @@ export default function LineupReview({ onBack, onBattle }: Props) {
             </button>
             <div className="flex gap-2">
               <button
-                onClick={onBattle}
-                className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-sm"
+                onClick={handleBattle}
+                disabled={battling}
+                className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
               >
                 <Trophy className="w-4 h-4" />
                 重新发起对战 (PK)
@@ -267,6 +287,13 @@ export default function LineupReview({ onBack, onBattle }: Props) {
       )}
 
       <HupuPrompt show={showHupuPrompt} onClose={() => setShowHupuPrompt(false)} />
+
+      {battling && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full mb-4 animate-spin" />
+          <h2 className="text-2xl font-black text-orange-400 uppercase tracking-widest">{battleMsg}</h2>
+        </div>
+      )}
     </>
   );
 }

@@ -300,12 +300,10 @@ export default function Home() {
       {phase === 'LINEUP_REVIEW' && (
         <LineupReview
           onBack={() => setPhase('INTRO')}
-          onBattle={async () => {
-            if (lineupId) {
-              await handleBattleAgain();
-            } else {
-              await handleUpload();
-            }
+          onBattleResult={(result) => {
+            setBattleData(result);
+            setPhase('BATTLE');
+            window.scrollTo({ top: 0, behavior: 'instant' });
           }}
         />
       )}
