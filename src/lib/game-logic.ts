@@ -82,6 +82,11 @@ export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number;
       bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn, isGod: p.id === 227 });
     }
   });
+  // 有乔有鲨组合加成
+  const ids = new Set(players.map(p => p.id));
+  if (ids.has(227) && ids.has(244)) {
+    bonuses.push({ name: '有乔有鲨的加成', bonus: 5, playerName: '乔丹+奥尼尔', isGod: false });
+  }
   return bonuses.sort((a, b) => b.bonus - a.bonus);
 }
 
@@ -95,6 +100,13 @@ export function hasYaoMing(lineup: Lineup): boolean {
 export function hasJordan(lineup: Lineup): boolean {
   const players = Object.values(lineup).filter(Boolean) as Player[];
   return players.some(p => p.id === 227);
+}
+
+// 判断阵容是否同时有乔丹和奥尼尔（有乔有鲨）
+export function hasJordanAndShaq(lineup: Lineup): boolean {
+  const players = Object.values(lineup).filter(Boolean) as Player[];
+  const ids = new Set(players.map(p => p.id));
+  return ids.has(227) && ids.has(244);
 }
 
 // 阵容总评分
@@ -122,6 +134,12 @@ export function calcLineupScore(lineup: Lineup): number {
     const legend = LEGEND_BONUSES[p.id];
     if (legend) legendBonus += legend.bonus;
   });
+
+  // 有乔有鲨组合加成
+  const ids = new Set(players.map(p => p.id));
+  if (ids.has(227) && ids.has(244)) {
+    legendBonus += 5;
+  }
 
   return parseFloat((baseOvr * (1 + (chemBonus + legendBonus) / 100)).toFixed(2));
 }

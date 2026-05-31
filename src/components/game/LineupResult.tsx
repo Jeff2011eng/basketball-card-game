@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lineup, STAT_LABELS } from '@/lib/types';
-import { calcLineupScore, getLegendBonuses, hasJordan, hasYaoMing, LEGEND_BONUSES } from '@/lib/game-logic';
+import { calcLineupScore, getLegendBonuses, hasJordan, hasYaoMing, hasJordanAndShaq, LEGEND_BONUSES } from '@/lib/game-logic';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Trophy, MessageSquarePlus } from 'lucide-react';
@@ -38,6 +38,7 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const legendBonusList = getLegendBonuses(lineup);
   const isGodLineup = hasJordan(lineup);
   const isYaoMingLineup = hasYaoMing(lineup);
+  const isJordanAndShaq = hasJordanAndShaq(lineup);
 
   // Chemistry info
   const teams = players.map(p => p!.team);
@@ -172,6 +173,9 @@ export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
                     神的加成已激活
                   </h3>
                   <p className="text-white/60 text-xs font-bold">篮球之神迈克尔·乔丹降临阵容 · 战力 +6%</p>
+                  {isJordanAndShaq && (
+                    <p className="text-amber-400/80 text-xs font-bold mt-1">有乔有鲨，天下无敌 · 战力 +5%</p>
+                  )}
                 </div>
               </div>
             </div>
