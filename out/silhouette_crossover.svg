@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" width="100%" height="100%">
+  <defs>
+    <filter id="silhouette-glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#silhouette-glow)">
+    
+<circle cx="100" cy="30" r="17" fill="#FFF" opacity="0.9"/>    <path d="M 83 25 Q 100 18 117 25" stroke="#FFD700" strokeWidth="3" fill="none" opacity="0.8"/>    <path d="M 85 52 L 115 52 L 120 115 L 80 115 Z" fill="#FFF" opacity="0.85"/>    <path d="M 97 52 L 103 52 L 103 115 L 97 115 Z" fill="none" stroke="#FFD700" strokeWidth="1" opacity="0.5"/>    <path d="M 115 62 L 145 45 L 165 30" stroke="#FFF" strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.75"/>    <path d="M 85 62 L 50 45 L 30 35" stroke="#FFF" strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.8"/>    <circle cx="28" cy="38" r="5" fill="#FFF" opacity="0.85"/>    <circle cx="25" cy="60" r="8" fill="none" stroke="#FFD700" strokeWidth="2" opacity="0.9"/>    <path d="M 25 52 A 8 8 0 0 1 33 60" stroke="#FFD700" strokeWidth="1" fill="none" opacity="0.6"/>    <path d="M 25 68 A 8 8 0 0 1 17 60" stroke="#FFD700" strokeWidth="1" fill="none" opacity="0.6"/>    <path d="M 28 44 Q 20 55 28 65" stroke="#FFF" strokeWidth="1" strokeDasharray="2,3" fill="none" opacity="0.3"/>    <path d="M 88 115 L 55 175 L 40 210" stroke="#FFF" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85"/>    <path d="M 105 115 L 130 170 L 145 210" stroke="#FFF" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85"/>    <path d="M 30 210 L 50 210 L 50 222 L 30 222 Z" fill="#FFD700" opacity="0.5"/>    <path d="M 135 210 L 155 210 L 155 222 L 135 222 Z" fill="#FFD700" opacity="0.5"/>    <path d="M 15 30 L 5 28 L 10 22" stroke="#FFF" strokeWidth="1" fill="none" opacity="0.3"/>    <path d="M 20 50 L 10 48 L 15 42" stroke="#FFF" strokeWidth="1" fill="none" opacity="0.2"/>
+  </g>
+</svg>
