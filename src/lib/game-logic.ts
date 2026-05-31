@@ -82,6 +82,11 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
   { name: '热火三巨头', bonus: 5, playerIds: [8, 229, 311], type: 'combo' },             // LeBron + Wade + Bosh
   { name: '詹眉组合', bonus: 3, playerIds: [8, 13], type: 'combo' },                    // LeBron + AD
   { name: '犹他双煞', bonus: 3, playerIds: [223, 240], type: 'combo' },                 // Stockton + Malone
+  { name: '水花兄弟', bonus: 3, playerIds: [1, 266], type: 'combo' },                    // Curry + Klay
+  { name: '绿军三巨头', bonus: 5, playerIds: [238, 269, 260], type: 'combo' },            // Garnett + Pierce + Ray Allen
+  { name: '凯尔特人前场', bonus: 5, playerIds: [233, 273, 282], type: 'combo' },          // Bird + McHale + Parish
+  { name: 'Showtime组合', bonus: 3, playerIds: [221, 243], type: 'combo' },              // Magic + Kareem
+  { name: '凯尔特人王朝', bonus: 3, playerIds: [246, 529], type: 'combo' },               // Russell + Cousy
 ];
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
