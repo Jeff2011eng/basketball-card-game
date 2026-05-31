@@ -87,6 +87,7 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
   { name: '凯尔特人前场', bonus: 5, playerIds: [233, 273, 282], type: 'combo' },          // Bird + McHale + Parish
   { name: 'Showtime组合', bonus: 3, playerIds: [221, 243], type: 'combo' },              // Magic + Kareem
   { name: '凯尔特人王朝', bonus: 3, playerIds: [246, 529], type: 'combo' },               // Russell + Cousy
+  { name: '探花组合', bonus: 3, playerIds: [10, 22], type: 'combo' },                     // Tatum + Jaylen Brown
 ];
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
