@@ -93,6 +93,9 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
   { name: 'Showtime组合', bonus: 3, playerIds: [221, 243], type: 'combo' },              // Magic + Kareem
   { name: '凯尔特人王朝', bonus: 3, playerIds: [246, 529], type: 'combo' },               // Russell + Cousy
   { name: '探花组合', bonus: 3, playerIds: [10, 22], type: 'combo' },                     // Tatum + Jaylen Brown
+  { name: '梦一加成', bonus: 12, playerIds: [227, 221, 233, 241], type: 'dream' },       // Jordan + Magic + Bird + Barkley
+  { name: '梦八加成', bonus: 10, playerIds: [228, 8, 229, 225], type: 'dream' },          // Kobe + LeBron + Wade + Kidd
+  { name: '梦十加成', bonus: 10, playerIds: [7, 8, 228, 534], type: 'dream' },             // Durant + LeBron + Kobe + Anthony
 ];
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
