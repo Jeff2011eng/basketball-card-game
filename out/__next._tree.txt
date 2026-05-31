@@ -1,2 +1,2 @@
-:HL["/basketball-card-game/_next/static/chunks/0jns2pnwx8k7z.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"UvGgiuoz4if88gvCzf0AB"}
+:HL["/basketball-card-game/_next/static/chunks/0768u3-voczs7.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"W8fmuabtAX59x3lwM2l35"}
