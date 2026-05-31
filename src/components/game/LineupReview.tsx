@@ -7,13 +7,14 @@ import { getPlayerId } from '@/lib/player-identity';
 import { fetchMyLineup } from '@/lib/supabase-service';
 import { calcLineupScore, getLegendBonuses, hasJordan } from '@/lib/game-logic';
 import Card from './Card';
-import { ArrowLeft, MessageSquarePlus, RotateCcw } from 'lucide-react';
+import { ArrowLeft, MessageSquarePlus, RotateCcw, Trophy } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { openHupuLink } from '@/lib/hupu-links';
 import HupuPrompt from '@/components/common/HupuPrompt';
 
 interface Props {
   onBack: () => void;
+  onBattle: () => void;
 }
 
 const STAT_KEYS = ['SHO', 'SLA', 'DEF', 'ATH', 'PLM', 'PHY'] as const;
@@ -22,7 +23,7 @@ const STAT_DISPLAY: Record<string, string> = {
   SHO: '投射', SLA: '突破', DEF: '防守', ATH: '运动', PLM: '组织', PHY: '对抗',
 };
 
-export default function LineupReview({ onBack }: Props) {
+export default function LineupReview({ onBack, onBattle }: Props) {
   const [lineup, setLineup] = useState<Lineup | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -247,10 +248,11 @@ export default function LineupReview({ onBack }: Props) {
             </button>
             <div className="flex gap-2">
               <button
-                onClick={handleViewTopic}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-sm"
+                onClick={onBattle}
+                className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white font-black py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-sm"
               >
-                看看其他JRs的阵容
+                <Trophy className="w-4 h-4" />
+                重新发起对战 (PK)
               </button>
               <button
                 onClick={onBack}
