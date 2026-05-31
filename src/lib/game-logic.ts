@@ -77,7 +77,7 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
   { name: '有乔有鲨的加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
   { name: 'OK组合', bonus: 3, playerIds: [228, 244], type: 'combo' },                  // Kobe + Shaq
   { name: '老流氓组合', bonus: 5, playerIds: [227, 234, 242], type: 'combo' },          // Jordan + Pippen + Rodman
-  { name: '海啸组合', bonus: 3, playerIds: [1, 7], type: 'combo' },                    // Curry + Durant
+  { name: '海啸组合', bonus: 5, playerIds: [1, 7, 266], type: 'combo' },                // Curry + Durant + Klay
   { name: 'GDP组合', bonus: 5, playerIds: [237, 254, 264], type: 'combo' },             // Duncan + Parker + Ginobili
   { name: '热火三巨头', bonus: 5, playerIds: [8, 229, 311], type: 'combo' },             // LeBron + Wade + Bosh
   { name: '詹眉组合', bonus: 3, playerIds: [8, 13], type: 'combo' },                    // LeBron + AD
