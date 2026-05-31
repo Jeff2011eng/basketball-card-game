@@ -72,6 +72,11 @@ export const LEGEND_BONUSES: Record<number, { name: string; bonus: number }> = {
   233: { name: '大鸟加成', bonus: 3 },            // Larry Bird
 };
 
+// 互斥规则：当一个组合激活时，另一个组合不享有加成（仍显示）
+const COMBO_EXCLUSIONS: Record<string, string> = {
+  '有乔有鲨加成': 'OK组合',   // 有乔有鲨优先于OK组合（共享奥尼尔）
+};
+
 // 组合加成配置
 export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; type: 'dream' | 'combo' }[] = [
   { name: '有乔有鲨加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
@@ -91,20 +96,28 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
 ];
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
-export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number; playerName: string; isGod: boolean }[] {
+export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number; playerName: string; isGod: boolean; excluded: boolean }[] {
   const players = Object.values(lineup).filter(Boolean) as Player[];
-  const bonuses: { name: string; bonus: number; playerName: string; isGod: boolean }[] = [];
+  const bonuses: { name: string; bonus: number; playerName: string; isGod: boolean; excluded: boolean }[] = [];
   players.forEach(p => {
     const legend = LEGEND_BONUSES[p.id];
     if (legend) {
-      bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn, isGod: p.id === 227 });
+      bonuses.push({ name: legend.name, bonus: legend.bonus, playerName: p.name_cn, isGod: p.id === 227, excluded: false });
     }
   });
-  // 组合加成
+  // 组合加成（含互斥处理）
   const ids = new Set(players.map(p => p.id));
+  const excludedCombos = new Set<string>();
   COMBO_BONUSES.forEach(combo => {
     if (combo.playerIds.every(id => ids.has(id))) {
-      bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: combo.type === 'dream' });
+      const excluded = COMBO_EXCLUSIONS[combo.name];
+      if (excluded) excludedCombos.add(excluded);
+    }
+  });
+  COMBO_BONUSES.forEach(combo => {
+    if (combo.playerIds.every(id => ids.has(id))) {
+      const isExcluded = excludedCombos.has(combo.name);
+      bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: combo.type === 'dream', excluded: isExcluded });
     }
   });
   return bonuses.sort((a, b) => b.bonus - a.bonus);
@@ -162,10 +175,17 @@ export function calcLineupScore(lineup: Lineup): number {
     if (legend) legendBonus += legend.bonus;
   });
 
-  // 组合加成（含梦幻加成）
+  // 组合加成（含梦幻加成，互斥处理）
   const ids = new Set(players.map(p => p.id));
+  const excludedCombos = new Set<string>();
   COMBO_BONUSES.forEach(combo => {
     if (combo.playerIds.every(id => ids.has(id))) {
+      const excluded = COMBO_EXCLUSIONS[combo.name];
+      if (excluded) excludedCombos.add(excluded);
+    }
+  });
+  COMBO_BONUSES.forEach(combo => {
+    if (combo.playerIds.every(id => ids.has(id)) && !excludedCombos.has(combo.name)) {
       legendBonus += combo.bonus;
     }
   });
