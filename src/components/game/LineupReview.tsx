@@ -243,7 +243,7 @@ export default function LineupReview({ onBack }: Props) {
               className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-lg py-3 rounded-xl uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
             >
               <MessageSquarePlus className="w-5 h-5" />
-              截图与JRs比一比
+              截图找JRs评评理
             </button>
             <div className="flex gap-2">
               <button
