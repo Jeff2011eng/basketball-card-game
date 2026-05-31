@@ -231,3 +231,61 @@ export async function fetchMyLineupRank(playerId: string): Promise<{ entry: Line
 
   return { entry: myLineup, rank: (count || 0) + 1 };
 }
+
+export async function fetchWinRateLeaderboard(): Promise<LeaderboardEntry[]> {
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('player_stats')
+    .select('player_id, nickname, wins, losses, draws, total_battles, best_score')
+    .gte('total_battles', 50)
+    .order('wins', { ascending: false })
+    .order('best_score', { ascending: false })
+    .limit(50);
+
+  if (error) throw new Error(error.message);
+  const entries = (data || []).map((e: any) => ({
+    ...e,
+    win_rate: e.total_battles > 0 ? Math.round(e.wins / e.total_battles * 1000) / 10 : 0,
+  }));
+  entries.sort((a, b) => b.win_rate - a.win_rate || b.wins - a.wins || b.best_score - a.best_score);
+  return entries;
+}
+
+export async function fetchTotalLineupCount(): Promise<number> {
+  const sb = getSupabase();
+  const { count } = await sb
+    .from('lineups')
+    .select('*', { count: 'exact', head: true })
+    .gt('score', 0);
+  return count || 0;
+}
+
+export async function fetchMyWinRateRank(playerId: string): Promise<{ entry: LeaderboardEntry; rank: number } | null> {
+  const sb = getSupabase();
+  const { data: myStats } = await sb.from('player_stats').select('*').eq('player_id', playerId).maybeSingle();
+  if (!myStats || myStats.total_battles < 50) return null;
+
+  const myWinRate = myStats.total_battles > 0 ? myStats.wins / myStats.total_battles : 0;
+
+  // Count players with higher win rate
+  const { data: allStats } = await sb
+    .from('player_stats')
+    .select('wins, total_battles, best_score')
+    .gte('total_battles', 50);
+
+  if (!allStats) return null;
+
+  let rank = 1;
+  for (const s of allStats) {
+    const wr = s.total_battles > 0 ? s.wins / s.total_battles : 0;
+    if (wr > myWinRate) rank++;
+    else if (wr === myWinRate && s.wins > myStats.wins) rank++;
+    else if (wr === myWinRate && s.wins === myStats.wins && s.best_score > myStats.best_score) rank++;
+  }
+
+  const entry: LeaderboardEntry = {
+    ...myStats,
+    win_rate: Math.round(myStats.wins / myStats.total_battles * 1000) / 10,
+  };
+  return { entry, rank };
+}

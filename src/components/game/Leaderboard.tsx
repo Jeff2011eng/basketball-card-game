@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LeaderboardEntry, LineupLeaderboardEntry, Lineup } from '@/lib/types';
 import { getPlayerId } from '@/lib/player-identity';
 import { calcLineupScore, getLegendBonuses } from '@/lib/game-logic';
-import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank } from '@/lib/supabase-service';
+import { fetchLeaderboard, fetchLineupLeaderboard, fetchMyRecordRank, fetchMyLineupRank, fetchWinRateLeaderboard, fetchTotalLineupCount, fetchMyWinRateRank } from '@/lib/supabase-service';
 import { Trophy, Medal, Crown, History, RotateCcw, X, Star, Eye } from 'lucide-react';
 import Card from './Card';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
-type Tab = 'record' | 'lineup';
+type Tab = 'record' | 'winrate' | 'lineup';
 
 interface Props {
   onRestart: () => void;
@@ -31,11 +31,15 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
   const [lineupBoard, setLineupBoard] = useState<LineupLeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [winRateBoard, setWinRateBoard] = useState<LeaderboardEntry[]>([]);
+  const [winRateLoading, setWinRateLoading] = useState(false);
   const [lineupLoading, setLineupLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedLineup, setSelectedLineup] = useState<LineupLeaderboardEntry | null>(null);
   const [myRecord, setMyRecord] = useState<{ entry: LeaderboardEntry; rank: number } | null>(null);
+  const [myWinRate, setMyWinRate] = useState<{ entry: LeaderboardEntry; rank: number } | null>(null);
   const [myLineup, setMyLineup] = useState<{ entry: LineupLeaderboardEntry; rank: number } | null>(null);
+  const [totalLineups, setTotalLineups] = useState(0);
   const playerId = getPlayerId();
 
   useEffect(() => {
@@ -62,6 +66,19 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
           }
         })
         .catch(() => setLineupLoading(false));
+      fetchTotalLineupCount().then(c => setTotalLineups(c));
+    }
+    if (activeTab === 'winrate' && winRateBoard.length === 0 && !winRateLoading) {
+      setWinRateLoading(true);
+      fetchWinRateLeaderboard()
+        .then(data => {
+          setWinRateBoard(data);
+          setWinRateLoading(false);
+          if (!data.some(e => e.player_id === playerId)) {
+            fetchMyWinRateRank(playerId).then(r => r && setMyWinRate(r));
+          }
+        })
+        .catch(() => setWinRateLoading(false));
     }
   }, [activeTab]);
 
@@ -208,19 +225,20 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         onClick={() => setSelectedLineup(null)}
       >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          onClick={e => e.stopPropagation()}
-          className="bg-gray-800 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto relative"
-        >
+        <div className="relative max-w-lg w-full max-h-[90vh]">
           <button
             onClick={() => setSelectedLineup(null)}
-            className="absolute top-4 right-4 text-white/50 hover:text-white z-10"
+            className="absolute -top-3 -right-3 bg-gray-700 hover:bg-gray-600 text-white/70 hover:text-white w-8 h-8 rounded-full flex items-center justify-center z-20 shadow-lg"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={e => e.stopPropagation()}
+            className="bg-gray-800 rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
+          >
 
           <div className="text-center mb-6">
             <h2 className="text-2xl font-black text-white mb-1">{selectedLineup.nickname}</h2>
@@ -308,6 +326,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             </div>
           </div>
         </motion.div>
+        </div>
       </motion.div>
     );
   };
@@ -323,7 +342,7 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
         </div>
 
         {/* Tab bar */}
-        <div className="flex bg-gray-800 rounded-xl p-1 mb-6 w-full max-w-sm">
+        <div className="flex bg-gray-800 rounded-xl p-1 mb-6 w-full max-w-md">
           <button
             onClick={() => setActiveTab('record')}
             className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
@@ -333,6 +352,16 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             }`}
           >
             战绩排行
+          </button>
+          <button
+            onClick={() => setActiveTab('winrate')}
+            className={`flex-1 py-2.5 rounded-lg font-black text-sm uppercase tracking-wider transition-all ${
+              activeTab === 'winrate'
+                ? 'bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            胜率排行
           </button>
           <button
             onClick={() => setActiveTab('lineup')}
@@ -401,6 +430,60 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
           )
         )}
 
+        {/* Win rate tab */}
+        {activeTab === 'winrate' && (
+          winRateLoading ? (
+            <div className="flex justify-center py-20">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full"
+              />
+            </div>
+          ) : winRateBoard.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 font-bold text-lg">暂无符合条件的记录</p>
+              <p className="text-gray-600 text-sm mt-2">至少50场对战才能进入胜率排行</p>
+            </div>
+          ) : (
+            <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
+              <div className="p-3 bg-gray-950 border-b border-gray-700 text-center">
+                <p className="text-gray-400 text-xs font-bold">需满足至少50场对战</p>
+              </div>
+              <div className="hidden md:grid grid-cols-12 gap-4 p-4 bg-gray-950 border-b border-gray-700 text-gray-400 font-bold text-sm uppercase tracking-wider">
+                <div className="col-span-1 text-center">#</div>
+                <div className="col-span-3">经理人</div>
+                <div className="col-span-2 text-center">胜 / 负</div>
+                <div className="col-span-2 text-center">胜率</div>
+                <div className="col-span-2 text-center">最高分</div>
+                <div className="col-span-2 text-center">场次</div>
+              </div>
+              <div className="flex flex-col">
+                {winRateBoard.map((entry, i) => {
+                  const rank = i + 1;
+                  const isUser = entry.player_id === playerId;
+                  return (
+                    <motion.div
+                      key={entry.player_id}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      {renderRecordEntry(entry, rank, isUser)}
+                    </motion.div>
+                  );
+                })}
+                {myWinRate && !winRateBoard.some(e => e.player_id === playerId) && (
+                  <>
+                    <div className="p-2 text-center text-gray-500 text-xs font-bold">· · ·</div>
+                    {renderRecordEntry(myWinRate.entry, myWinRate.rank, true)}
+                  </>
+                )}
+              </div>
+            </div>
+          )
+        )}
+
         {/* Lineup tab */}
         {activeTab === 'lineup' && (
           lineupLoading ? (
@@ -418,6 +501,11 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             </div>
           ) : (
             <>
+            {totalLineups > 0 && (
+              <p className="text-gray-400 text-sm font-bold mb-4 text-center">
+                已有<span className="text-yellow-400 font-black mx-1">{lineupBoard.length + (myLineup && !lineupBoard.some(e => e.player_id === playerId) ? 1 : 0)}</span>JRs，生成<span className="text-purple-400 font-black mx-1">{totalLineups}</span>套对战阵容
+              </p>
+            )}
             <div className="w-full max-w-4xl bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
               <div className="flex flex-col">
                 {lineupBoard.map((entry, i) => {
@@ -449,6 +537,24 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
       </div>
 
       {/* Sticky my rank bar */}
+      {activeTab === 'winrate' && myWinRate && !winRateBoard.some(e => e.player_id === playerId) && (
+        <div className="fixed bottom-[68px] left-0 right-0 z-20 px-4">
+          <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-t-xl border border-b-0 border-green-500/50 p-3 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-green-400 font-black text-sm">#{myWinRate.rank}</span>
+                <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
+              </div>
+              <div className="flex items-center gap-3 text-xs">
+                <span className="text-green-400 font-bold">{myWinRate.entry.wins}胜</span>
+                <span className="text-red-400 font-bold">{myWinRate.entry.losses}负</span>
+                <span className={`font-black text-base ${myWinRate.entry.win_rate >= 60 ? 'text-green-400' : 'text-yellow-400'}`}>{myWinRate.entry.win_rate}%</span>
+                <span className="text-white font-black">{myWinRate.entry.best_score}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {activeTab === 'record' && myRecord && !board.some(e => e.player_id === playerId) && (
         <div className="fixed bottom-[68px] left-0 right-0 z-20 px-4">
           <div className="max-w-4xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-t-xl border border-b-0 border-blue-500/50 p-3 shadow-lg">
