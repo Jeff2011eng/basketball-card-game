@@ -456,7 +456,6 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
               <div className="flex items-center gap-2">
                 <span className="text-blue-400 font-black text-sm">#{myRecord.rank}</span>
                 <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
-                <span className="text-blue-400 font-black">{myRecord.entry.nickname}</span>
               </div>
               <div className="flex items-center gap-3 text-xs">
                 <span className="text-green-400 font-bold">{myRecord.entry.wins}胜</span>
@@ -474,7 +473,6 @@ export default function Leaderboard({ onRestart, onHistory }: Props) {
             <div className="flex items-center gap-2">
               <span className="text-purple-400 font-black text-sm">#{myLineup.rank}</span>
               <span className="bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded font-black">我</span>
-              <span className="text-purple-400 font-black">{myLineup.entry.nickname}</span>
             </div>
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-purple-400" />
