@@ -1807,16 +1807,16 @@
       "tier": "B",
       "card_tier": "R/SR",
       "stats": {
-        "SHO": 86,
-        "SLA": 69,
-        "DEF": 61,
-        "ATH": 71,
+        "SHO": 90,
+        "SLA": 85,
+        "DEF": 88,
+        "ATH": 88,
         "PLM": 99,
-        "PHY": 53,
-        "REB": 46,
-        "CLU": 78
+        "PHY": 70,
+        "REB": 60,
+        "CLU": 92
       },
-      "ovr": 79.6,
+      "ovr": 90.5,
       "badges": [
         {
           "name": "组织核心",
@@ -10088,13 +10088,13 @@
         "SHO": 99,
         "SLA": 68,
         "DEF": 90,
-        "ATH": 65,
-        "PLM": 63,
+        "ATH": 72,
+        "PLM": 72,
         "PHY": 99,
         "REB": 99,
-        "CLU": 68
+        "CLU": 78
       },
-      "ovr": 85.2,
+      "ovr": 87.5,
       "badges": [
         {
           "name": "三分神射",
@@ -10574,13 +10574,13 @@
         "SHO": 54,
         "SLA": 85,
         "DEF": 99,
-        "ATH": 78,
-        "PLM": 42,
+        "ATH": 88,
+        "PLM": 55,
         "PHY": 99,
         "REB": 99,
-        "CLU": 74
+        "CLU": 82
       },
-      "ovr": 88.2,
+      "ovr": 93.5,
       "badges": [
         {
           "name": "隔扣达人",
@@ -10961,16 +10961,16 @@
       "tier": "B",
       "card_tier": "SR/SSR",
       "stats": {
-        "SHO": 80,
-        "SLA": 66,
-        "DEF": 58,
-        "ATH": 72,
+        "SHO": 88,
+        "SLA": 82,
+        "DEF": 75,
+        "ATH": 85,
         "PLM": 99,
-        "PHY": 56,
-        "REB": 40,
-        "CLU": 79
+        "PHY": 72,
+        "REB": 52,
+        "CLU": 85
       },
-      "ovr": 78.1,
+      "ovr": 86.5,
       "badges": [
         {
           "name": "组织核心",
@@ -11088,14 +11088,14 @@
       "stats": {
         "SHO": 99,
         "SLA": 94,
-        "DEF": 53,
-        "ATH": 76,
-        "PLM": 72,
-        "PHY": 55,
-        "REB": 44,
-        "CLU": 79
+        "DEF": 65,
+        "ATH": 82,
+        "PLM": 80,
+        "PHY": 68,
+        "REB": 55,
+        "CLU": 88
       },
-      "ovr": 81,
+      "ovr": 88.5,
       "badges": [
         {
           "name": "三分神射",
@@ -11459,14 +11459,14 @@
       "stats": {
         "SHO": 83,
         "SLA": 87,
-        "DEF": 87,
-        "ATH": 85,
-        "PLM": 66,
-        "PHY": 67,
-        "REB": 70,
-        "CLU": 79
+        "DEF": 92,
+        "ATH": 88,
+        "PLM": 72,
+        "PHY": 72,
+        "REB": 75,
+        "CLU": 85
       },
-      "ovr": 80.4,
+      "ovr": 83,
       "badges": [
         {
           "name": "防守威慑",
@@ -13333,15 +13333,15 @@
       "card_tier": "R/SR",
       "stats": {
         "SHO": 97,
-        "SLA": 73,
-        "DEF": 42,
-        "ATH": 72,
-        "PLM": 58,
-        "PHY": 48,
-        "REB": 33,
-        "CLU": 70
+        "SLA": 80,
+        "DEF": 58,
+        "ATH": 80,
+        "PLM": 68,
+        "PHY": 62,
+        "REB": 45,
+        "CLU": 78
       },
-      "ovr": 71.8,
+      "ovr": 82.5,
       "badges": [
         {
           "name": "三分神射",

@@ -77,7 +77,42 @@ const COMBO_EXCLUSIONS: Record<string, string> = {
   '有乔有鲨加成': 'OK组合',   // 有乔有鲨优先于OK组合（共享奥尼尔）
 };
 
-// 组合加成配置
+// 梦之队阶梯加成配置（含全部成员）
+export const DREAM_TEAM_CONFIG: { name: string; playerIds: number[]; tiers: Record<number, number> }[] = [
+  {
+    name: '梦一加成',
+    playerIds: [227, 221, 233, 241, 240, 223, 234, 248, 249, 231, 298, 351],
+    tiers: { 2: 3, 3: 6, 4: 10, 5: 15 },
+  },
+  {
+    name: '梦八加成',
+    playerIds: [228, 8, 229, 225, 534, 40, 286, 311, 295, 356],
+    tiers: { 2: 3, 3: 5, 4: 9, 5: 12 },
+  },
+  {
+    name: '梦十加成',
+    playerIds: [7, 8, 228, 534, 40, 226, 265, 276, 13, 322, 307, 275],
+    tiers: { 2: 3, 3: 5, 4: 9, 5: 12 },
+  },
+];
+
+// 计算阵容触发的梦之队加成
+function calcDreamTeamBonus(ids: Set<number>): { name: string; bonus: number; count: number }[] {
+  const results: { name: string; bonus: number; count: number }[] = [];
+  for (const dt of DREAM_TEAM_CONFIG) {
+    const count = dt.playerIds.filter(id => ids.has(id)).length;
+    const tiers = Object.keys(dt.tiers).map(Number).sort((a, b) => b - a);
+    for (const t of tiers) {
+      if (count >= t) {
+        results.push({ name: dt.name, bonus: dt.tiers[t], count });
+        break;
+      }
+    }
+  }
+  return results;
+}
+
+// 组合加成配置（不含梦之队）
 export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; type: 'dream' | 'combo' }[] = [
   { name: '有乔有鲨加成', bonus: 5, playerIds: [227, 244], type: 'dream' },        // Jordan + Shaq
   { name: 'OK组合', bonus: 3, playerIds: [228, 244], type: 'combo' },                  // Kobe + Shaq
@@ -93,9 +128,6 @@ export const COMBO_BONUSES: { name: string; bonus: number; playerIds: number[]; 
   { name: 'Showtime组合', bonus: 3, playerIds: [221, 243], type: 'combo' },              // Magic + Kareem
   { name: '凯尔特人王朝', bonus: 3, playerIds: [246, 529], type: 'combo' },               // Russell + Cousy
   { name: '探花组合', bonus: 3, playerIds: [10, 22], type: 'combo' },                     // Tatum + Jaylen Brown
-  { name: '梦一加成', bonus: 12, playerIds: [227, 221, 233, 241], type: 'dream' },       // Jordan + Magic + Bird + Barkley
-  { name: '梦八加成', bonus: 10, playerIds: [228, 8, 229, 225], type: 'dream' },          // Kobe + LeBron + Wade + Kidd
-  { name: '梦十加成', bonus: 10, playerIds: [7, 8, 228, 534], type: 'dream' },             // Durant + LeBron + Kobe + Anthony
 ];
 
 // 获取阵容中的传奇加成列表（按加成值从大到小排列）
@@ -122,6 +154,11 @@ export function getLegendBonuses(lineup: Lineup): { name: string; bonus: number;
       const isExcluded = excludedCombos.has(combo.name);
       bonuses.push({ name: combo.name, bonus: combo.bonus, playerName: combo.playerIds.map(id => players.find(p => p.id === id)?.name_cn || '').join('+'), isGod: combo.type === 'dream', excluded: isExcluded });
     }
+  });
+  // 梦之队阶梯加成
+  const dreamBonuses = calcDreamTeamBonus(ids);
+  dreamBonuses.forEach(db => {
+    bonuses.push({ name: `${db.name} · ${db.count}人`, bonus: db.bonus, playerName: '', isGod: true, excluded: false });
   });
   return bonuses.sort((a, b) => b.bonus - a.bonus);
 }
@@ -178,7 +215,7 @@ export function calcLineupScore(lineup: Lineup): number {
     if (legend) legendBonus += legend.bonus;
   });
 
-  // 组合加成（含梦幻加成，互斥处理）
+  // 组合加成（含互斥处理）
   const ids = new Set(players.map(p => p.id));
   const excludedCombos = new Set<string>();
   COMBO_BONUSES.forEach(combo => {
@@ -193,5 +230,9 @@ export function calcLineupScore(lineup: Lineup): number {
     }
   });
 
-  return parseFloat((baseOvr * (1 + (chemBonus + legendBonus) / 100)).toFixed(2));
+  // 梦之队阶梯加成
+  const dreamBonuses = calcDreamTeamBonus(ids);
+  const dreamBonus = dreamBonuses.reduce((sum, db) => sum + db.bonus, 0);
+
+  return parseFloat((baseOvr * (1 + (chemBonus + legendBonus + dreamBonus) / 100)).toFixed(2));
 }
