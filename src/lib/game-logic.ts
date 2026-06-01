@@ -80,19 +80,19 @@ const COMBO_EXCLUSIONS: Record<string, string> = {
 // 梦之队阶梯加成配置（含全部成员）
 export const DREAM_TEAM_CONFIG: { name: string; playerIds: number[]; tiers: Record<number, number> }[] = [
   {
-    name: '梦一加成',
+    name: '梦一队加成',
     playerIds: [227, 221, 233, 241, 240, 223, 234, 248, 249, 231, 298, 351],
-    tiers: { 2: 3, 3: 6, 4: 10, 5: 15 },
+    tiers: { 4: 10, 5: 15 },
   },
   {
-    name: '梦八加成',
+    name: '梦八队加成',
     playerIds: [228, 8, 229, 225, 534, 40, 286, 311, 295, 356],
-    tiers: { 2: 3, 3: 5, 4: 9, 5: 12 },
+    tiers: { 4: 9, 5: 12 },
   },
   {
-    name: '梦十加成',
+    name: '梦十队加成',
     playerIds: [7, 8, 228, 534, 40, 226, 265, 276, 13, 322, 307, 275],
-    tiers: { 2: 3, 3: 5, 4: 9, 5: 12 },
+    tiers: { 4: 9, 5: 12 },
   },
 ];
 
