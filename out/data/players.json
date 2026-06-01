@@ -1805,7 +1805,7 @@
       "birth_year": 1985,
       "player_type": "组织大师",
       "tier": "B",
-      "card_tier": "R/SR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 90,
         "SLA": 85,
@@ -8915,7 +8915,7 @@
       "birth_year": 1968,
       "player_type": "攻防一体",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 92,
         "SLA": 90,
@@ -9260,7 +9260,7 @@
       "birth_year": 1988,
       "player_type": "得分机器",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 92,
         "SLA": 99,
@@ -9311,7 +9311,7 @@
       "birth_year": 1975,
       "player_type": "得分机器",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 99,
         "SLA": 92,
@@ -9409,7 +9409,7 @@
       "birth_year": 1979,
       "player_type": "得分机器",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 99,
         "SLA": 95,
@@ -9789,7 +9789,7 @@
       "birth_year": 1972,
       "player_type": "攻防一体",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 96,
         "SLA": 98,
@@ -10569,7 +10569,7 @@
       "birth_year": 1985,
       "player_type": "内线巨兽",
       "tier": "A",
-      "card_tier": "SR/SSR",
+      "card_tier": "SSR/UR",
       "stats": {
         "SHO": 54,
         "SLA": 85,
@@ -13330,7 +13330,7 @@
       "birth_year": 1979,
       "player_type": "得分机器",
       "tier": "C",
-      "card_tier": "R/SR",
+      "card_tier": "SR/SSR",
       "stats": {
         "SHO": 97,
         "SLA": 80,
