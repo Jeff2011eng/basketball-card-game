@@ -89,7 +89,7 @@ export default function LineupReview({ onBack, onBattleResult }: Props) {
   };
 
   const shareText = `我在【AI广场】-【NBA最佳阵容对战】#NBA梦幻1阵# 我的阵容战力 ${score} 分！快来抽卡组队挑战我！`;
-  const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=湿乎乎的话题&topicId=177';
+  const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=147959&topicName=湿乎乎的话题&topicId=177';
 
   const handleShareClick = async () => {
     try {
@@ -99,7 +99,7 @@ export default function LineupReview({ onBack, onBattleResult }: Props) {
   };
 
   const handleViewTopic = () => {
-    openHupuLink('huputiyu://bbs/topicTag?tagId=37312', () => setShowHupuPrompt(true));
+    openHupuLink('huputiyu://bbs/topicTag?tagId=147959', () => setShowHupuPrompt(true));
   };
 
   const SCALE = 0.5;

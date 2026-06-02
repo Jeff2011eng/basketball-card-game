@@ -220,36 +220,16 @@ export default function PackOpener({ onComplete }: Props) {
 
       {/* HUD */}
       <div className="absolute top-8 left-0 right-0 flex justify-between px-8 z-20">
-        <div className="flex flex-col gap-2">
-          <div className="text-white font-bold text-xl bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
-            第 {currentRound + 1} / {TOTAL_ROUNDS} 轮
-          </div>
-          <div className="text-white/70 font-bold text-base bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
-            {roundCards.length - roundIndex} / {CARDS_PER_ROUND}
-          </div>
+        <div className="text-white font-bold text-xl bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
+          第 {currentRound + 1} / {TOTAL_ROUNDS} 轮
         </div>
-        <button
-          onClick={handleSkipRound}
-          className="text-white font-bold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg backdrop-blur transition-colors h-fit"
-        >
-          解锁全部
-        </button>
-      </div>
-
-      {/* Round progress dots */}
-      <div className="absolute top-32 flex gap-2 z-20">
-        {Array.from({ length: TOTAL_ROUNDS }).map((_, i) => (
-          <div
-            key={i}
-            className={`w-3 h-3 rounded-full transition-all ${
-              i < currentRound ? 'bg-green-400' : i === currentRound ? 'bg-blue-400 scale-125' : 'bg-gray-600'
-            }`}
-          />
-        ))}
+        <div className="text-white/70 font-bold text-base bg-black/50 px-4 py-2 rounded-lg backdrop-blur">
+          {roundCards.length - roundIndex} / {CARDS_PER_ROUND}
+        </div>
       </div>
 
       {/* Card stack */}
-      <div className="relative w-80 h-[480px] z-10 flex items-center justify-center">
+      <div className="relative w-80 h-[480px] z-10 flex items-center justify-center -mt-16">
         <AnimatePresence>
           {roundCards.map((player, index) => {
             if (index < roundIndex || index > roundIndex + 3) return null;
@@ -302,6 +282,12 @@ export default function PackOpener({ onComplete }: Props) {
         ) : (
           <span>再次点击或上滑收牌</span>
         )}
+        <button
+          onClick={handleSkipRound}
+          className="text-white font-bold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg backdrop-blur transition-colors"
+        >
+          解锁全部
+        </button>
       </div>
     </div>
   );

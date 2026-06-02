@@ -190,7 +190,7 @@ export default function Home() {
                 </button>
               )}
               <button
-                onClick={() => openHupuLink('huputiyu://bbs/topicTag?tagId=37312', () => setShowHupuPrompt(true))}
+                onClick={() => openHupuLink('huputiyu://bbs/topicTag?tagId=147959', () => setShowHupuPrompt(true))}
                 className="group relative w-full px-4 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full font-black text-base overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.4)] mt-3"
               >
                 <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />

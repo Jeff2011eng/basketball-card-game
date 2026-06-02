@@ -27,7 +27,7 @@ const STAT_DISPLAY: Record<string, string> = {
   PHY: '对抗',
 };
 
-const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=37312&topicName=湿乎乎的话题&topicId=177';
+const HUPU_POST_URL = 'huputiyu://bbs/postImg?tagName=NBA梦幻1阵&tagId=147959&topicName=湿乎乎的话题&topicId=177';
 
 export default function LineupResult({ lineup, onUpload, onRestart }: Props) {
   const players = Object.values(lineup).filter(Boolean);
