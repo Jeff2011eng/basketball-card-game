@@ -33,10 +33,9 @@ export async function uploadLineup(
   // Upsert identity
   await sb.from('players_identity').upsert({ id: playerId, nickname }, { onConflict: 'id' });
 
-  // Deactivate old lineups
-  await sb.from('lineups').update({ is_active: false }).eq('player_id', playerId);
-
-  // Insert lineup
+  // Insert lineup FIRST (active=true), then deactivate old ones.
+  // This order guarantees there's always an active lineup even if the
+  // second statement fails or races with a concurrent upload.
   const { data: row, error } = await sb.from('lineups').insert({
     player_id: playerId,
     nickname,
@@ -51,6 +50,9 @@ export async function uploadLineup(
   }).select('id').single();
 
   if (error) throw new Error(error.message);
+
+  // Deactivate previous lineups (exclude the one just inserted)
+  await sb.from('lineups').update({ is_active: false }).eq('player_id', playerId).neq('id', row.id);
 
   // Upsert player_stats
   const { data: stats } = await sb.from('player_stats').select('best_score').eq('player_id', playerId).single();
